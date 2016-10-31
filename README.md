@@ -1,12 +1,12 @@
 # Tellina
 
-## Install dependencies:
+### Install dependencies:
 
 ```
 pip3 install -r requirements.txt
 ```
 
-## Run webapp:
+### Run webapp:
 
 ```
 python3 manage.py runserver
