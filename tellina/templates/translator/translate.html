@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %} - {{ getargs|e }}{% endblock %}
+	{% block content %}
+            <div id="navigate" style="position: relative;" class="small-push"></div>
+            <!--<span style="background-color:white;position: fixed; bottom:0; right:0;" id="coords"></span>-->
+            <div class="push"></div>
+            <div id="bump-fixer">
+                <div id="command-wrapper">
+                    <svg id="canvas">
+                    </svg>
+                    <div id="command">
+                    {% import 'macros.html' as macros -%}
+                    {% for m in matches -%}
+                        {%- if m.name -%}
+                            {{ macros.outputcommandexplain(m) }}
+                        {%- else -%}
+                            <span {{ macros.spanclasses(m) }}>{{ m.match|safe }}</span>
+                        {%- endif -%}{{ m.spaces|safe }}
+                    {%- endfor %}
+                    </div>
+                    <div style="height: 5px;"></div>
+                    <div style="height: 100px;"></div>
+                </div>
+            </div>
+            <div>
+                <table id="help" width="100%">
+                    <tbody>
+                        {% for text, id in helptext -%}
+                        <tr>
+                            <td>
+                                <pre class="help-box" id="{{ id }}">{{ text|safe }}</pre>
+                            </td>
+                        </tr>
+                        {%- endfor %}
+                    </tbody>
+                </table>
+            </div>
+{% endblock %}
+{% block footer -%}
+<div class="push"></div><div class="text-center"><small>
+{% for m in matches if m.name %}
+{% if loop.first %}source manpages: {% endif %}
+<a href="http://manpages.ubuntu.com/manpages/precise/en/man{{ m.section }}/{{ m.source|e }}.html">{{ m.name|e }}</a>{% if not loop.last %},&nbsp;{% endif %}
+{% endfor %}
+</small></div>
+{%- endblock %}
+{% block js -%}
+{% if config.DEBUG %}
+        <script src="/static/js/d3.v3.min.js"></script>
+{% else %}
+        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.1.6/d3.min.js"></script>
+{%- endif %}
+        <script type="text/javascript">
+            var $window = $(window),
+                helppres = $('#help pre');
+            adjustcommandfontsize();
+            currentgroup = initialize();
+            navigation();
+            $(document).ready(function() {
+                // set the query in the top search box from the url. assumes we
+                // take a single parameter.
+                if (window.location.search.split("&").length == 1) {
+                    var cmdquery = window.location.search.substr("?cmd=".length);
+                    $("#top-search").val(decodeURIComponent(cmdquery.replace(/\+/g, ' ')));
+                }
+                // when #command-wrapper position is changed to fixed, it'll be removed
+                // from the normal flow, and everything below it will up. we use this div
+                // to prevent that.
+                $('#bump-fixer').height($("#command-wrapper").height());
+                $('#command-wrapper').affix({
+                    offset: { top: $('#command-wrapper').offset().top-10 }
+                });
+                drawgrouplines(currentgroup.commandselector);
+                var throttled = _.throttle(function() {
+                    draw()
+                }, 10);
+                $window.scroll(throttled);
+                $window.resize(throttled);
+            });
+        </script>
+{%- endblock %}
