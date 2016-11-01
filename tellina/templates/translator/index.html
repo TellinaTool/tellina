@@ -7,6 +7,7 @@
         <!-- Bootstrap -->
         <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/static/lib/jquery.upvote.css">
         <link href="/static/css/es.css" rel="stylesheet" media="screen">
         <link href='http://fonts.googleapis.com/css?family=Berkshire+Swash' rel='stylesheet' type='text/css'>
         <meta name="description" content="natural language command to bash translation interface">
@@ -37,119 +38,40 @@
                 </div>
             </div>
             <div class="row">
-            <div class="center-block">
-                <div class="offset2 span8" id="suggestions">
-                    <div class="well">
-                        <table class="oneliner">
-                            <tr>
-                                <td style="vertical-align: top; width: 50px">
-                                    <div class="upvote" data-id="226" data-user-id="246">
-                                        <a class="upvote "></a>
-                                        <span class="count">0</span>
-                                        <a class="downvote "></a>
-                                        <!-- coming soon!
-                                        <a class="star "></a>
-                                        -->
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="oneliner oneliner-226">
-                                        <pre class="line">
-                                            <span class="oneliner-line" style="white-space:nowrap">
-                                                for i in {1..254}; do arp -d 192.168.0.$i; done
-                                            </span>
-                                        </pre>
-                                        <!-- <p class="author">
-                                            <small>
-                                                &mdash; by <a href="/oneliners/profile/246/"><span>dennyhalim.com</span></a>
-                                                on <span>Oct. 21, 2016, 5:07 a.m.</span>
-                                            </small>
-                                        </p> -->
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>simply looping from 1 to 254 and delete the arp</p>
+                <div class="center-block">
+                    <div class="offset2 span8" id="suggestions">
+                        <div class="well">
+                            <table class="oneliner">
+                                <tr>
+                                    <td style="vertical-align: top; width: 50px">
+                                        <div class="upvote upvote-programmers" data-id="226"
+                                             data-user-id="246">
+                                            <a class="upvote "></a>
+                                            <span class="count">0</span>
+                                            <a class="downvote "></a>
+                                            <!-- coming soon!
+                                            <a class="star "></a>
+                                            -->
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
+                                    </td>
 
-                    <div class="well">
-                        <table class="oneliner">
-                            <tr>
-                                <td style="vertical-align: top; width: 50px">
-                                    <div class="upvote" data-id="226" data-user-id="246">
-                                        <a class="upvote "></a>
-                                        <span class="count">0</span>
-                                        <a class="downvote "></a>
-                                        <!-- coming soon!
-                                        <a class="star "></a>
-                                        -->
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="oneliner oneliner-226">
-                                        <pre class="line">
-                                            <span class="oneliner-line" style="white-space:nowrap">
-                                                for i in {1..254}; do arp -d 192.168.0.$i; done
-                                            </span>
-                                        </pre>
-                                        <!-- <p class="author">
-                                            <small>
-                                                &mdash; by <a href="/oneliners/profile/246/"><span>dennyhalim.com</span></a>
-                                                on <span>Oct. 21, 2016, 5:07 a.m.</span>
-                                            </small>
-                                        </p> -->
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>simply looping from 1 to 254 and delete the arp</p>
+                                    <td>
+                                        <div class="oneliner oneliner-226">
+                                            <pre class="line">
+                                                <span class="oneliner-line" style="white-space:nowrap">
+                                                    for i in {1..254}; do arp -d 192.168.0.$i; done
+                                                </span>
+                                            </pre>
+                                            <div class="explanation">
+                                                <h4>Explanation</h4>
+                                                <p>simply looping from 1 to 254 and delete the arp</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-
-                    <div class="well">
-                        <table class="oneliner">
-                            <tr>
-                                <td style="vertical-align: top; width: 50px">
-                                    <div class="upvote" data-id="226" data-user-id="246">
-                                        <a class="upvote "></a>
-                                        <span class="count">0</span>
-                                        <a class="downvote "></a>
-                                        <!-- coming soon!
-                                        <a class="star "></a>
-                                        -->
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="oneliner oneliner-226">
-                                        <pre class="line">
-                                            <span class="oneliner-line" style="white-space:nowrap">
-                                                for i in {1..254}; do arp -d 192.168.0.$i; done
-                                            </span>
-                                        </pre>
-                                        <!-- <p class="author">
-                                            <small>
-                                                &mdash; by <a href="/oneliners/profile/246/"><span>dennyhalim.com</span></a>
-                                                on <span>Oct. 21, 2016, 5:07 a.m.</span>
-                                            </small>
-                                        </p> -->
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>simply looping from 1 to 254 and delete the arp</p>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -157,6 +79,7 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <script src="/static/lib/jquery.upvote.js"></script>
         <script src="/static/js/es.js"></script>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
