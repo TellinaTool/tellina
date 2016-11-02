@@ -137,8 +137,16 @@ a {
     color:#ff6666 !important;
 }
 
+.request-suggestion a {
+    color:#ff7272 !important;
+}
+
+.request-suggestion a:hover {
+    color:#ff6666 !important;
+}
+
 #top-search {
-   width: 150px;
+   width: 320px;
    -webkit-transition: all .5s ease;
    -moz-transition: all .5s ease;
    transition: all .5s ease;
@@ -148,8 +156,12 @@ a {
 }
 
 #top-search:focus {
-   left: -110px;
-   width: 260px;
+   width: 400px;
+
+   border-color: #ff9999;
+   -moz-box-shadow: 0 0 8px rgba(255, 153, 153, 0.6);
+   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(255, 153, 153, 0.6);
+   outline: 0 none;
 }
 
 #prevnext {

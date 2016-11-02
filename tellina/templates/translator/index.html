@@ -1,18 +1,5 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
-    <head>
-        <title>Tellina - natural language to bash translation interface</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/static/lib/jquery.upvote.css">
-        <link href="/static/css/es.css" rel="stylesheet" media="screen">
-        <link href='http://fonts.googleapis.com/css?family=Berkshire+Swash' rel='stylesheet' type='text/css'>
-        <meta name="description" content="natural language command to bash translation interface">
-    </head>
-    <body>
+{% extends "translator/base.html" %}
+    {% block body %}
         <div class="container">
             <div class="push"></div>
             <div class="header">
@@ -30,9 +17,9 @@
             <div class="push"></div>
             <div class="text-center">
                 <div class="input-append">
-                    <form action='/translate' method="get">
-                        <input id='translate' class="span8" type="text" name="description" autocapitalize="off"
-                               autocorrect="off">
+                    <form action="/translate" method="POST">
+                        <input id='translate' class="span8" type="text" name="request_str"
+                               autocapitalize="off" autocorrect="off">
                         <button class="btn" type="submit">Translate</button>
                     </form>
                 </div>
@@ -40,10 +27,11 @@
             <div class="offset1 span8">
                 <div class="center-block">
                     {% if latest_request_list %}
-                        <p> Something to try: </p>
-                        <ul>
+                        <p> Recently asked: </p>
+                        <ul class="request-suggestion">
                             {% for request in latest_request_list %}
-                                <li><a href="/">{{request.request_str}}</a></li>
+                                <li><a href="/translate?request_str={{request.request_str}}">
+                                    {{request.request_str}}</a></li>
                             {% endfor %}
                         </ul>
                     {% else %}
@@ -51,61 +39,10 @@
                     {% endif %}
                 </div>
             </div>
-            <!-- <div class="row">
-                <div class="center-block">
-                    <div class="offset2 span8" id="suggestions">
-                        <div class="well">
-                            <table class="oneliner">
-                                <tr>
-                                    <td style="vertical-align: top; width: 50px">
-                                        <div class="upvote upvote-programmers" data-id="226"
-                                             data-user-id="246">
-                                            <a class="upvote "></a>
-                                            <span class="count">0</span>
-                                            <a class="downvote "></a>
-                                            <!- - coming soon!
-                                            <a class="star "></a>
-                                            - ->
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="oneliner oneliner-226">
-                                            <pre class="line">
-                                                <span class="oneliner-line" style="white-space:nowrap">
-                                                    for i in {1..254}; do arp -d 192.168.0.$i; done
-                                                </span>
-                                            </pre>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>simply looping from 1 to 254 and delete the arp</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </div>
-
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-        <script src="/static/lib/jquery.upvote.js"></script>
-        <script src="/static/js/es.js"></script>
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-          ga('create', 'UA-43455040-1', 'explainshell.com');
-          ga('send', 'pageview');
-
-        </script><script type="text/javascript">
+    {% endblock %}
+    {% block other-js %}
+        <script type="text/javascript">
             $("#translate").focus();
         </script>
-    </body>
-</html>
+    {% endblock %}
