@@ -7,7 +7,7 @@
                 <div style="position: relative;">
                     <ul class="inline menu">
                         <li>
-                            <form action='/translate' method='get'>
+                            <form action='/translate/' method='POST'>{% csrf_token %}
                                 <input id="top-search" name='cmd' type="text"
                                 autocapitalize="off" autocorrect="off" placeholder="translate...">
                             </form>

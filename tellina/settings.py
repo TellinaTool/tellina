@@ -68,10 +68,6 @@ TEMPLATES = [
     },
 ]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'tellina.context_processors.debug',
-)
-
 
 WSGI_APPLICATION = 'tellina.wsgi.application'
 

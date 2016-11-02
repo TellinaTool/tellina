@@ -17,7 +17,7 @@
             <div class="push"></div>
             <div class="text-center">
                 <div class="input-append">
-                    <form action="/translate" method="POST">
+                    <form action="/translate/" method="POST">{% csrf_token %}
                         <input id='translate' class="span8" type="text" name="request_str"
                                autocapitalize="off" autocorrect="off">
                         <button class="btn" type="submit">Translate</button>
@@ -34,8 +34,6 @@
                                     {{request.request_str}}</a></li>
                             {% endfor %}
                         </ul>
-                    {% else %}
-                        <p> Submit your first query and see what will happen!</p>
                     {% endif %}
                 </div>
             </div>

@@ -1,12 +1,11 @@
-import datetime
-
 from django.db import models
+from django.utils import timezone
 
 class NLRequest(models.Model):
     request_str = models.TextField()
 
     # used to display a list of query suggestions in the main page
-    sub_time = models.DateTimeField(default=datetime.datetime.now())
+    sub_time = models.DateTimeField(default=timezone.now)
     frequency = models.PositiveIntegerField(default=0)
 
     def __str__(self):
