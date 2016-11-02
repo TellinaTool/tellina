@@ -37,7 +37,21 @@
                     </form>
                 </div>
             </div>
-            <div class="row">
+            <div class="offset1 span8">
+                <div class="center-block">
+                    {% if latest_request_list %}
+                        <p> Something to try: </p>
+                        <ul>
+                            {% for request in latest_request_list %}
+                                <li><a href="/">{{request.request_str}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p> Submit your first query and see what will happen!</p>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- <div class="row">
                 <div class="center-block">
                     <div class="offset2 span8" id="suggestions">
                         <div class="well">
@@ -49,9 +63,9 @@
                                             <a class="upvote "></a>
                                             <span class="count">0</span>
                                             <a class="downvote "></a>
-                                            <!-- coming soon!
+                                            <!- - coming soon!
                                             <a class="star "></a>
-                                            -->
+                                            - ->
                                         </div>
                                     </td>
 
@@ -73,7 +87,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
