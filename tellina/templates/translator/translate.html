@@ -1,81 +1,69 @@
-{% extends "base.html" %}
-{% block title %} - {{ getargs|e }}{% endblock %}
-	{% block content %}
-            <div id="navigate" style="position: relative;" class="small-push"></div>
-            <!--<span style="background-color:white;position: fixed; bottom:0; right:0;" id="coords"></span>-->
+{% extends "translator/base.html" %}
+    {% block body %}
+        <div class="container">
             <div class="push"></div>
-            <div id="bump-fixer">
-                <div id="command-wrapper">
-                    <svg id="canvas">
-                    </svg>
-                    <div id="command">
-                    {% import 'macros.html' as macros -%}
-                    {% for m in matches -%}
-                        {%- if m.name -%}
-                            {{ macros.outputcommandexplain(m) }}
-                        {%- else -%}
-                            <span {{ macros.spanclasses(m) }}>{{ m.match|safe }}</span>
-                        {%- endif -%}{{ m.spaces|safe }}
-                    {%- endfor %}
-                    </div>
-                    <div style="height: 5px;"></div>
-                    <div style="height: 100px;"></div>
+            <div class="small-push"></div>
+            <div class="header" ></div>
+                <div style="position: relative;">
+                    <ul class="inline menu">
+                        <li>
+                            <form action='/translate' method='get'>
+                                <input id="top-search" name='cmd' type="text"
+                                autocapitalize="off" autocorrect="off" placeholder="translate...">
+                            </form>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div>
-                <table id="help" width="100%">
-                    <tbody>
-                        {% for text, id in helptext -%}
-                        <tr>
-                            <td>
-                                <pre class="help-box" id="{{ id }}">{{ text|safe }}</pre>
-                            </td>
-                        </tr>
-                        {%- endfor %}
-                    </tbody>
-                </table>
+            <div class="push"></div>
+            <div class="offset2 span8" id="suggestions">
+                <div class="center-block">
+                    {% if translation_list %}
+                        {% for translation in translation_list %}
+                            <div class="well">
+                                <table class="oneliner">
+                                    <tr>
+                                        <td style="vertical-align: top; width: 50px">
+                                            <div class="upvote upvote-programmers">
+                                                <a class="upvote "></a>
+                                                <span class="count">{{translation.num_votes}}</span>
+                                                <a class="downvote "></a>
+                                                <!-- coming soon!
+                                                <a class="star "></a>
+                                                -->
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="oneliner oneliner-226">
+                                                <pre class="line">
+                                                    <span class="oneliner-line"
+                                                          style="white-space:nowrap">
+                                                        {{translation.pred_CMD}}
+                                                    </span>
+                                                </pre>
+                                                <p class="score">
+                                                    <small>
+                                                        &mdash; <b>score: </b>{{translation
+                                                        .score}}</span>
+                                                    </small>
+                                                </p>
+
+                                                <div class="explanation">
+                                                    <h4>Explanation</h4>
+                                                    <p>I am a placeholder.</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="translation-error">
+                            <p>Oops! Something went wrong...</p>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-{% endblock %}
-{% block footer -%}
-<div class="push"></div><div class="text-center"><small>
-{% for m in matches if m.name %}
-{% if loop.first %}source manpages: {% endif %}
-<a href="http://manpages.ubuntu.com/manpages/precise/en/man{{ m.section }}/{{ m.source|e }}.html">{{ m.name|e }}</a>{% if not loop.last %},&nbsp;{% endif %}
-{% endfor %}
-</small></div>
-{%- endblock %}
-{% block js -%}
-{% if config.DEBUG %}
-        <script src="/static/js/d3.v3.min.js"></script>
-{% else %}
-        <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.1.6/d3.min.js"></script>
-{%- endif %}
-        <script type="text/javascript">
-            var $window = $(window),
-                helppres = $('#help pre');
-            adjustcommandfontsize();
-            currentgroup = initialize();
-            navigation();
-            $(document).ready(function() {
-                // set the query in the top search box from the url. assumes we
-                // take a single parameter.
-                if (window.location.search.split("&").length == 1) {
-                    var cmdquery = window.location.search.substr("?cmd=".length);
-                    $("#top-search").val(decodeURIComponent(cmdquery.replace(/\+/g, ' ')));
-                }
-                // when #command-wrapper position is changed to fixed, it'll be removed
-                // from the normal flow, and everything below it will up. we use this div
-                // to prevent that.
-                $('#bump-fixer').height($("#command-wrapper").height());
-                $('#command-wrapper').affix({
-                    offset: { top: $('#command-wrapper').offset().top-10 }
-                });
-                drawgrouplines(currentgroup.commandselector);
-                var throttled = _.throttle(function() {
-                    draw()
-                }, 10);
-                $window.scroll(throttled);
-                $window.resize(throttled);
-            });
-        </script>
-{%- endblock %}
+        </div>
+    {% endblock %}

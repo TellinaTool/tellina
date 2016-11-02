@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'tellina.apps.TranslatorConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,6 +67,10 @@ TEMPLATES = [
         },
     },
 ]
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'tellina.context_processors.debug',
+)
 
 
 WSGI_APPLICATION = 'tellina.wsgi.application'
