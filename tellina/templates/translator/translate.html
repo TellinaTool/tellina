@@ -6,12 +6,14 @@
             <div class="header" ></div>
                 <div style="position: relative;">
                     <ul class="inline menu">
-                        <li>
-                            <form action='/translate/' method='POST'>{% csrf_token %}
-                                <input id="top-search" name='cmd' type="text"
-                                autocapitalize="off" autocorrect="off" placeholder="translate...">
-                            </form>
-                        </li>
+                        {% if request_str %}
+                            <li>
+                                <form action='/translate/' method='POST'>{% csrf_token %}
+                                    <input id="top-search" name='cmd' type="text"
+                                    autocapitalize="off" autocorrect="off" placeholder={{ request_str }}>
+                                </form>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -38,7 +40,7 @@
                                                 <pre class="line">
                                                     <span class="oneliner-line"
                                                           style="white-space:nowrap">
-                                                        {{translation.pred_CMD}}
+                                                        {{translation.pred_cmd}}
                                                     </span>
                                                 </pre>
                                                 <p class="score">
