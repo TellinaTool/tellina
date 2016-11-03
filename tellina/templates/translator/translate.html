@@ -6,11 +6,12 @@
             <div class="header" ></div>
                 <div style="position: relative;">
                     <ul class="inline menu">
-                        {% if request_str %}
+                        {% if nl_request %}
                             <li>
                                 <form action='/translate/' method='POST'>{% csrf_token %}
-                                    <input id="top-search" name='cmd' type="text"
-                                    autocapitalize="off" autocorrect="off" placeholder={{ request_str }}>
+                                    <input id="top-search" type="text" name="request_str"
+                                    autocapitalize="off" autocorrect="off"
+                                           placeholder={{nl_request.request_str}}>
                                 </form>
                             </li>
                         {% endif %}
@@ -24,39 +25,38 @@
                         {% for translation in translation_list %}
                             <div class="well">
                                 <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 50px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">{{translation.num_votes}}</span>
-                                                <a class="downvote "></a>
-                                                <!-- coming soon!
-                                                <a class="star "></a>
-                                                -->
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="oneliner oneliner-226">
-                                                <pre class="line">
-                                                    <span class="oneliner-line"
-                                                          style="white-space:nowrap">
-                                                        {{translation.pred_cmd}}
-                                                    </span>
-                                                </pre>
-                                                <p class="score">
-                                                    <small>
-                                                        &mdash; <b>score: </b>{{translation
-                                                        .score}}</span>
-                                                    </small>
-                                                </p>
+                                <tr>
+                                <td style="vertical-align: top; width: 50px">
+                                    <div class="upvote upvote-programmers">
+                                        <a class="upvote "></a>
+                                        <span class="count">{{translation.num_votes}}</span>
+                                        <a class="downvote "></a>
+                                        <!-- coming soon!
+                                        <a class="star "></a>
+                                        -->
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="oneliner oneliner-226">
+                                    <pre class="line">
+                                        <span class="oneliner-line"
+                                              style="white-space:nowrap">
+                                            {{translation.pred_cmd}}
+                                        </span>
+                                    </pre>
+                                    <p class="score">
+                                        <small>
+                                            <span><b>score: </b>{{translation.score}}</span>
+                                        </small>
+                                    </p>
 
-                                                <div class="explanation">
-                                                    <h4>Explanation</h4>
-                                                    <p>I am a placeholder.</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <div class="explanation">
+                                        <h4>Explanation</h4>
+                                        <p>I am a placeholder.</p>
+                                    </div>
+                                    </div>
+                                </td>
+                                </tr>
                                 </table>
                             </div>
                         {% endfor %}

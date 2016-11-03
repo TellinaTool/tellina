@@ -6,17 +6,17 @@ import tensorflow as tf
 import os
 import sys
 
-commandline_helper_dir = os.path.join(os.path.dirname(__file__), "commandline-helper")
+commandline_helper_dir = os.path.join(os.path.dirname(__file__), "..", "commandline-helper")
 sys.path.append(commandline_helper_dir)
 
-import encoder_decoder.data_utils as data_utils
-import encoder_decoder.decode_tools as decode_tools
-import encoder_decoder.parse_args as parse_args
-import encoder_decoder.translate as trans
+from encoder_decoder import data_utils
+from encoder_decoder import decode_tools
+from encoder_decoder import translate as trans
 
 FLAGS = tf.app.flags.FLAGS
 
 FLAGS.demo = True
+FLAGS.normalized = True
 
 FLAGS.dim = 200
 FLAGS.batch_size = 16
@@ -30,7 +30,7 @@ FLAGS.decoder_output_keep = 0.6
 FLAGS.use_attention = True
 FLAGS.attention_input_keep = 0.6
 FLAGS.attention_output_keep = 0.6
-FLAGS.beta = 0
+FLAGS.beta = 0.0
 
 FLAGS.decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 10
@@ -41,18 +41,13 @@ FLAGS.cm_vocab_size = 1000
 
 FLAGS.data_dir = os.path.join(commandline_helper_dir, "data", "bash")
 FLAGS.model_dir = os.path.join(commandline_helper_dir, "model", "seq2seq")
+
 # create tensorflow session
 sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
                   log_device_placement=FLAGS.log_device_placement))
 
-# create buckets
-if FLAGS.decoder_topology in ['basic_tree']:
-    _buckets = [(5, 30), (10, 30), (20, 40), (30, 64), (40, 64)]
-elif FLAGS.decoder_topology in ['rnn']:
-    _buckets = [(5, 20), (10, 20), (20, 30), (30, 40), (40, 40)]
-
 # create model and load parameters.
-model, _ = trans.create_model(sess, forward_only=True)
+model, _ = trans.create_model(sess, forward_only=True, buckets=[(20, 50)])
 nl_vocab, _, _, rev_cm_vocab = data_utils.load_vocab(FLAGS)
 
 def translate_fun(sentence):
