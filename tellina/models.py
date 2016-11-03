@@ -19,4 +19,4 @@ class Translation(models.Model):
     num_votes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return "{}\n{}".format(self.request, self.pred_CMD)
+        return "{}\n{}".format(self.request, self.pred_cmd)
