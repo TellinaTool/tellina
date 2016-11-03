@@ -3,10 +3,12 @@
         <div class="container">
             <div class="push"></div>
             <div class="small-push"></div>
-            <div class="header" ></div>
+            <div class="header" >
                 <div style="position: relative;">
                     <ul class="inline menu">
                         {% if nl_request %}
+                            <li><a href="/about">about</a></li>
+                            <li><a href="https://github.com/todpole3/tellina"><i class="icon-github"></i></a></li>
                             <li>
                                 <form action='/translate/' method='POST'>{% csrf_token %}
                                     <input id="top-search" type="text" name="request_str"
@@ -37,9 +39,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="oneliner oneliner-226">
                                     <pre class="line">
-                                        <span class="oneliner-line"
+                                        <span class="oneliner-line-0"
                                               style="white-space:nowrap">
                                             {{translation.pred_cmd}}
                                         </span>
@@ -53,7 +54,6 @@
                                     <div class="explanation">
                                         <h4>Explanation</h4>
                                         <p>I am a placeholder.</p>
-                                    </div>
                                     </div>
                                 </td>
                                 </tr>
