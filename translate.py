@@ -6,7 +6,8 @@ import tensorflow as tf
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "commandline-helper"))
+commandline_helper_dir = os.path.join(os.path.dirname(__file__), "commandline-helper")
+sys.path.append(commandline_helper_dir)
 
 import encoder_decoder.data_utils as data_utils
 import encoder_decoder.decode_tools as decode_tools
@@ -15,8 +16,31 @@ import encoder_decoder.translate as trans
 
 FLAGS = tf.app.flags.FLAGS
 
-parse_args.define_input_flags()
+FLAGS.demo = True
 
+FLAGS.dim = 200
+FLAGS.batch_size = 16
+FLAGS.num_layers = 1
+FLAGS.learning_rate = 0.0001
+FLAGS.encoder_input_keep = 0.6
+FLAGS.encoder_output_keep = 0.6
+FLAGS.decoder_input_keep = 0.6
+FLAGS.decoder_output_keep = 0.6
+
+FLAGS.use_attention = True
+FLAGS.attention_input_keep = 0.6
+FLAGS.attention_output_keep = 0.6
+FLAGS.beta = 0
+
+FLAGS.decoding_algorithm = 'beam_search'
+FLAGS.beam_size = 10
+FLAGS.alpha = 1.0
+
+FLAGS.nl_vocab_size = 1000
+FLAGS.cm_vocab_size = 1000
+
+FLAGS.data_dir = os.path.join(commandline_helper_dir, "data", "bash")
+FLAGS.model_dir = os.path.join(commandline_helper_dir, "model", "seq2seq")
 # create tensorflow session
 sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
                   log_device_placement=FLAGS.log_device_placement))
