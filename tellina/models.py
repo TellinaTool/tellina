@@ -15,8 +15,8 @@ class NLRequest(models.Model):
 class Translation(models.Model):
     request = models.ForeignKey(NLRequest, on_delete=models.CASCADE)
     pred_cmd = models.TextField()
-    score = models.DecimalField(max_digits=7, decimal_places=4)
+    score = models.FloatField()
     num_votes = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return "{}\n{}".format(self.request, self.pred_CMD)
+        return "{}\n{}".format(self.request, self.pred_cmd)
