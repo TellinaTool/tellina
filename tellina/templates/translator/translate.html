@@ -1,10 +1,10 @@
 {% extends "translator/base.html" %}
     {% block head %}
-        <!-- <link rel="stylesheet"
+        <!--<link rel="stylesheet"
                href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
         -->
+        <link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
         <link rel='stylesheet' href='/static/css/perfect-scrollbar.css'>
-        <link rel="stylesheet" href="/static/lib/hljs.themes/zenburn.css">
         <link href="/static/lib/jquery.upvote/jquery.upvote.css" rel="stylesheet" media="screen">
     {% endblock %}
     {% block body %}
@@ -40,7 +40,7 @@
                             <div class="well">
                                 <table class="oneliner">
                                     <tr>
-                                        <td style="vertical-align: top; width: 0px">
+                                        <td style="vertical-align: top; width: 50px">
                                             <div class="upvote upvote-programmers">
                                                 <!-- comming soon!
                                                 <a class="upvote "></a>
@@ -48,23 +48,21 @@
                                                 <a class="downvote "></a>
                                                     <a class="star "></a>
                                                 -->
-                                                <!-- <span class="index">{{forloop.counter}}</span> -->
                                             </div>
+                                            <div class="small-push"></div>
+                                            <div class="index">{{forloop.counter}}</div>
                                         </td>
                                         <td>
-                                            <span class="span7">
+                                            <div class="span7">
                                                 <code class="bash">
-                                                    # suggestion #{{forloop.counter}}<br>
+                                                    <br>
                                                     {{translation.pred_cmd}}<br>
                                                     <br>
-                                                    score: {{translation.score | floatformat:-4}}
-                                                </code>
-                                            </span>
-                                            <!-- <p class="score">
-                                                <small>
-                                                    <span><b>score: </b>{{translation.score}}</span>
-                                                </small>
-                                            </p> -->
+                                                 </code>
+                                                 <div class="score">
+                                                    <small><b>score: </b>{{translation.score | floatformat:-4}}</small>
+                                                <div>
+                                            </div>
                                             <!-- coming soon!
                                             <div class="explanation">
                                                 <h4>Explanation</h4>
@@ -93,11 +91,13 @@
         <script src="/static/lib/hljs.themes/bash.js"></script>
         <script>
             $(document).ready(function() {
-              $('span code').each(function(i, block) {
+              $('div code').each(function(i, block) {
                 hljs.highlightBlock(block);
-                Ps.initialize(block);
               });
-              $('span code').scrollTop(100).perfectScrollbar('update');
+              /* $('span code').each(function(i, block) {
+                Ps.initialize(block);
+                $('span code').scrollTop(100).perfectScrollbar('update');
+              }); */
             });
         </script>
     {% endblock %}

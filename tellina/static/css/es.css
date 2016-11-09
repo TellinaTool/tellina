@@ -110,12 +110,9 @@ table.oneliner {
     font-weight: bold;
 } */
 
-#suggestions .index {
-    font-size: 24px;
-    color: #ff4d4d
+.index {
+    font-size: 20px;
 }
-
-/* enable horizontal scrolling of code blocks */
 
 .center-block {
   display: block;

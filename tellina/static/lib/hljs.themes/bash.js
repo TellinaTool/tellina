@@ -161,7 +161,10 @@ hljs.registerLanguage("bash", function(e) {
                     + " -7"
                     + " -8"
                     + " -9"
-                    + " -0",
+                    + " -0"
+                    + " \{\}"
+                    + " \\;"
+                    + " \+",
             literal: "true false",
             built_in: "break cd continue eval exec exit export find getopts grep hash pwd readonly"
                     + " return shift test times trap umask unset alias bind builtin caller command"
