@@ -94,8 +94,8 @@ a {
     font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif
 }
 
-table.oneliner {
-    width: 100%;
+.oneliner {
+    padding-bottom: 30px;
 }
 
 /* .oneliner .line {

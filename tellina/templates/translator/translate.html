@@ -24,7 +24,7 @@
                             <li>
                                 <form action='/translate/' method='POST'>{% csrf_token %}
                                     <input id="top-search" type="text" name="request_str"
-                                    autocapitalize="off" autocorrect="off"
+                                           autocapitalize="off" autocorrect="off"
                                            placeholder="{{nl_request.request_str}}">
                                 </form>
                             </li>
@@ -37,42 +37,40 @@
                 <div class="center-block">
                     {% if translation_list %}
                         {% for translation in translation_list %}
-                            <div class="well">
+                            <!-- <div class="well">
                                 <table class="oneliner">
                                     <tr>
-                                        <td style="vertical-align: top; width: 50px">
+                                        <td style="vertical-align: top; width: 0px">
                                             <div class="upvote upvote-programmers">
-                                                <!-- comming soon!
                                                 <a class="upvote "></a>
                                                 <span class="count">{{translation.num_votes}}</span>
                                                 <a class="downvote "></a>
-                                                    <a class="star "></a>
-                                                -->
+                                                <a class="star "></a>
                                             </div>
-                                            <div class="small-push"></div>
-                                            <div class="index">{{forloop.counter}}</div>
                                         </td>
                                         <td>
                                             <div class="span7">
                                                 <code class="bash">
-                                                    <br>
+                                                    # {{forloop.counter}}<br>
                                                     {{translation.pred_cmd}}<br>
                                                     <br>
                                                  </code>
-                                                 <div class="score">
-                                                    <small><b>score: </b>{{translation.score | floatformat:-4}}</small>
-                                                <div>
                                             </div>
-                                            <!-- coming soon!
                                             <div class="explanation">
                                                 <h4>Explanation</h4>
                                                 <p>I am a placeholder.</p>
                                             </div>
-                                            -->
                                         </td>
                                     </tr>
                                 </table>
+                            </div> -->
+                            <div class="oneliner">
+                                <code class="bash">
+                                    # {{forloop.counter}}<br>
+                                    {{translation.pred_cmd}}<br>
+                                 </code>
                             </div>
+                            <i class="icon-copy"></i>
                         {% endfor %}
                     {% else %}
                         <div class="translation-error">
