@@ -5,6 +5,7 @@
         -->
         <link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
         <link rel='stylesheet' href='/static/css/perfect-scrollbar.css'>
+        <!-- <link rel='stylesheet' href='/static/css/docs.min.css'>-->
         <link href="/static/lib/jquery.upvote/jquery.upvote.css" rel="stylesheet" media="screen">
     {% endblock %}
     {% block body %}
@@ -15,17 +16,12 @@
                 <div style="position: relative;">
                     <ul class="inline menu">
                         {% if nl_request %}
-                            <li><a href="/about">about</a></li>
-                            <li>
-                                <a href="https://github.com/todpole3/tellina">
-                                    <i class="icon-github"></i>
-                                </a>
-                            </li>
+                            <li><a href="/">Tellina</a></li>
                             <li>
                                 <form action='/translate/' method='POST'>{% csrf_token %}
                                     <input id="top-search" type="text" name="request_str"
                                            autocapitalize="off" autocorrect="off"
-                                           placeholder="{{nl_request.request_str}}">
+                                           value="{{nl_request.request_str}}">
                                 </form>
                             </li>
                         {% endif %}
@@ -33,7 +29,7 @@
                 </div>
             </div>
             <div class="push"></div>
-            <div class="offset2 span8" id="suggestions">
+            <div id="suggestions">
                 <div class="center-block">
                     {% if translation_list %}
                         {% for translation in translation_list %}
@@ -65,12 +61,20 @@
                                 </table>
                             </div> -->
                             <div class="oneliner">
-                                <code class="bash">
-                                    # {{forloop.counter}}<br>
-                                    {{translation.pred_cmd}}<br>
-                                 </code>
+                                <div class="offset2 span8">
+                                    <code class="bash" id="oneliner-{{forloop.counter}}">
+                                        # {{forloop.counter}}
+                                        <br>
+                                        <span id="pred_cmd-{{forloop.counter}}">
+                                            {{translation.pred_cmd}}
+                                        </span>
+                                        <br>
+                                    </code>
+                                </div>
+                                <button type="button" class="btn btn-copy" data-clipboard-target="#pred_cmd-{{forloop.counter}}">
+                                    <img src="/static/img/clippy.svg" width="14"></img>
+                                </button>
                             </div>
-                            <i class="icon-copy"></i>
                         {% endfor %}
                     {% else %}
                         <div class="translation-error">
@@ -82,6 +86,7 @@
         </div>
     {% endblock %}
     {% block other-js %}
+        <script src='/static/js/clipboard.min.js'></script>
         <script src='/static/js/perfect-scrollbar.js'></script>
         <script src='/static/js/perfect-scrollbar.jquery.js'></script>
         <script src="/static/lib/jquery.upvote/jquery.upvote.js"></script>
@@ -98,4 +103,36 @@
               }); */
             });
         </script>
+        <script>
+            var clipboard = new Clipboard('.btn-copy');
+
+            function setTooltip(btn, message) {
+                $(btn).tooltip('hide')
+                .attr('data-original-title', message)
+                .tooltip('show');
+            }
+
+            function hideTooltip(btn, message) {
+                setTimeout(function() {
+                $(btn).tooltip('hide');
+                }, 1000);
+            }
+
+            clipboard.on('success', function(e) {
+                // console.info('Action:', e.action);
+                // console.info('Text:', e.text);
+                setTooltip(e.trigger, 'Copied!');            
+                e.clearSelection();
+                hideTooltip(e.trigger, 'Copy to clipboard');
+            });
+
+            clipboard.on('error', function(e) {
+                console.error('Action:', e.action);
+                console.error('Trigger:', e.trigger);
+            });
+        </script>
+        <script>$('.btn-copy').tooltip({
+            trigger: 'click',
+            placement: 'top'
+        });</script>
     {% endblock %}
