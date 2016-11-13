@@ -94,19 +94,11 @@ a {
     font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif
 }
 
-#suggestions a {
-    font-size: 15px;
+.oneliner {
+    padding-bottom: 30px;
 }
 
-#suggestions h3 {
-    font-family: 'Berkshire Swash', cursive;
-}
-
-table.oneliner {
-    width: 100%;
-}
-
-.oneliner .line {
+/* .oneliner .line {
     background: #eee;
     font-size: 16px;
     font-family: Consolas,monaco,monospace
@@ -116,6 +108,10 @@ table.oneliner {
     color: #253;
     padding-right: .5em;
     font-weight: bold;
+} */
+
+.index {
+    font-size: 20px;
 }
 
 .center-block {

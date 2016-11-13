@@ -33,7 +33,7 @@ FLAGS.attention_output_keep = 0.6
 FLAGS.beta = 0.0
 
 FLAGS.decoding_algorithm = 'beam_search'
-FLAGS.beam_size = 10
+FLAGS.beam_size = 50
 FLAGS.alpha = 1.0
 
 FLAGS.nl_vocab_size = 1000

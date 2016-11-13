@@ -1,4 +1,12 @@
 {% extends "translator/base.html" %}
+    {% block head %}
+        <!--<link rel="stylesheet"
+               href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+        -->
+        <link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
+        <link rel='stylesheet' href='/static/css/perfect-scrollbar.css'>
+        <link href="/static/lib/jquery.upvote/jquery.upvote.css" rel="stylesheet" media="screen">
+    {% endblock %}
     {% block body %}
         <div class="container">
             <div class="push"></div>
@@ -8,12 +16,16 @@
                     <ul class="inline menu">
                         {% if nl_request %}
                             <li><a href="/about">about</a></li>
-                            <li><a href="https://github.com/todpole3/tellina"><i class="icon-github"></i></a></li>
+                            <li>
+                                <a href="https://github.com/todpole3/tellina">
+                                    <i class="icon-github"></i>
+                                </a>
+                            </li>
                             <li>
                                 <form action='/translate/' method='POST'>{% csrf_token %}
                                     <input id="top-search" type="text" name="request_str"
-                                    autocapitalize="off" autocorrect="off"
-                                           placeholder={{nl_request.request_str}}>
+                                           autocapitalize="off" autocorrect="off"
+                                           placeholder="{{nl_request.request_str}}">
                                 </form>
                             </li>
                         {% endif %}
@@ -25,40 +37,40 @@
                 <div class="center-block">
                     {% if translation_list %}
                         {% for translation in translation_list %}
-                            <div class="well">
+                            <!-- <div class="well">
                                 <table class="oneliner">
-                                <tr>
-                                <td style="vertical-align: top; width: 50px">
-                                    <div class="upvote upvote-programmers">
-                                        <a class="upvote "></a>
-                                        <span class="count">{{translation.num_votes}}</span>
-                                        <a class="downvote "></a>
-                                        <!-- coming soon!
-                                        <a class="star "></a>
-                                        -->
-                                    </div>
-                                </td>
-                                <td>
-                                    <pre class="line">
-                                        <span class="oneliner-line-0"
-                                              style="white-space:nowrap">
-                                            {{translation.pred_cmd}}
-                                        </span>
-                                    </pre>
-                                    <p class="score">
-                                        <small>
-                                            <span><b>score: </b>{{translation.score}}</span>
-                                        </small>
-                                    </p>
-
-                                    <div class="explanation">
-                                        <h4>Explanation</h4>
-                                        <p>I am a placeholder.</p>
-                                    </div>
-                                </td>
-                                </tr>
+                                    <tr>
+                                        <td style="vertical-align: top; width: 0px">
+                                            <div class="upvote upvote-programmers">
+                                                <a class="upvote "></a>
+                                                <span class="count">{{translation.num_votes}}</span>
+                                                <a class="downvote "></a>
+                                                <a class="star "></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="span7">
+                                                <code class="bash">
+                                                    # {{forloop.counter}}<br>
+                                                    {{translation.pred_cmd}}<br>
+                                                    <br>
+                                                 </code>
+                                            </div>
+                                            <div class="explanation">
+                                                <h4>Explanation</h4>
+                                                <p>I am a placeholder.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </table>
+                            </div> -->
+                            <div class="oneliner">
+                                <code class="bash">
+                                    # {{forloop.counter}}<br>
+                                    {{translation.pred_cmd}}<br>
+                                 </code>
                             </div>
+                            <i class="icon-copy"></i>
                         {% endfor %}
                     {% else %}
                         <div class="translation-error">
@@ -68,4 +80,22 @@
                 </div>
             </div>
         </div>
+    {% endblock %}
+    {% block other-js %}
+        <script src='/static/js/perfect-scrollbar.js'></script>
+        <script src='/static/js/perfect-scrollbar.jquery.js'></script>
+        <script src="/static/lib/jquery.upvote/jquery.upvote.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+        <script src="/static/lib/hljs.themes/bash.js"></script>
+        <script>
+            $(document).ready(function() {
+              $('div code').each(function(i, block) {
+                hljs.highlightBlock(block);
+              });
+              /* $('span code').each(function(i, block) {
+                Ps.initialize(block);
+                $('span code').scrollTop(100).perfectScrollbar('update');
+              }); */
+            });
+        </script>
     {% endblock %}
