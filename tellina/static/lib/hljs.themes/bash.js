@@ -25,12 +25,11 @@ hljs.registerLanguage("bash", function(e) {
         };
     return {
         aliases: ["sh", "zsh"],
-        l: /-?[a-zA-Z0-9\._]+/,
+        l: /-?[a-zA-Z0-9\.\(\)\!\\;\{\}_\+]+/,
         k: {
             keyword: "if then else elif fi for while in do done case esac function"
                     + " -true"
                     + " -false"
-                    + " -not"
                     + " -Bmin"
                     + " -Bnewer"
                     + " -Btime"
@@ -41,16 +40,11 @@ hljs.registerLanguage("bash", function(e) {
                     + " -cmin"
                     + " -cnewer"
                     + " -ctime"
-                    + " -exec"
-                    + " -execdir"
-                    + " -ok"
-                    + " -flags"
-                    + " -okdir"
                     + " -d"
-                    + " -delete"
                     + " -depth"
                     + " -depth"
                     + " -empty"
+                    + " -executable"
                     + " -fstype"
                     + " -gid"
                     + " -group"
@@ -80,9 +74,7 @@ hljs.registerLanguage("bash", function(e) {
                     + " -nouser"
                     + " -path"
                     + " -perm"
-                    + " -print0"
                     + " -print"
-                    + " -prune"
                     + " -regex"
                     + " -samefile"
                     + " -size"
@@ -93,11 +85,6 @@ hljs.registerLanguage("bash", function(e) {
                     + " -xattr"
                     + " -xattrname"
                     + " -xi"
-                    + " -and"
-                    + " -or"
-                    + " -not"
-                    + " -printf"
-                    + " !"
                     + " -daystart"
                     + " -xtype"
                     + " -a"
@@ -161,10 +148,7 @@ hljs.registerLanguage("bash", function(e) {
                     + " -7"
                     + " -8"
                     + " -9"
-                    + " -0"
-                    + " \{\}"
-                    + " \\;"
-                    + " \+",
+                    + " -0",
             literal: "true false",
             built_in: "break cd continue eval exec exit export find getopts grep hash pwd readonly"
                     + " return shift test times trap umask unset alias bind builtin caller command"
@@ -177,6 +161,10 @@ hljs.registerLanguage("bash", function(e) {
                     + " ttyctl unfunction unhash unlimit unsetopt vared wait whence where which"
                     + " zcompile zformat zftp zle zmodload zparseopts zprof zpty zregexparse zsocket"
                     + " zstyle ztcp rm sort head tail tar cp smv ls chmod chown chgrp wc xargs",
+            operators: "\| \\\! -not -and -or",
+            actions: "-detele -exec -execdir -fls -fprint -fprint0 -fprintf -ls -ok -okdir -print"
+                    + " -print0 -printf -prune -quit",
+            special_symbols: "\\\( \\\) \\; \+" 
         },
         c: [{
             cN: "meta",

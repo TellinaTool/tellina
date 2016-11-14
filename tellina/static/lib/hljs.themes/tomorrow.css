@@ -2,6 +2,7 @@
 .hljs-quote {
     color: #8e908c
 }
+
 .hljs-variable,
 .hljs-template-variable,
 .hljs-tag,
@@ -12,6 +13,8 @@
 .hljs-deletion {
     color: #c82829
 }
+
+/* bash utilities */
 .hljs-number,
 .hljs-built_in,
 .hljs-builtin-name,
@@ -19,26 +22,42 @@
 .hljs-type,
 .hljs-params,
 .hljs-meta,
-.hljs-link {
+.hljs-link{
     color: #f5871f
+} 
+.hljs-special_symbols{
+    color: #66cccc
 }
-.hljs-attribute {
-    color: #eab700
+
+/* bash operators */
+.hljs-operators {
+    color: #ff4c4c
 }
+
 .hljs-string,
+.hljs-attribute {
+    color: #718c00
+}
+
+/* bash actions */
+.hljs-actions,
 .hljs-symbol,
 .hljs-bullet,
 .hljs-addition {
-    color: #718c00
-}
-.hljs-title,
-.hljs-section {
     color: #4271ae
 }
+
+.hljs-title,
+.hljs-section {
+    color: #eab700
+}
+
+/* bash tests */
 .hljs-keyword,
 .hljs-selector-tag {
     color: #8959a8
 }
+
 .hljs {
     display: block;
     overflow-x: auto;
