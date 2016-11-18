@@ -11,12 +11,7 @@ from tellina.models import NLRequest, Translation
 
 DEBUG = False
 
-if DEBUG:
-    from bashlex import data_tools
-    from encoder_decoder import data_utils
-    from tellina.helper_interface import translate_fun, FLAGS
-else:
-    from tellina.helper_interface import translate_fun
+from tellina.helper_interface import translate_fun
 
 
 def about(request):
@@ -83,4 +78,9 @@ def index(request):
     context = {
         'latest_request_list': latest_request_list,
     }
+    return HttpResponse(template.render(context, request))
+
+def task(request):
+    template = loader.get_template('platform/task.html')
+    context = {}
     return HttpResponse(template.render(context, request))
