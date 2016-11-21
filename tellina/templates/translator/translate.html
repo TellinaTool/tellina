@@ -94,13 +94,11 @@
         <script src="/static/lib/hljs.themes/bash.js"></script>
         <script>
             $(document).ready(function() {
-              $('div code').each(function(i, block) {
-                hljs.highlightBlock(block);
-              });
-              /* $('span code').each(function(i, block) {
-                Ps.initialize(block);
-                $('span code').scrollTop(100).perfectScrollbar('update');
-              }); */
+                $('div code').each(
+                    function(i, block) {
+                        hljs.highlightBlock(block);
+                    }
+                );
             });
         </script>
         <script>
@@ -131,8 +129,10 @@
                 console.error('Trigger:', e.trigger);
             });
         </script>
-        <script>$('.btn-copy').tooltip({
-            trigger: 'click',
-            placement: 'top'
-        });</script>
+        <script>
+            $('.btn-copy').tooltip({
+                trigger: 'click',
+                placement: 'top'
+            });
+        </script>
     {% endblock %}
