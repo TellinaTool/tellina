@@ -59,20 +59,22 @@
                                     </tr>
                                 </table>
                             </div> -->
-                            <div class="offset2 span8">
-                                <code class="oneliner" id="oneliner-{{forloop.counter}}">
-                                    # {{forloop.counter}}
-                                    <br>
-                                    <span class="pred-cmd" id="pred-cmd-{{forloop.counter}}">
-                                        {{translation.pred_cmd}}
-                                    </span>
-                                    &nbsp;
-                                    <button class="btn nohover btn-copy btn-mini"
-                                     data-clipboard-target="#pred-cmd-{{forloop.counter}}"
-                                     id="copy-btn-{{forloop.counter}}">
-                                        <span style="">copy</span>
+                            <div class="oneliner">
+                                <div class="offset2">
+                                    <code class="bash span8" id="oneliner-{{forloop.counter}}">
+                                        # {{forloop.counter}}
+                                        <br>
+                                        <span id="pred-cmd-{{forloop.counter}}">
+                                            {{translation.pred_cmd}}
+                                        </span>
+                                        <br>
+                                    </code>
+                                    <button type="button" class="btn btn-copy"
+                                        data-clipboard-target="#pred-cmd-{{forloop.counter}}"
+                                        id="copy-btn-{{forloop.counter}}">
+                                        <img src="/static/img/clippy.svg" width="14">
                                     </button>
-                                </code>
+                                </div>
                             </div>
                         {% endfor %}
                     {% else %}
@@ -99,10 +101,11 @@
 
               var num_suggestions = 50;
               for (var i=1; i<=num_suggestions; i++) {
-                  $('#copy-btn-' + i).hide();
+                  $('#copy-btn-' + i)
+                  .height($('#oneliner-' + i).height() + 4);
               }
 
-              $('.oneliner').hover(
+              /* $('.oneliner').hover(
                   function(event) {
                     target_id = event.target.id;
                     i = target_id.split('-').slice(-1)[0];
@@ -114,8 +117,7 @@
                     $('#copy-btn-' + i).hide();
                   }
               );
-
-
+              */
             });
         </script>
         <script>
