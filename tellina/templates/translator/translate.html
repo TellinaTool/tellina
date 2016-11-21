@@ -66,6 +66,7 @@
                                     <span class="pred-cmd" id="pred-cmd-{{forloop.counter}}">
                                         {{translation.pred_cmd}}
                                     </span>
+                                    &nbsp;
                                     <button class="btn nohover btn-copy btn-mini"
                                      data-clipboard-target="#pred-cmd-{{forloop.counter}}"
                                      id="copy-btn-{{forloop.counter}}">
@@ -101,21 +102,20 @@
                   $('#copy-btn-' + i).hide();
               }
 
-              $('.oneliner').hover(function(event) {
-                target_id = event.target.id;
-                i = target_id.split('-').slice(-1)[0];
-                $('#copy-btn-' + i).stop(true, true).fadeIn();
-              });
+              $('.oneliner').hover(
+                  function(event) {
+                    target_id = event.target.id;
+                    i = target_id.split('-').slice(-1)[0];
+                    $('#copy-btn-' + i).stop(true, true).fadeIn();
+                  },
+                  function(event) {
+                    target_id = event.target.id;
+                    i = target_id.split('-').slice(-1)[0];
+                    $('#copy-btn-' + i).hide();
+                  }
+              );
 
-              $('.oneliner').mouseout(function(event) {
-                if (e.parentNode == this ||
-                           e == this) {
-                    return;
-                }
-                target_id = event.target.id;
-                i = target_id.split('-').slice(-1)[0];
-                $('#copy-btn-' + i).hide();
-              });
+
             });
         </script>
         <script>

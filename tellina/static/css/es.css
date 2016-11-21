@@ -205,14 +205,18 @@ a {
 
 .btn-copy {
     color: white;
+    height: 18px;
     background: #ffbbbb;
     border: 0px;
     margin-top: 0em;
+    padding-top: 0em;
 }
 
 .btn-copy:hover {
     color: white;
+    height: 18px;
     background: #ff6666;
     border: 0px;
     margin-top: 0em;
+    padding-top: 0em;
 }
