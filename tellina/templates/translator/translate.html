@@ -59,20 +59,19 @@
                                     </tr>
                                 </table>
                             </div> -->
-                            <div class="oneliner">
-                                <div class="offset2 span8">
-                                    <code class="bash" id="oneliner-{{forloop.counter}}">
-                                        # {{forloop.counter}}
-                                        <br>
-                                        <span id="pred_cmd-{{forloop.counter}}">
-                                            {{translation.pred_cmd}}
-                                        </span>
-                                        <br>
-                                    </code>
-                                </div>
-                                <button type="button" class="btn btn-copy" data-clipboard-target="#pred_cmd-{{forloop.counter}}">
-                                    <img src="/static/img/clippy.svg" width="14">
-                                </button>
+                            <div class="offset2 span8">
+                                <code class="oneliner" id="oneliner-{{forloop.counter}}">
+                                    # {{forloop.counter}}
+                                    <br>
+                                    <span class="pred-cmd" id="pred-cmd-{{forloop.counter}}">
+                                        {{translation.pred_cmd}}
+                                    </span>
+                                    <button class="btn nohover btn-copy btn-mini"
+                                     data-clipboard-target="#pred-cmd-{{forloop.counter}}"
+                                     id="copy-btn-{{forloop.counter}}">
+                                        <span style="">copy</span>
+                                    </button>
+                                </code>
                             </div>
                         {% endfor %}
                     {% else %}
@@ -96,10 +95,27 @@
               $('div code').each(function(i, block) {
                 hljs.highlightBlock(block);
               });
-              /* $('span code').each(function(i, block) {
-                Ps.initialize(block);
-                $('span code').scrollTop(100).perfectScrollbar('update');
-              }); */
+
+              var num_suggestions = 50;
+              for (var i=1; i<=num_suggestions; i++) {
+                  $('#copy-btn-' + i).hide();
+              }
+
+              $('.oneliner').hover(function(event) {
+                target_id = event.target.id;
+                i = target_id.split('-').slice(-1)[0];
+                $('#copy-btn-' + i).stop(true, true).fadeIn();
+              });
+
+              $('.oneliner').mouseout(function(event) {
+                if (e.parentNode == this ||
+                           e == this) {
+                    return;
+                }
+                target_id = event.target.id;
+                i = target_id.split('-').slice(-1)[0];
+                $('#copy-btn-' + i).hide();
+              });
             });
         </script>
         <script>
@@ -111,18 +127,19 @@
                 .tooltip('show');
             }
 
-            function hideTooltip(btn, message) {
+            function hideTooltip(btn) {
                 setTimeout(function() {
-                $(btn).tooltip('hide');
+                $(btn).tooltip('hide')
+                .attr('data-original-title', '');
                 }, 1000);
             }
 
             clipboard.on('success', function(e) {
                 // console.info('Action:', e.action);
                 // console.info('Text:', e.text);
-                setTooltip(e.trigger, 'Copied!');            
+                setTooltip(e.trigger, 'Copied!');
+                hideTooltip(e.trigger);
                 e.clearSelection();
-                hideTooltip(e.trigger, 'Copy to clipboard');
             });
 
             clipboard.on('error', function(e) {
@@ -130,8 +147,10 @@
                 console.error('Trigger:', e.trigger);
             });
         </script>
-        <script>$('.btn-copy').tooltip({
-            trigger: 'click',
-            placement: 'top'
-        });</script>
+        <script>
+            $('.btn-copy').tooltip({
+                trigger: 'click',
+                placement: 'top'
+            });
+        </script>
     {% endblock %}
