@@ -161,10 +161,10 @@ hljs.registerLanguage("bash", function(e) {
                     + " ttyctl unfunction unhash unlimit unsetopt vared wait whence where which"
                     + " zcompile zformat zftp zle zmodload zparseopts zprof zpty zregexparse zsocket"
                     + " zstyle ztcp rm sort head tail tar cp smv ls chmod chown chgrp wc xargs",
-            operators: "\| \\\! -not -and -or",
+            operators: "\! \\\! -not -and -or",
             actions: "-detele -exec -execdir -fls -fprint -fprint0 -fprintf -ls -ok -okdir -print"
                     + " -print0 -printf -prune -quit",
-            special_symbols: "\\\( \\\) \\; \+" 
+            special_symbols: "\\\( \\\) \\; \+"
         },
         c: [{
             cN: "meta",

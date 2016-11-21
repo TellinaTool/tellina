@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^translate/', views.translate, name='translate'),
     url(r'^about/', views.about, name='about'),
     url(r'^admin/', admin.site.urls),
+
+    url(r'^task/', views.task)
 ]
