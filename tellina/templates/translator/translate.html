@@ -32,8 +32,8 @@
                 <div class="center-block">
                     {% if translation_list %}
                         {% for translation in translation_list %}
-                            <!-- <div class="well">
-                                <table class="oneliner">
+                            <div class="well offset1 span10">
+                                <!-- <table class="oneliner">
                                     <tr>
                                         <td style="vertical-align: top; width: 0px">
                                             <div class="upvote upvote-programmers">
@@ -57,24 +57,32 @@
                                             </div>
                                         </td>
                                     </tr>
+                                </table> -->
+                                <table class="oneliner">
+                                    <tr>
+                                        <div class="oneliner-index">
+                                            <h4># {{forloop.counter}}</h4>
+                                        </div>
+                                    </tr>
+                                    <tr>
+                                        <code class="bash span8" id="oneliner-{{forloop.counter}}">
+                                            <span id="pred-cmd-{{forloop.counter}}">
+                                                {{translation.pred_cmd}}
+                                            </span>
+                                        </code>
+                                        <button type="button" class="btn btn-copy"
+                                            data-clipboard-target="#pred-cmd-{{forloop.counter}}"
+                                            id="copy-btn-{{forloop.counter}}">
+                                            <img src="/static/img/clippy.svg" width="14">
+                                        </button>
+                                    </tr>
+                                    <tr>
+                                        <div class="explanation">
+                                            <h4>Explanation</h4>
+                                            <p>I am a placeholder.</p>
+                                        </div>
+                                    </tr>
                                 </table>
-                            </div> -->
-                            <div class="oneliner">
-                                <div class="offset2">
-                                    <code class="bash span8" id="oneliner-{{forloop.counter}}">
-                                        # {{forloop.counter}}
-                                        <br>
-                                        <span id="pred-cmd-{{forloop.counter}}">
-                                            {{translation.pred_cmd}}
-                                        </span>
-                                        <br>
-                                    </code>
-                                    <button type="button" class="btn btn-copy"
-                                        data-clipboard-target="#pred-cmd-{{forloop.counter}}"
-                                        id="copy-btn-{{forloop.counter}}">
-                                        <img src="/static/img/clippy.svg" width="14">
-                                    </button>
-                                </div>
                             </div>
                         {% endfor %}
                     {% else %}
