@@ -86,16 +86,17 @@ a {
     outline: 0 none;
 }
 
+.oneliner-index h4 {
+    font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif;
+    margin-left: 20px;
+}
+
+.explanation {
+    margin-left: 20px;
+}
+
 .explanation h4 {
-    font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif
-}
-
-.oneliner {
-    margin-bottom: 48px;
-}
-
-.oneliner-actions {
-    text-align: right;
+    font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif;
 }
 
 /* .oneliner .line {
@@ -122,6 +123,7 @@ a {
 
 .well {
     background: white;
+    height:auto;
 }
 
 .menu {

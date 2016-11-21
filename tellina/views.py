@@ -17,6 +17,11 @@ from tellina.helper_interface import translate_fun
 def about(request):
     return HttpResponse("coming soon...")
 
+def mockup_translate(request):
+    template = loader.get_template('mockups/translate.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
 @csrf_protect
 def translate(request):
     template = loader.get_template('translator/translate.html')
