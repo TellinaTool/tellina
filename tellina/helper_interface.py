@@ -18,22 +18,22 @@ FLAGS = tf.app.flags.FLAGS
 FLAGS.demo = True
 FLAGS.normalized = True
 
-FLAGS.dim = 200
+FLAGS.dim = 400
 FLAGS.batch_size = 16
 FLAGS.num_layers = 1
 FLAGS.learning_rate = 0.0001
-FLAGS.encoder_input_keep = 0.6
-FLAGS.encoder_output_keep = 0.6
-FLAGS.decoder_input_keep = 0.6
-FLAGS.decoder_output_keep = 0.6
+FLAGS.encoder_input_keep = 0.7
+FLAGS.encoder_output_keep = 1.0
+FLAGS.decoder_input_keep = 0.7
+FLAGS.decoder_output_keep = 0.7
 
-FLAGS.use_attention = True
+FLAGS.use_attention = False
 FLAGS.attention_input_keep = 0.6
 FLAGS.attention_output_keep = 0.6
 FLAGS.beta = 0.0
 
 FLAGS.decoding_algorithm = 'beam_search'
-FLAGS.beam_size = 50
+FLAGS.beam_size = 100
 FLAGS.alpha = 1.0
 
 FLAGS.nl_vocab_size = 1000
