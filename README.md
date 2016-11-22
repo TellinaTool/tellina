@@ -14,7 +14,7 @@ https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#pip-installa
 pip3 install -r requirements.txt
 ```
 
-### Retrieve commandline-helper submodule
+### Commandline-helper submodule:
 
 ```
 git submodule update --remote
