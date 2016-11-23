@@ -17,6 +17,9 @@
                         {% if nl_request %}
                             <li><a href="/">Tellina</a></li>
                             <li>
+                                <a href="/websearch"><i class="icon-globe"></i></a>
+                            </li>
+                            <li>
                                 <form action='/translate/' method='POST'>{% csrf_token %}
                                     <input id="top-search" type="text" name="request_str"
                                            autocapitalize="off" autocorrect="off"
@@ -75,6 +78,11 @@
                                             id="copy-btn-{{forloop.counter}}">
                                             <img src="/static/img/clippy.svg" width="14">
                                         </button>
+                                        <button type="button" class="btn btn-expl"
+                                            data-clipboard-target="#pred-cmd-{{forloop.counter}}"
+                                            id="expl-btn-{{forloop.counter}}">
+                                            <img src="/static/img/gear.svg" width="14">
+                                        </button>
                                     </tr>
                                     <tr>
                                         <div class="explanation">
@@ -110,6 +118,8 @@
               var num_suggestions = 50;
               for (var i=1; i<=num_suggestions; i++) {
                   $('#copy-btn-' + i)
+                  .height($('#oneliner-' + i).height() + 4);
+                  $('#expl-btn-' + i)
                   .height($('#oneliner-' + i).height() + 4);
               }
 

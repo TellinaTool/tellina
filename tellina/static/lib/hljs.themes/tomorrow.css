@@ -58,6 +58,11 @@
     color: #8959a8
 }
 
+/* holes */
+.hljs-semantic_types {
+    text-decoration: underline;
+}
+
 .hljs {
     display: block;
     overflow-x: auto;

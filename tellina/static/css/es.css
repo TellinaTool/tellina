@@ -99,6 +99,7 @@ a {
     font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif;
 }
 
+
 /* .oneliner .line {
     background: #eee;
     font-size: 16px;
@@ -193,6 +194,17 @@ a {
     max-width: 450px;
 }
 
+.btn-search{
+    background: white;
+    box-shadow: none;
+    outline: 0;
+}
+
+.btn-search:hover{
+    background: #ffbbbb;
+    # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);
+}
+
 .btn-copy{
     background: white;
     box-shadow: none;
@@ -202,6 +214,17 @@ a {
 .btn-copy:hover{
     background: #ffbbbb;
     # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);    
+}
+
+.btn-expl{
+    background: white;
+    box-shadow: none;
+    outline: 0;
+}
+
+.btn-expl:hover{
+    background: #ffbbbb;
+    # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);
 }
 
 /* .btn-copy {

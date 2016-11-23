@@ -66,6 +66,12 @@ def translate(request):
     }
     return HttpResponse(template.render(context, request))
 
+@csrf_protect
+def web_search(request):
+    template = loader.get_template('translator/websearch.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
 def index(request):
     latest_request_list = NLRequest.objects.order_by('-sub_time')[:10]
     template = loader.get_template('translator/index.html')
