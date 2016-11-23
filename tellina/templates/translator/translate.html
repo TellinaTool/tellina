@@ -111,9 +111,11 @@
         <script src="/static/lib/hljs.themes/bash.js"></script>
         <script>
             $(document).ready(function() {
-              $('div code').each(function(i, block) {
-                hljs.highlightBlock(block);
-              });
+                $('div code').each(
+                    function(i, block) {
+                        hljs.highlightBlock(block);
+                    }
+                );
 
               var num_suggestions = 50;
               for (var i=1; i<=num_suggestions; i++) {
