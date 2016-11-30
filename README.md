@@ -18,6 +18,7 @@ pip3 install -r requirements.txt
 
 ```
 git submodule update --remote
+git submodule foreach git pull origin master
 ```
 
 ### Run webapp:
