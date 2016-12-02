@@ -37,6 +37,9 @@
                         
                             <li><a href="/">Tellina</a></li>
                             <li>
+                                <a href="/websearch"><i class="icon-globe"></i></a>
+                            </li>
+                            <li>
                                 <form action='/translate/' method='POST'><input type='hidden' name='csrfmiddlewaretoken' value='BVlUbyE8zpRKfngsgWqryeucNOEcsCiztMyCyV0Dlk68ut1SHd00HO0Xf7mZHznr' />
                                     <input id="top-search" type="text" name="request_str"
                                            autocapitalize="off" autocorrect="off"
@@ -53,31 +56,6 @@
                     
                         
                             <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 1<br>
-                                                    find File -type f -mtime Time -exec rm {} \;<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
                                 <table class="oneliner">
                                     <tr>
                                         <div class="oneliner-index">
@@ -87,7 +65,8 @@
                                     <tr>
                                         <code class="bash span8" id="oneliner-1">
                                             <span id="pred-cmd-1">
-                                                find File -type f -mtime Time -exec rm {} \;
+                                                find Directory -type f -mtime Timespan -exec rm
+                                                {} \;
                                             </span>
                                         </code>
                                         <button type="button" class="btn btn-copy"
@@ -95,12 +74,17 @@
                                             id="copy-btn-1">
                                             <img src="/static/img/clippy.svg" width="14">
                                         </button>
+                                        <button type="button" class="btn btn-expl"
+                                            data-clipboard-target="#pred-cmd-1"
+                                            id="expl-btn-1">
+                                            <img src="/static/img/gear.svg" width="14">
+                                        </button>
                                     </tr>
                                     <tr>
                                         <div class="explanation">
                                             <h4>Explanation</h4>
-                                            <p>Remove all regular files in directory <i>File</i>
-                                                modified <i>Time</i> days ago
+                                            <p>Remove all regular files in <i>Directory</i>
+                                                modified <i>Timespan</i> days ago
                                             </p>
                                         </div>
                                     </tr>
@@ -108,31 +92,6 @@
                             </div>
                         
                             <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 2<br>
-                                                    find File -user Pattern -mtime Time -exec rm {} \;<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
                                 <table class="oneliner">
                                     <tr>
                                         <div class="oneliner-index">
@@ -142,7 +101,9 @@
                                     <tr>
                                         <code class="bash span8" id="oneliner-2">
                                             <span id="pred-cmd-2">
-                                                find File -user Pattern -mtime Time -exec rm {} \;
+                                                find Directory -user Username -mtime Timespan
+                                                -exec rm
+                                                {} \;
                                             </span>
                                         </code>
                                         <button type="button" class="btn btn-copy"
@@ -150,13 +111,18 @@
                                             id="copy-btn-2">
                                             <img src="/static/img/clippy.svg" width="14">
                                         </button>
+                                        <button type="button" class="btn btn-expl"
+                                            data-clipboard-target="#pred-cmd-2"
+                                            id="expl-btn-2">
+                                            <img src="/static/img/gear.svg" width="14">
+                                        </button>
                                     </tr>
                                     <tr>
                                         <div class="explanation">
                                             <h4>Explanation</h4>
-                                            <p>Remove all files/directories in directory
-                                                <i>File</i> which belong to user <i>Pattern</i>
-                                                and was modified <i>Time</i> days ago.
+                                            <p>Remove all files/directories in <i>Directory</i>
+                                                which belong to user <i>Username</i>
+                                                and was modified <i>Timespan</i> days ago.
                                             </p>
                                         </div>
                                     </tr>
@@ -164,31 +130,6 @@
                             </div>
                         
                             <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 3<br>
-                                                    find File -type f -mtime Time -exec rm -f {} \;<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
                                 <table class="oneliner">
                                     <tr>
                                         <div class="oneliner-index">
@@ -198,7 +139,8 @@
                                     <tr>
                                         <code class="bash span8" id="oneliner-3">
                                             <span id="pred-cmd-3">
-                                                find File -type f -mtime Time -exec rm -f {} \;
+                                                find Directory -type f -mtime Timespan -exec rm -f
+                                                {} \;
                                             </span>
                                         </code>
                                         <button type="button" class="btn btn-copy"
@@ -206,13 +148,17 @@
                                             id="copy-btn-3">
                                             <img src="/static/img/clippy.svg" width="14">
                                         </button>
+                                        <button type="button" class="btn btn-expl"
+                                            data-clipboard-target="#pred-cmd-3"
+                                            id="expl-btn-3">
+                                            <img src="/static/img/gear.svg" width="14">
+                                        </button>
                                     </tr>
                                     <tr>
                                         <div class="explanation">
                                             <h4>Explanation</h4>
-                                            <p>Force remove all regular files in directory <i>File
-                                            </i>
-                                                modified <i>Time</i> days ago.
+                                            <p>Force remove all regular files in <i>Directory</i>
+                                                modified <i>Timespan</i> days ago.
                                             </p>
                                         </div>
                                     </tr>
@@ -220,31 +166,6 @@
                             </div>
                         
                             <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 4<br>
-                                                    find File -type f -mtime Time -print0 | xargs -0 -I {} rm {}<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
                                 <table class="oneliner">
                                     <tr>
                                         <div class="oneliner-index">
@@ -254,7 +175,8 @@
                                     <tr>
                                         <code class="bash span8" id="oneliner-4">
                                             <span id="pred-cmd-4">
-                                                find File -type f -mtime Time -print0 | xargs -0 -I {} rm {}
+                                                find Directory -type f -mtime Timespan -print0 |
+                                                xargs -0 -I {} rm {}
                                             </span>
                                         </code>
                                         <button type="button" class="btn btn-copy"
@@ -262,336 +184,23 @@
                                             id="copy-btn-4">
                                             <img src="/static/img/clippy.svg" width="14">
                                         </button>
+                                        <button type="button" class="btn btn-expl"
+                                            data-clipboard-target="#pred-cmd-4"
+                                            id="expl-btn-4">
+                                            <img src="/static/img/gear.svg" width="14">
+                                        </button>
                                     </tr>
                                     <tr>
                                         <div class="explanation">
                                             <h4>Explanation</h4>
-                                            <p>Remove all regular files in directory <i>File</i>
-                                                modified <i>Time</i> days ago.
+                                            <p>Remove all regular files in <i>Directory</i>
+                                                modified <i>Timespan</i> days ago.
                                             </p>
                                         </div>
                                     </tr>
                                 </table>
                             </div>
-                        
-                            <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 5<br>
-                                                    find File -type f -mtime Time -exec rm {} +<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
-                                <table class="oneliner">
-                                    <tr>
-                                        <div class="oneliner-index">
-                                            <h4># 5</h4>
-                                        </div>
-                                    </tr>
-                                    <tr>
-                                        <code class="bash span8" id="oneliner-5">
-                                            <span id="pred-cmd-5">
-                                                find File -type f -mtime Time -exec rm {} +
-                                            </span>
-                                        </code>
-                                        <button type="button" class="btn btn-copy"
-                                            data-clipboard-target="#pred-cmd-5"
-                                            id="copy-btn-5">
-                                            <img src="/static/img/clippy.svg" width="14">
-                                        </button>
-                                    </tr>
-                                    <tr>
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>I am a placeholder.</p>
-                                        </div>
-                                    </tr>
-                                </table>
-                            </div>
-                        
-                            <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 6<br>
-                                                    find File -type f -mtime Time -exec rm -i {} \;<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
-                                <table class="oneliner">
-                                    <tr>
-                                        <div class="oneliner-index">
-                                            <h4># 6</h4>
-                                        </div>
-                                    </tr>
-                                    <tr>
-                                        <code class="bash span8" id="oneliner-6">
-                                            <span id="pred-cmd-6">
-                                                find File -type f -mtime Time -exec rm -i {} \;
-                                            </span>
-                                        </code>
-                                        <button type="button" class="btn btn-copy"
-                                            data-clipboard-target="#pred-cmd-6"
-                                            id="copy-btn-6">
-                                            <img src="/static/img/clippy.svg" width="14">
-                                        </button>
-                                    </tr>
-                                    <tr>
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>I am a placeholder.</p>
-                                        </div>
-                                    </tr>
-                                </table>
-                            </div>
-                        
-                            <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 7<br>
-                                                    find File -user Pattern -mtime Time -exec rm -f {} \;<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
-                                <table class="oneliner">
-                                    <tr>
-                                        <div class="oneliner-index">
-                                            <h4># 7</h4>
-                                        </div>
-                                    </tr>
-                                    <tr>
-                                        <code class="bash span8" id="oneliner-7">
-                                            <span id="pred-cmd-7">
-                                                find File -user Pattern -mtime Time -exec rm -f {} \;
-                                            </span>
-                                        </code>
-                                        <button type="button" class="btn btn-copy"
-                                            data-clipboard-target="#pred-cmd-7"
-                                            id="copy-btn-7">
-                                            <img src="/static/img/clippy.svg" width="14">
-                                        </button>
-                                    </tr>
-                                    <tr>
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>I am a placeholder.</p>
-                                        </div>
-                                    </tr>
-                                </table>
-                            </div>
-                        
-                            <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 8<br>
-                                                    find File -user Pattern -mtime Time -exec rm {} +<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
-                                <table class="oneliner">
-                                    <tr>
-                                        <div class="oneliner-index">
-                                            <h4># 8</h4>
-                                        </div>
-                                    </tr>
-                                    <tr>
-                                        <code class="bash span8" id="oneliner-8">
-                                            <span id="pred-cmd-8">
-                                                find File -user Pattern -mtime Time -exec rm {} +
-                                            </span>
-                                        </code>
-                                        <button type="button" class="btn btn-copy"
-                                            data-clipboard-target="#pred-cmd-8"
-                                            id="copy-btn-8">
-                                            <img src="/static/img/clippy.svg" width="14">
-                                        </button>
-                                    </tr>
-                                    <tr>
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>I am a placeholder.</p>
-                                        </div>
-                                    </tr>
-                                </table>
-                            </div>
-                        
-                            <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 9<br>
-                                                    find File -user Pattern -daystart -mtime Time -exec rm {} \;<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
-                                <table class="oneliner">
-                                    <tr>
-                                        <div class="oneliner-index">
-                                            <h4># 9</h4>
-                                        </div>
-                                    </tr>
-                                    <tr>
-                                        <code class="bash span8" id="oneliner-9">
-                                            <span id="pred-cmd-9">
-                                                find File -user Pattern -daystart -mtime Time -exec rm {} \;
-                                            </span>
-                                        </code>
-                                        <button type="button" class="btn btn-copy"
-                                            data-clipboard-target="#pred-cmd-9"
-                                            id="copy-btn-9">
-                                            <img src="/static/img/clippy.svg" width="14">
-                                        </button>
-                                    </tr>
-                                    <tr>
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>I am a placeholder.</p>
-                                        </div>
-                                    </tr>
-                                </table>
-                            </div>
-                        
-                            <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">0</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    # 10<br>
-                                                    find File -mtime Time -exec rm {} \;<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
-                                <table class="oneliner">
-                                    <tr>
-                                        <div class="oneliner-index">
-                                            <h4># 10</h4>
-                                        </div>
-                                    </tr>
-                                    <tr>
-                                        <code class="bash span8" id="oneliner-10">
-                                            <span id="pred-cmd-10">
-                                                find File -mtime Time -exec rm {} \;
-                                            </span>
-                                        </code>
-                                        <button type="button" class="btn btn-copy"
-                                            data-clipboard-target="#pred-cmd-10"
-                                            id="copy-btn-10">
-                                            <img src="/static/img/clippy.svg" width="14">
-                                        </button>
-                                    </tr>
-                                    <tr>
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>I am a placeholder.</p>
-                                        </div>
-                                    </tr>
-                                </table>
-                            </div>
-                        
+
                     
                 </div>
             </div>
@@ -619,6 +228,8 @@
               var num_suggestions = 50;
               for (var i=1; i<=num_suggestions; i++) {
                   $('#copy-btn-' + i)
+                  .height($('#oneliner-' + i).height() + 4);
+                  $('#expl-btn-' + i)
                   .height($('#oneliner-' + i).height() + 4);
               }
 

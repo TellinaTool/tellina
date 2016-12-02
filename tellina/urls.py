@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^about/', views.about, name='about'),
     url(r'^admin/', admin.site.urls),
 
+    url(r'^websearch/', views.web_search, name='websearch'),
+
     url(r'^task/', views.task),
 
     url(r'^mockups/translate.html', views.mockup_translate)
