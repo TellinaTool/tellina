@@ -165,8 +165,8 @@ hljs.registerLanguage("bash", function(e) {
             actions: "-detele -exec -execdir -fls -fprint -fprint0 -fprintf -ls -ok -okdir -print"
                     + " -print0 -printf -prune -quit",
             special_symbols: "\\\( \\\) \\; \+",
-            semantic_types: "File Directory Path Number Size Timespan String Date Timestamp"
-                    + " Permission Username Groupname"
+            semantic_types: "File Directory Path Number Size Timespan Regex DateTime Type Option"
+                    + " Permission Username Groupname Prog"
         },
         c: [{
             cN: "meta",
