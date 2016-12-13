@@ -32,7 +32,7 @@ def translate(request):
 
     if not request_str or not request_str.strip():
         return redirect('/')
-    translation_list = []
+    trans_list = []
     if NLRequest.objects.filter(request_str=request_str).exists():
         # request has been issued before
         nl_request = NLRequest.objects.filter(request_str=request_str)
@@ -41,13 +41,13 @@ def translate(request):
             nlr.save()
         if Translation.objects.filter(request__request_str=request_str).exists():
             # model translations exist
-            translation_list = Translation.objects.filter(
+            trans_list = Translation.objects.filter(
                 request__request_str=request_str)
     else:
         # record request
         nlr = NLRequest(request_str=request_str, frequency=1)
         nlr.save()
-    if not translation_list:
+    if not trans_list:
         # call learning model and store the translations
         batch_outputs, output_logits = translate_fun(request_str)
         top_k_predictions = batch_outputs[0]
@@ -58,11 +58,11 @@ def translate(request):
             trans = Translation(request=nlr, pred_cmd=pred_cmd,
                                 score=score, num_votes=0)
             trans.save()
-            translation_list.append(trans)
+            trans_list.append((trans, pred_cmd.replace('\\', '\\\\')))
 
     context = {
         'nl_request': nlr,
-        'translation_list': translation_list,
+        'trans_list': trans_list
     }
     return HttpResponse(template.render(context, request))
 

@@ -17,7 +17,10 @@
                         {% if nl_request %}
                             <li><a href="/">Tellina</a></li>
                             <li>
-                                <a href="/websearch"><i class="icon-globe"></i></a>
+                                <a href="https://www.google.com/search?q={{nl_request.request_str}}"
+                                    target="_blank">
+                                    <i class="icon-globe"></i>
+                                </a>
                             </li>
                             <li>
                                 <form action='/translate/' method='POST'>{% csrf_token %}
@@ -33,8 +36,8 @@
             <div class="push"></div>
             <div id="suggestions">
                 <div class="center-block">
-                    {% if translation_list %}
-                        {% for translation in translation_list %}
+                    {% if trans_list %}
+                        {% for translation, to_expl_cmd in trans_list %}
                             <div class="well offset1 span10">
                                 <!-- <table class="oneliner">
                                     <tr>
@@ -79,8 +82,8 @@
                                             <img src="/static/img/clippy.svg" width="14">
                                         </button>
                                         <button type="button" class="btn btn-expl"
-                                            data-clipboard-target="#pred-cmd-{{forloop.counter}}"
-                                            id="expl-btn-{{forloop.counter}}">
+                                            id="expl-btn-{{forloop.counter}}"
+                                            onclick="window.open('http://explainshell.com/explain?cmd={{to_expl_cmd}}')">
                                             <img src="/static/img/gear.svg" width="14">
                                         </button>
                                     </tr>
@@ -125,6 +128,18 @@
                   .height($('#oneliner-' + i).height() + 4);
               } 
 
+              $('#copy-btn-1').attr(
+                {
+                 'data-original-title': 'Copy to clipboard'
+                }
+              )
+
+              $('#expl-btn-1').attr(
+                {
+                 'data-original-title': 'Open Man Page explanation'
+                }
+              )
+
               /* $('.oneliner').hover(
                   function(event) {
                     target_id = event.target.id;
@@ -150,18 +165,26 @@
             }
 
             function hideTooltip(btn) {
-                setTimeout(function() {
-                $(btn).tooltip('hide')
-                .attr('data-original-title', '');
-                }, 1000);
+                i = btn.id.split('-').slice(-1)[0];
+                if (i == '1') {
+                    setTimeout(function() {
+                        $(btn).tooltip('hide')
+                        .attr('data-original-title', 'Copy to clipboard');
+                    }, 1000);
+                } else {
+                    setTimeout(function() {
+                        $(btn).tooltip('hide')
+                        .attr('data-original-title', '');
+                    }, 1000);
+                }
             }
 
             clipboard.on('success', function(e) {
                 // console.info('Action:', e.action);
                 // console.info('Text:', e.text);
+                e.clearSelection();
                 setTooltip(e.trigger, 'Copied!');
                 hideTooltip(e.trigger);
-                e.clearSelection();
             });
 
             clipboard.on('error', function(e) {
@@ -171,8 +194,10 @@
         </script>
         <script>
             $('.btn-copy').tooltip({
-                trigger: 'click',
                 placement: 'top'
+            });
+            $('.btn-expl').tooltip({
+                placement: 'bottom'
             });
         </script>
     {% endblock %}

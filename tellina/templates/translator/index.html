@@ -16,26 +16,30 @@
                 </div>
             </div>
             <div class="push"></div>
-            <div class="text-center">
-                <div class="input-append">
-                    <form action="/translate/" method="POST">{% csrf_token %}
-                        <input id='translate' class="span8" type="text" name="request_str"
-                               autocapitalize="off" autocorrect="off">
-                        <button class="btn" type="submit">Translate</button>
-                    </form>
+            <div class="offset1">
+                <div class="center-block">
+                    <div class="input-append">
+                        <form action="/translate/" method="POST">{% csrf_token %}
+                            <input id='translate' class="span9" type="text" name="request_str"
+                                   autocapitalize="off" autocorrect="off">
+                            <button class="btn" type="submit">Translate</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div class="offset1 span8">
+            <div class="offset2 span8">
                 <div class="center-block">
-                    {% if latest_request_list %}
-                        <p> Recently asked: </p>
-                        <ul class="request-suggestion">
-                            {% for request in latest_request_list %}
-                                <li><a href="/translate?request_str={{request.request_str}}">
-                                    {{request.request_str}}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                    <div class="request-suggestion">
+                        {% if latest_request_list %}
+                            <h4> Recently asked: </h4>
+                            <ul>
+                                {% for request in latest_request_list %}
+                                    <li><a href="/translate?request_str={{request.request_str}}">
+                                        {{request.request_str}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
