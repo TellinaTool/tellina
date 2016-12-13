@@ -84,3 +84,23 @@ def task(request):
     template = loader.get_template('platform/task.html')
     context = {}
     return HttpResponse(template.render(context, request))
+
+def task1(request):
+    template = loader.get_template('platform/task1.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def task2(request):
+    template = loader.get_template('platform/task2.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def task3(request):
+    template = loader.get_template('platform/task3.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def task4(request):
+    template = loader.get_template('platform/task4.html')
+    context = {}
+    return HttpResponse(template.render(context, request))

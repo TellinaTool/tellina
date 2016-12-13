@@ -84,12 +84,12 @@
                                             <img src="/static/img/gear.svg" width="14">
                                         </button>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <div class="explanation">
                                             <h4>Explanation</h4>
                                             <p>I am a placeholder.</p>
                                         </div>
-                                    </tr>
+                                    </tr> -->
                                 </table>
                             </div>
                         {% endfor %}
@@ -117,13 +117,13 @@
                     }
                 );
 
-              var num_suggestions = 50;
+              var num_suggestions = 100;
               for (var i=1; i<=num_suggestions; i++) {
                   $('#copy-btn-' + i)
                   .height($('#oneliner-' + i).height() + 4);
                   $('#expl-btn-' + i)
                   .height($('#oneliner-' + i).height() + 4);
-              }
+              } 
 
               /* $('.oneliner').hover(
                   function(event) {
