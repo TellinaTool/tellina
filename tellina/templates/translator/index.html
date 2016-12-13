@@ -16,13 +16,15 @@
                 </div>
             </div>
             <div class="push"></div>
-            <div class="text-center">
-                <div class="input-append">
-                    <form action="/translate/" method="POST">{% csrf_token %}
-                        <input id='translate' class="span8" type="text" name="request_str"
-                               autocapitalize="off" autocorrect="off">
-                        <button class="btn" type="submit">Translate</button>
-                    </form>
+            <div class="offset1">
+                <div class="center-block">
+                    <div class="input-append">
+                        <form action="/translate/" method="POST">{% csrf_token %}
+                            <input id='translate' class="span9" type="text" name="request_str"
+                                   autocapitalize="off" autocorrect="off">
+                            <button class="btn" type="submit">Translate</button>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div class="offset2 span8">
