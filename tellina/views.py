@@ -58,7 +58,9 @@ def translate(request):
             trans = Translation(request=nlr, pred_cmd=pred_cmd,
                                 score=score, num_votes=0)
             trans.save()
-            trans_list.append((trans, pred_cmd.replace('\\', '\\\\')))
+            trans_list.append(trans)
+
+    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\')) for trans in trans_list]
 
     context = {
         'nl_request': nlr,
