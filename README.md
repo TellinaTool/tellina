@@ -15,6 +15,9 @@ pip3 install -r requirements.txt
 ```
 git submodule update --remote
 git submodule foreach git pull origin master
+
+cd commandline-helper/data/bash
+tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 ```
 
 ### Run webapp:
