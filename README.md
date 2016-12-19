@@ -20,6 +20,13 @@ cd commandline-helper/data/bash
 tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 ```
 
+### Set up databases
+
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
 ### Run webapp:
 
 ```
