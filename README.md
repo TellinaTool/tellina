@@ -20,7 +20,7 @@ cd commandline-helper/data/bash
 tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 ```
 
-### Set up databases
+### Set up databases:
 
 ```
 python manage.py makemigrations
