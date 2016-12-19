@@ -2,11 +2,7 @@
 
 ### Install Tensorflow:
 
-```
-Follow the official instruction on installing with `pip3`
-
-https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#pip-installation
-```
+Follow the instructions on the [official website](https://www.tensorflow.org/versions/r0.9/get_started/os_setup.html). The simplest way is to install using [`pip3`](https://www.tensorflow.org/versions/r0.11/get_started/os_setup.html#pip-installation).
 
 ### Install other dependencies:
 
@@ -19,6 +15,9 @@ pip3 install -r requirements.txt
 ```
 git submodule update --remote
 git submodule foreach git pull origin master
+
+cd commandline-helper/data/bash
+tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 ```
 
 ### Run webapp:
