@@ -13,21 +13,23 @@ from encoder_decoder import data_utils
 from encoder_decoder import decode_tools
 from encoder_decoder import translate as trans
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
+
 FLAGS = tf.app.flags.FLAGS
 
 FLAGS.demo = True
 FLAGS.normalized = True
 
-FLAGS.dim = 400
+FLAGS.dim = 200
 FLAGS.batch_size = 16
 FLAGS.num_layers = 1
-FLAGS.learning_rate = 0.0001
-FLAGS.encoder_input_keep = 0.7
-FLAGS.encoder_output_keep = 1.0
-FLAGS.decoder_input_keep = 0.7
-FLAGS.decoder_output_keep = 0.7
+FLAGS.learning_rate = 0.001
+FLAGS.encoder_input_keep = 0.6
+FLAGS.encoder_output_keep = 0.6
+FLAGS.decoder_input_keep = 0.6
+FLAGS.decoder_output_keep = 0.6
 
-FLAGS.use_attention = False
+FLAGS.use_attention = True
 FLAGS.attention_input_keep = 0.6
 FLAGS.attention_output_keep = 0.6
 FLAGS.beta = 0.0

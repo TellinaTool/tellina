@@ -32,6 +32,10 @@ def translate(request):
 
     if not request_str or not request_str.strip():
         return redirect('/')
+    
+    while request_str.endswith('/'):
+        request_str = request_str[:-1]
+
     trans_list = []
     if NLRequest.objects.filter(request_str=request_str).exists():
         # request has been issued before

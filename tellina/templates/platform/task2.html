@@ -83,25 +83,28 @@
                                  </div>
                                  <div class="accordion-section-body" data-reactid="77">
                                     <div class="jfdpfOzslotw2euWgxJNN _1PzvoBkjTI2SFvb5o9YAHW" data-reactid="78">
-                                    <p>I want to delete files in my folder which are older than 6 days.    
+                                    I'm searching for some folder named "reports" in my current directory. However, I do not want to include anything under the directory named "backup".</p>
+                                    Specifically, below are all folders named "reports" in my current directory: 
                                     <pre><code>
                                        <span wrap="true" class="_18cGopAuUQVCOplu8pL9b5 _12mn8XNbByNCYxyzndA6if _3xp4c3Gvny8Oap6jE2-Q_ _2RE0-ZG6UYzWFn9_EER397 undefined" data-reactroot="" data-reactid="1" data-react-checksum="417103695">
                                          <div class="CodeMirror" data-reactid="2">
-                                          <!-- react-text: 3 -->$ ls -a<!-- /react-text --><!-- react-text: 4 -->
-<!-- /react-text --><!-- react-text: 5 -->.  ..  .preferences  action  drama comedy  genres.xt<!-- /react-text --></div></span>
-</code></pre>
-                                       <ol>
-                                          <li>The <code>ls</code> command lists all files and directories in the working directory.</li>
-                                          <li>The <code>-a</code> modifies the behavior of the <code>ls</code> command to also list the files and directories starting with a dot (<code>.</code>). Files started with a dot are hidden, and don&#39;t appear when using <code>ls</code> alone.</li>
-                                       </ol>
-                                       <p>The <code>-a</code> is called an <em>option</em>. Options modify the behavior of commands. Here we used <code>ls -a</code> to display the contents of the working directory in more detail.</p>
-                                       <p>In addition to <code>-a</code>, the <code>ls</code> command has several more options. Here are three common options:</p>
-                                       <ul>
-                                          <li><code>-a</code> - lists all contents, including hidden files and directories</li>
-                                          <li><code>-l</code> - lists all contents of a directory in long format</li>
-                                          <li><code>-t</code> - order files and directories by the time they were last modified.</li>
-                                       </ul>
-                                       <p>Let&#39;s practice using these options below.</p>
+                                            ./reports
+                                            backup/reports
+                                            experiment1/reports
+                                            experiment2/reports
+                                         </div>
+                                       </span>
+                                    </code></pre>
+                                    I'm expecting the results to be just:
+                                    <pre><code>
+                                       <span wrap="true" class="_18cGopAuUQVCOplu8pL9b5 _12mn8XNbByNCYxyzndA6if _3xp4c3Gvny8Oap6jE2-Q_ _2RE0-ZG6UYzWFn9_EER397 undefined" data-reactroot="" data-reactid="1" data-react-checksum="417103695">
+                                         <div class="CodeMirror" data-reactid="2">
+                                            ./reports
+                                            experiment1/reports
+                                            experiment2/reports
+                                         </div>
+                                       </span>
+                                    </code></pre>
                                     </div>
                                  </div>
                               </div>
