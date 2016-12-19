@@ -23,8 +23,8 @@ tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 ### Set up databases:
 
 ```
-python manage.py makemigrations
-python manage.py migrate
+python3 manage.py makemigrations
+python3 manage.py migrate
 ```
 
 ### Run webapp:
