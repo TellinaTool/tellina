@@ -28,6 +28,10 @@ urlpatterns = [
     url(r'^websearch/', views.web_search, name='websearch'),
 
     url(r'^task/', views.task),
+    url(r'^task1/', views.task1),
+    url(r'^task2/', views.task2),
+    url(r'^task3/', views.task3),
+    url(r'^task4/', views.task4),
 
     url(r'^mockups/translate.html', views.mockup_translate)
 ]

@@ -13,7 +13,7 @@
             <div class="small-push"></div>
             <div class="header" >
                 <div style="position: relative;">
-                    <ul class="inline menu">
+                    <ul class="inline menu translate-menu">
                         {% if nl_request %}
                             <li><a href="/">Tellina</a></li>
                             <li>
@@ -52,7 +52,7 @@
                                         <td>
                                             <div class="span7">
                                                 <code class="bash">
-                                                    # {{forloop.counter}}<br>
+                                                    <br>
                                                     {{translation.pred_cmd}}<br>
                                                     <br>
                                                  </code>
@@ -67,7 +67,7 @@
                                 <table class="oneliner">
                                     <tr>
                                         <div class="oneliner-index">
-                                            <h4># {{forloop.counter}}</h4>
+                                            <h4></h4>
                                         </div>
                                     </tr>
                                     <tr>
@@ -120,13 +120,13 @@
                     }
                 );
 
-              var num_suggestions = 50;
+              var num_suggestions = 100;
               for (var i=1; i<=num_suggestions; i++) {
                   $('#copy-btn-' + i)
                   .height($('#oneliner-' + i).height() + 4);
                   $('#expl-btn-' + i)
                   .height($('#oneliner-' + i).height() + 4);
-              }
+              } 
 
               $('#copy-btn-1').attr(
                 {

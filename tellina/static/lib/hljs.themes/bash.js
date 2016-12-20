@@ -25,7 +25,7 @@ hljs.registerLanguage("bash", function(e) {
         };
     return {
         aliases: ["sh", "zsh"],
-        l: /-?[a-zA-Z0-9\.\(\)\!\\;\{\}_\+]+/,
+        l: /-?[a-zA-Z0-9\.\(\)\!\\;\{\}_+-]+/,
         k: {
             keyword: "if then else elif fi for while in do done case esac function"
                     + " -true"
@@ -165,7 +165,18 @@ hljs.registerLanguage("bash", function(e) {
             actions: "-detele -exec -execdir -fls -fprint -fprint0 -fprintf -ls -ok -okdir -print"
                     + " -print0 -printf -prune -quit",
             special_symbols: "\\\( \\\) \\; \+",
-            semantic_types: "File Directory Path Number Size Timespan Regex DateTime Type Option"
+            semantic_types: "File-01 File-02 File-03 File-04 File-05 File-06"
+                    + " Directory-01 Directory-02 Directory-03 Directory-04 Directory-05 Directory-06"
+                    + " Path-01 Path-02 Path-03 Path-04 Path-05 Path-06"
+                    + " Number-01 Number-02 Number-03 Number-04 Number-05 Number-06"
+                    + " Size-01 Size-02 Size-03 Size-04 Size-05 Size-06"
+                    + " Timespan-01 Timespan-02 Timespan-03 Timespan-04 Timespan-05 Timespan-06"
+                    + " Regex-01 Regex-02 Regex-03 Regex-04 Regex-05 Regex-06"
+                    + " DateTime-01 DateTime-02 DateTime-03 DateTime-04 DateTime-05 DateTime-06"
+                    + " Permission-01 Permission-02 Permission-03 Permission-04 Permission-05 Permission-06"
+                    + " Username-01 Username-02 Username-03 Username-04 Username-05 Username-06"
+                    + " Groupname-01 Groupname-02 Groupname-03 Groupname-04 Groupname-05 Groupname-06"
+                    + " File Directory Path Number Size Timespan Regex DateTime Type Option"
                     + " Permission Username Groupname Prog"
         },
         c: [{

@@ -20,6 +20,16 @@ git submodule foreach git pull origin master
 
 cd commandline-helper/data/bash
 tar -xzvf vocab.tar.xz && rm vocab.tar.xz
+
+cd commandline-helper/tools/spellcheck
+unxz --keep most_common.txt.xz
+```
+
+### Set up databases:
+
+```
+python3 manage.py makemigrations
+python3 manage.py migrate
 ```
 
 ### Run webapp:

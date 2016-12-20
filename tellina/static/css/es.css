@@ -140,6 +140,10 @@ a {
     color:#ff6666 !important;
 }
 
+.translate-menu {
+    left: 120px;
+}
+
 .request-suggestion a {
     color:#484848 !important;
 }
@@ -155,7 +159,7 @@ a {
 }
 
 #top-search {
-   width: 400px;
+   width: 600px;
    -webkit-transition: all .5s ease;
    -moz-transition: all .5s ease;
    transition: all .5s ease;
@@ -165,7 +169,7 @@ a {
 }
 
 #top-search:focus {
-   width: 440px;
+   width: 640px;
 
    border-color: #f08080;
    -moz-box-shadow: 0 0 8px rgba(255, 153, 153, 0.6);
