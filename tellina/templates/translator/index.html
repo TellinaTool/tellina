@@ -1,49 +1,49 @@
 {% extends "translator/base.html" %}
+    {% block head %}
+        <!--<link rel="stylesheet"
+               href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+        -->
+        <link rel="stylesheet" href="/static/css/index.css">
+    {% endblock %}
     {% block body %}
-        <div class="container">
-            <div class="push"></div>
-            <div class="small-push"></div>
-            <div class="header">
-                <div style="position: relative;">
-                    <ul class="inline menu">
-                      <li><a href="/about">about</a></li>
-                      <li><a href="https://github.com/todpole3/tellina"><i class="icon-github"></i></a></li>
-                    </ul>
+        <div class="container main">
+            <h1>Tellina</h1>
+            <h4 class="text-center subtitle">
+                Commanding your terminal with natural language.
+            </h4>
+            <div class="search-panel">
+                <div class="form-group">
+                    <form class="form-block" action="/translate/" method="POST">{% csrf_token %}
+                        <input id="translate" class="form-control search-box" type="text" name="request_str"
+                                       autocapitalize="off" autocorrect="off">
+                        <div class="small-push"></div>
+                        <button id="submit-to-tellina" class="search-btn" type="submit">Translate</button>
+                        <button id="google-command" type="button" class="search-btn" target="_blank"> Search with Google </button>
+                    </form>
                 </div>
-                <div class="small-push"></div>
-                <div class="text-center">
-                    <div>describe the operation you want to perform in natural language</div>
-                </div>
-            </div>
-            <div class="push"></div>
-            <div class="offset1">
-                <div class="center-block">
-                    <div class="input-append">
-                        <form action="/translate/" method="POST">{% csrf_token %}
-                            <input id='translate' class="span9" type="text" name="request_str"
-                                   autocapitalize="off" autocorrect="off">
-                            <button class="btn" type="submit">Translate</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="offset2 span8">
-                <div class="center-block">
-                    <div class="request-suggestion">
-                        {% if latest_request_list %}
-                            <h4> Recently asked: </h4>
-                            <ul>
-                                {% for request in latest_request_list %}
-                                    <li><a href="/translate?request_str={{request.request_str}}">
-                                        {{request.request_str}}</a></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
+            </div><!-- /.search-panel -->
+            <div id="recent-questions" class="center-block">
+                <div class="request-suggestion">
+                    {% if latest_request_list %}
+                        <h5> Recently Asked Questions </h5>
+                        <ul>
+                            {% for request in latest_request_list %}
+                                <li><a href="/translate?request_str={{request.request_str}}">
+                                    {{request.request_str}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>
     {% endblock %}
     {% block other-js %}
-        <script>$("#translate").focus();</script>
+        <script>
+            $("#translate").focus();
+            $("#google-command").click(function() {
+                nl_cmd = $("#translate").val();
+                href="https://www.google.com/search?q=" + nl_cmd;
+                window.open(href);
+            });
+        </script>
     {% endblock %}

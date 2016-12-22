@@ -1,0 +1,15 @@
+.translate-panel {
+	max-width: 720px;
+	text-align: left;
+	padding-top: 20px;
+	margin: 0 auto; 
+}
+
+.btn {
+	border-radius: 0 !important;
+}
+
+.cmd-result {
+	table-layout:fixed;
+	width: 100%;
+}

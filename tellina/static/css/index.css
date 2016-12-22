@@ -1,0 +1,57 @@
+.main {
+	padding: 60px 20px 20px 20px;
+	margin: 0 auto;
+}
+
+.search-panel {
+	width: 60%;
+	text-align: center;
+	padding-top: 20px;
+	margin: 0 auto; 
+}
+
+.subtitle {
+	color: #777777;
+}
+
+
+#recent-questions {
+	padding-top: 10px;
+	text-align: left;
+	width: 40%;
+	margin: 0 auto;
+}
+
+#recent-questions a{
+	text-decoration: underline;
+	color: #222222;
+}
+
+#recent-questions a:hover{
+	text-decoration: underline;
+	color: #337ab7;
+}
+
+/* Tellina it or google it button style*/
+
+.search-btn {
+    background-color:#f7f7f7;
+    border:1px solid #ffffff;
+    display:inline-block;
+    cursor:pointer;
+    color:#666666;
+    font-family:Arial;
+    font-size:14px;
+    font-weight:bold;
+    padding:7px 32px;
+    text-decoration:none;
+}
+.search-btn:hover {
+    background-color:#ffffff;
+    border:1px solid #dcdcdc;
+    color: black;
+}
+.search-btn:active {
+    position:relative;
+    top:1px;
+}

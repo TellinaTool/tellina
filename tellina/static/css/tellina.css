@@ -3,21 +3,23 @@ html {
 }
 
 body {
-    font-family: "Courier New", Courier, Monaco, Menlo, Consolas, monospace;
+    font-family: 14px/1.5 "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
 }
 
-a {
-    color: #f08080;
+.main {
+    padding: 60px 20px 20px 20px;
+    margin: 0 auto;
+}
+
+.command {
+    font-family: Monaco, Menlo, Consolas, monospace;
+    font-size: 18px;
+    text-align: center;
 }
 
 .program-text {
     font-weight: bold;
-}
-
-#command {
-	font-size: 18px;
-    word-spacing: 10px;
-	text-align: center;
 }
 
 #command-wrapper {
@@ -87,7 +89,7 @@ a {
 }
 
 .oneliner-index h4 {
-    font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif;
+    font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-left: 20px;
 }
 
@@ -96,9 +98,13 @@ a {
 }
 
 .explanation h4 {
-    font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif;
+    font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.search-box {
+    border-radius: 0px;
+    box-shadow: 2px 2px 1px 1px #f7f7f7;
+}
 
 /* .oneliner .line {
     background: #eee;
@@ -132,7 +138,7 @@ a {
     position: absolute;
     top: -30px;
     left: 240px;
-    font-family: 'Berkshire Swash', cursive;
+    /*font-family: 'Berkshire Swash', cursive;*/
     font-size: 24px;
 }
 
@@ -145,7 +151,7 @@ a {
 }
 
 .request-suggestion a {
-    color:#484848 !important;
+ /*   color:#484848 !important;
 }
 
 .request-suggestion a:hover {
@@ -154,9 +160,9 @@ a {
 
 .request-suggestion h4 {
     color:#484848 !important;
-    font-family: Garamond,Baskerville,"Baskerville Old Face","Hoefler Text","Times New Roman",serif;
+    font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 18px;
-}
+}*/
 
 #top-search {
    width: 600px;

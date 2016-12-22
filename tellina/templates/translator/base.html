@@ -4,14 +4,13 @@
         <title>Tellina - a natural language to bash translation tool</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
-{% if DEBUG %}
-        <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <!--<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">-->
         <link href="/static/css/font-awesome.min.css" rel="stylesheet" media="screen">
-{% else %}
-        <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-{% endif %}
-        <link href="/static/css/es.css" rel="stylesheet" media="screen">
+        <!--<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">-->
+        <link href="/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+
+        <link href="/static/css/tellina.css" rel="stylesheet" media="screen">
         <link href='http://fonts.googleapis.com/css?family=Berkshire+Swash' rel='stylesheet' type='text/css'>
 
         <meta name="description" content="natural language command to bash translation interface">
@@ -22,17 +21,28 @@
     </head>
 
     <body>
+        <nav class="navbar navbar-inverse navbar-static-top navbar-full">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Tellina</a>
+                </div>
+                 <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    <li><a href="/about">about</a></li>
+                    <li><a href="https://github.com/todpole3/tellina"><i class="icon-github"></i> Github</a></li>
+                  </ul>
+                </div>
+            </div>
+        </nav>
         {% block body %}{% endblock %}
-        {% if DEBUG %}
-            <script src="/static/js/jquery.js"></script>
-            <script src="/static/js/underscore.js"></script>
-            <script src="/static/js/bootstrap.min.js"></script>
-        {% else %}
-            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="/static/js/jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/underscore.js"></script>
+        <!--<script src="/static/js/bootstrap.min.js"></script>-->
+        <script src="/static/lib/bootstrap/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-        {% endif %}
-        <script src="/static/js/es.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>-->
+        <script src="/static/js/tellina.js"></script>
         {% block other-js %}{% endblock %}
     </body>
 </html>
