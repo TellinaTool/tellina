@@ -12,11 +12,11 @@ body {
     margin: 0 auto;
 }
 
-.command {
+/*.command {
     font-family: Monaco, Menlo, Consolas, monospace;
     font-size: 18px;
     text-align: center;
-}
+}*/
 
 .program-text {
     font-weight: bold;

@@ -56,8 +56,8 @@
                                 <table class="cmd-result">
                                     <tr>
                                         <td>
-                                            <code class="bash span8" id="oneliner-{{forloop.counter}}">
-                                                <span id="pred-cmd-{{forloop.counter}}">
+                                            <code class="bash" id="oneliner-{{forloop.counter}}">
+                                                <span id="pred-cmd-{{forloop.counter}}" class="command">
                                                     {{translation.pred_cmd}}
                                                 </span>
                                             </code>
@@ -98,41 +98,58 @@
         <script src='/static/js/perfect-scrollbar.js'></script>
         <script src='/static/js/perfect-scrollbar.jquery.js'></script>
         <script src="/static/lib/jquery.upvote/jquery.upvote.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/highlight.min.js"></script>
+        <script src="/static/js/hljs-9.8.0.min.js"></script>
         <script src="/static/lib/hljs.themes/bash.js"></script>
         <script>
             $(document).ready(function() {
-                $('div code').each(
-                    function(i, block) {
-                        hljs.highlightBlock(block);
+                try {
+                    $('div code').each(
+                        function(i, block) {
+                            hljs.highlightBlock(block);
+                        }
+                    );
+                    // set tooltip for each span inside command
+                    /*$('.command span').attr({
+                        'data-original-title': $(this).text()
+                    });*/
+                    /*$('.command span').tooltip({
+                        placement: 'bottom'
+                    });
+                    $('.command span').tooltip({
+                        placement: 'bottom'
+                    });
+                    $('.command span').each(function () {
+                        $(this).attr({
+                          'data-original-title': $(this).text()
+                        });
+                    });*/
+                } catch (e) {
+                    console.log("hljs is not working");
+                }
+
+                var num_suggestions = 100;
+                for (var i=1; i<=num_suggestions; i++) {
+                    $('#copy-btn-' + i).height($('#oneliner-' + i).height() + 4);
+                    $('#expl-btn-' + i).height($('#oneliner-' + i).height() + 4);
+                    $('#copy-btn-' + i).attr({
+                        'data-original-title': 'Copy to clipboard'
+                    });
+                    $('#expl-btn-' + i).attr({
+                        'data-original-title': 'Explain the command'
+                    });
+                }
+                /* $('.oneliner').hover(
+                    function(event) {
+                        target_id = event.target.id;
+                        i = target_id.split('-').slice(-1)[0];
+                        $('#copy-btn-' + i).stop(true, true).fadeIn();
+                    },
+                    function(event) {
+                        target_id = event.target.id;
+                        i = target_id.split('-').slice(-1)[0];
+                        $('#copy-btn-' + i).hide();
                     }
-                );
-
-              var num_suggestions = 20;
-              for (var i=1; i<=num_suggestions; i++) {
-                $('#copy-btn-' + i).height($('#oneliner-' + i).height() + 4);
-                $('#expl-btn-' + i).height($('#oneliner-' + i).height() + 4);
-                $('#copy-btn-' + i).attr({
-                    'data-original-title': 'Copy to clipboard'
-                });
-                $('#expl-btn-' + i).attr({
-                    'data-original-title': 'Explain the command'
-                });
-              } 
-
-              /* $('.oneliner').hover(
-                  function(event) {
-                    target_id = event.target.id;
-                    i = target_id.split('-').slice(-1)[0];
-                    $('#copy-btn-' + i).stop(true, true).fadeIn();
-                  },
-                  function(event) {
-                    target_id = event.target.id;
-                    i = target_id.split('-').slice(-1)[0];
-                    $('#copy-btn-' + i).hide();
-                  }
-              );
-              */
+                ); */
             });
         </script>
         <script>
