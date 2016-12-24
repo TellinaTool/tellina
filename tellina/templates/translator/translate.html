@@ -28,31 +28,6 @@
                     {% if trans_list %}
                         {% for translation, to_expl_cmd in trans_list %}
                             <div class="well offset1 span10">
-                                <!-- <table class="oneliner">
-                                    <tr>
-                                        <td style="vertical-align: top; width: 0px">
-                                            <div class="upvote upvote-programmers">
-                                                <a class="upvote "></a>
-                                                <span class="count">{{translation.num_votes}}</span>
-                                                <a class="downvote "></a>
-                                                <a class="star "></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="span7">
-                                                <code class="bash">
-                                                    <br>
-                                                    {{translation.pred_cmd}}<br>
-                                                    <br>
-                                                 </code>
-                                            </div>
-                                            <div class="explanation">
-                                                <h4>Explanation</h4>
-                                                <p>I am a placeholder.</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table> -->
                                 <table class="cmd-result">
                                     <tr>
                                         <td>
@@ -75,12 +50,6 @@
                                             </button>
                                         </td>
                                     </tr>
-                                    <!-- <tr>
-                                        <div class="explanation">
-                                            <h4>Explanation</h4>
-                                            <p>I am a placeholder.</p>
-                                        </div>
-                                    </tr> -->
                                 </table>
                             </div>
                         {% endfor %}
@@ -89,7 +58,7 @@
                         <p>Oops! Something went wrong...</p>
                     </div>
                 {% endif %}
-                </div><!-- /.search-panel -->
+                </div>
             </div>
         </div>
     {% endblock %}
