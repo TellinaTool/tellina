@@ -6,7 +6,7 @@ import tensorflow as tf
 import os
 import sys
 
-commandline_helper_dir = os.path.join(os.path.dirname(__file__), "..", "commandline-helper")
+commandline_helper_dir = os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module")
 sys.path.append(commandline_helper_dir)
 
 from encoder_decoder import data_utils
