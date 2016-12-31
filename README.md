@@ -12,16 +12,16 @@ Follow the instructions on the [official website](https://www.tensorflow.org/ver
 pip3 install -r requirements.txt
 ```
 
-### Set up commandline-helper submodule:
+### Set up tellina_learning_module submodule:
 
 ```
 git submodule update --remote
 git submodule foreach git pull origin master
 
-cd commandline-helper/data/bash
+cd tellina_learning_module/data/bash
 tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 
-cd commandline-helper/tools/spellcheck
+cd tellina_learning_module/tools/spellcheck
 unxz --keep most_common.txt.xz
 ```
 
