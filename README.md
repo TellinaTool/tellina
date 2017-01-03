@@ -18,9 +18,13 @@ pip3 install -r requirements.txt
 git submodule update --init --remote
 git submodule foreach git pull origin master
 
+#untar vocabulary files
 cd tellina_learning_module/data/bash
 tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 
+cd ../../..
+
+#enable spellcheck
 cd tellina_learning_module/tools/spellcheck
 unxz --keep most_common.txt.xz
 ```
