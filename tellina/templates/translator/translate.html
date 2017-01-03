@@ -26,14 +26,14 @@
             <div id="suggestions">
                 <div class="center-block">
                     {% if trans_list %}
-                        {% for translation, to_expl_cmd in trans_list %}
+                        {% for translation, to_expl_cmd, html_str in trans_list %}
                             <div class="well offset1 span10">
                                 <table class="cmd-result">
                                     <tr>
                                         <td>
-                                            <code class="bash" id="oneliner-{{forloop.counter}}">
+                                            <code class="bash hljs" id="oneliner-{{forloop.counter}}">
                                                 <span id="pred-cmd-{{forloop.counter}}" class="command">
-                                                    {{translation.pred_cmd}}
+                                                    {{html_str | safe}}
                                                 </span>
                                             </code>
                                         </td>
@@ -72,11 +72,11 @@
         <script>
             $(document).ready(function() {
                 try {
-                    $('div code').each(
+                    /*$('div code').each(
                         function(i, block) {
                             hljs.highlightBlock(block);
                         }
-                    );
+                    );*/
                     // set tooltip for each span inside command
                     /*$('.command span').attr({
                         'data-original-title': $(this).text()

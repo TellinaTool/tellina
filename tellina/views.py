@@ -12,6 +12,7 @@ from tellina.models import NLRequest, Translation
 DEBUG = False
 
 from tellina.helper_interface import translate_fun
+from tellina.cmd2html import cmd2html
 
 
 def about(request):
@@ -59,12 +60,13 @@ def translate(request):
         for i in range(len(top_k_predictions)):
             pred_tree, pred_cmd, outputs = top_k_predictions[i]
             score = top_k_scores[i]
+
             trans = Translation(request=nlr, pred_cmd=pred_cmd,
                                 score=score, num_votes=0)
             trans.save()
             trans_list.append(trans)
 
-    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\')) for trans in trans_list]
+    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), cmd2html(trans.pred_cmd)) for trans in trans_list]
 
     context = {
         'nl_request': nlr,
