@@ -15,7 +15,7 @@ pip3 install -r requirements.txt
 ### Set up tellina_learning_module submodule:
 
 ```
-git submodule update --remote
+git submodule update --init --remote
 git submodule foreach git pull origin master
 
 cd tellina_learning_module/data/bash
