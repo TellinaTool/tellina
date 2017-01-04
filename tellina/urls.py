@@ -17,13 +17,14 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from . import views
-
+from . import cmd2html
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^translate/', views.translate, name='translate'),
     url(r'^about/', views.about, name='about'),
     url(r'^admin/', admin.site.urls),
+    url(r'^explain_cmd/', cmd2html.explain_cmd, name='explain_cmd'),
 
     url(r'^websearch/', views.web_search, name='websearch'),
 

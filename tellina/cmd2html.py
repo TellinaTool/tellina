@@ -1,8 +1,47 @@
 import os
 import sys
+import json
+
+from django.http import HttpResponse
 sys.path.append(os.path.join(os.path.dirname(__file__),"..", "tellina_learning_module"))
 
 from bashlex import data_tools
+
+## load the manpage expl file, note that the root should be before tellina 
+with open(os.path.join('tellina', 'manpage_expl.json'), encoding='UTF-8') as data_file:
+    manpage_json = json.loads(data_file.read())
+
+def explain_cmd(request):
+  """ This is the responser for flag explanation:
+    it takes in a request consist of a pair (cmd_head, flag_name) and returns the explanation of the flag.
+    Returns:
+      returns the manpage explanation of the cmd_head/flag_name
+  """
+
+  if request.method == 'POST':
+    cmd_head = request.POST.get('cmd_head')
+    flag_name = request.POST.get('flag_name')
+  else:
+    cmd_head = request.GET.get('cmd_head')
+    flag_name = request.GET.get('flag_name')
+
+  if cmd_head:
+    # retrieve the explanation of the command
+    for cmd_obj in manpage_json:
+      if cmd_head in cmd_obj["aliases"]:
+        cmd_expl = " ".join(cmd_obj["aliases"]) + "\n\n" + cmd_obj["description"]
+        if flag_name:
+          flag_expl_list = []
+          for option_desc in cmd_obj["optionDesc"]:
+            if flag_name == option_desc["name"].split()[0]:
+              flag_expl_list.append(option_desc["description"])
+          if flag_expl_list:
+            return HttpResponse("\n".join(flag_expl_list))
+        # if the flag is not provided, or we cannot find the flag
+        return HttpResponse(cmd_expl)
+  
+  # in this case, either the thead is not provided or the head cannot be retrieved
+  return HttpResponse("")
 
 def cmd2html(cmd_str):
   """ A wrapper for the function ast2html (see below) that takes in a cmd string 
@@ -12,6 +51,7 @@ def cmd2html(cmd_str):
   return " ".join(ast2html(root))
 
 def ast2html(node):
+
   """ Translate a bash AST from tellina_learning_module/bashlex/nast.py into html code,
     with proper syntax highlighting.
     Argument:
@@ -19,6 +59,13 @@ def ast2html(node):
     Returns:
       a html string that can be embedded into your browser with appropriate syntax highlighting
   """
+
+  dominator = retrieve_dominators(node)
+
+  # the documation of the span
+  span_doc = "dominate_cmd=\"" + (str(dominator[0]) if dominator[0] else "None") \
+                + "\" dominate_flag=\"" + (str(dominator[1]) if dominator[1] else "None") + "\""
+
   html_spans = []
 
   # switching among node kinds for the generation of different spans 
@@ -34,16 +81,16 @@ def ast2html(node):
         html_spans.append("|")
       html_spans.extend(ast2html(child))
   elif node.kind == "headcommand":
-    span = "<span class=\"hljs-built_in\">" + node.value + "</span>"
+    span = "<span class=\"hljs-built_in\" " + span_doc + " >" + node.value + "</span>"
     html_spans.append(span)
     for child in node.children:
       html_spans.extend(ast2html(child))
   elif node.kind == "flag":
     ## note there are two corner cases of flags, -exec::; and -exec::+ since they have different endings 
     if node.value == "-exec::;" or node.value == "-exec::+":
-      head_span = "<span class=\"hljs-keyword\">" + "-exec" + "</span>"
+      head_span = "<span class=\"hljs-keyword\" " + span_doc + " >" + "-exec" + "</span>"
     else:
-      head_span = "<span class=\"hljs-keyword\">" + node.value + "</span>"
+      head_span = "<span class=\"hljs-keyword\" " + span_doc + " >" + node.value + "</span>"
     html_spans.append(head_span)
     for child in node.children:
       html_spans.extend(ast2html(child))
@@ -52,7 +99,7 @@ def ast2html(node):
     elif node.value == "-exec::+":
       html_spans.append("+");
   elif node.kind == "argument":
-    span = "<span class=\"hljs-semantic_types\">" + node.value + "</span>"
+    span = "<span class=\"hljs-semantic_types\" " + span_doc + " >" + node.value + "</span>"
     html_spans.append(span)
     for child in node.children:
       html_spans.extend(ast2html(child))
@@ -62,7 +109,7 @@ def ast2html(node):
       html_spans.extend(ast2html(child))
     html_spans.append("\\)")
   elif node.kind in ["binarylogicop", "unarylogicop", "redirect"]:
-    span = "<span class=\"hljs-keyword\">" + node.value + "</span>"
+    span = "<span class=\"hljs-keyword\" " + span_doc + " >" + node.value + "</span>"
     html_spans.append(span)
   elif node.kind in ["commandsubstitution", "processsubstitution"]:
     html_spans.append(node.value)
@@ -74,6 +121,35 @@ def ast2html(node):
     html_spans.append(node.value)
 
   return html_spans
+
+def retrieve_dominators(node):
+  """ Given a node, retrieve its dominator, 
+    i.e., its headcommand and/or its dominate flag
+  """ 
+  dominate_headcmd = None
+  dominate_flag = None
+
+  current_node = node
+
+  while True:
+    if current_node.kind == "flag":
+      if not dominate_flag: 
+        dominate_flag = current_node.value
+        # this is resulted from a corner case by Victoria, 
+        #   for -exec::; -exec::+ and potentially others
+        if "::" in dominate_flag:
+          dominate_flag = dominate_flag[0: dominate_flag.index("::")]
+    elif current_node.kind == "headcommand":
+      dominate_headcmd = current_node.value
+      return (dominate_headcmd, dominate_flag) 
+
+    # we have already find dominate_headcmd or we have reached root
+    if (not current_node.parent):
+      return (dominate_headcmd, dominate_flag)
+    else:
+      current_node = current_node.parent
+
+  return (dominate_headcmd, dominate_flag)
 
 def test():
   cmd_str_list = [

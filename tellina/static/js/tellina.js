@@ -15,6 +15,37 @@ var assignedcolors = {};
 var vtimeout,
     changewait = 250;
 
+// Below are two utility functions that works on strings
+
+// implement trim if the browser does not support it
+if (!String.prototype.trim) {
+    (function() {
+        // Make sure we trim BOM and NBSP
+        var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+        String.prototype.trim = function() {
+            return this.replace(rtrim, '');
+        };
+    })();
+}
+
+// replacing linebreaks etc with html things
+String.prototype.replaceAll = function(search, replacement) {
+  var target = this;
+    return target.split(search).join(replacement);
+};
+function htmlForTextWithEmbeddedNewlines(text) {
+  var htmls = [];
+  var lines = text.trim().replaceAll("\t", "    ").replaceAll(/ /g, ' ').split("\n");
+  // The temporary <div/> is to perform HTML entity encoding reliably.
+  // Don't need jQuery but then you need to struggle with browser
+  // differences in innerText/textContent yourself
+  var tmpDiv = jQuery(document.createElement('div'));
+  for (var i = 0 ; i < lines.length ; i++) {
+    htmls.push(tmpDiv.text(lines[i]).html());
+  }
+  return htmls.join("<br>");
+}
+
 function specialparam(text) {
     return {
         title: "Special Parameters",

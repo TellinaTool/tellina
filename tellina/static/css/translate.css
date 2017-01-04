@@ -13,3 +13,12 @@
 	table-layout:fixed;
 	width: 100%;
 }
+
+.tooltip-inner {
+  min-width: 100px;
+  max-width: 100%; 
+}
+
+.tooltip-inner > p {
+	text-align: left;
+}

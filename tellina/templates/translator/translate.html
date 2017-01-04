@@ -70,31 +70,73 @@
         <script src="/static/js/hljs-9.8.0.min.js"></script>
         <script src="/static/lib/hljs.themes/bash.js"></script>
         <script>
+
+            // implement trim if the browser does not support it
+            if (!String.prototype.trim) {
+                (function() {
+                    // Make sure we trim BOM and NBSP
+                    var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+                    String.prototype.trim = function() {
+                        return this.replace(rtrim, '');
+                    };
+                })();
+            }
+
+            // replacing linebreaks etc with html things
+            String.prototype.replaceAll = function(search, replacement) {
+              var target = this;
+                return target.split(search).join(replacement);
+            };
+            function htmlForTextWithEmbeddedNewlines(text) {
+              var htmls = [];
+              var lines = text.trim().replaceAll("\t", "    ").replaceAll(/ /g, ' ').split("\n");
+              // The temporary <div/> is to perform HTML entity encoding reliably.
+              // Don't need jQuery but then you need to struggle with browser
+              // differences in innerText/textContent yourself
+              var tmpDiv = jQuery(document.createElement('div'));
+              for (var i = 0 ; i < lines.length ; i++) {
+                htmls.push(tmpDiv.text(lines[i]).html());
+              }
+              return htmls.join("<br>");
+            }
+
             $(document).ready(function() {
-                try {
-                    /*$('div code').each(
-                        function(i, block) {
-                            hljs.highlightBlock(block);
-                        }
-                    );*/
-                    // set tooltip for each span inside command
-                    /*$('.command span').attr({
-                        'data-original-title': $(this).text()
-                    });*/
-                    /*$('.command span').tooltip({
-                        placement: 'bottom'
-                    });
-                    $('.command span').tooltip({
-                        placement: 'bottom'
-                    });
-                    $('.command span').each(function () {
-                        $(this).attr({
-                          'data-original-title': $(this).text()
+                // We don't need to use the following function call anymore since our too generates the commands directly in backend.
+                /*$('div code').each(
+                    function(i, block) {
+                        hljs.highlightBlock(block);
+                    }
+                );*/
+
+                // set tooltip for each span inside command
+                $('.command span').tooltip({
+                    placement: 'bottom',
+                    html: true,
+                    // Hover over the tooltip will trigger the code to access the code
+                    title: function () {
+                        dominate_cmd = $(this).attr("dominate_cmd");
+                        dominate_flag = $(this).attr("dominate_flag");
+
+                        var local_data = "error";
+
+                        $.ajax({
+                            type: 'get',
+                            async: false,
+                            url: '/explain_cmd',
+                            data: { 
+                                cmd_head : dominate_cmd, 
+                                flag_name : dominate_flag
+                            },
+                            success: function (data) {
+                                local_data = data;
+                            }
                         });
-                    });*/
-                } catch (e) {
-                    console.log("hljs is not working");
-                }
+
+                        return  "<p>" 
+                                + htmlForTextWithEmbeddedNewlines(local_data) 
+                                + "</p>";
+                    }
+                });
 
                 var num_suggestions = 100;
                 for (var i=1; i<=num_suggestions; i++) {
@@ -107,18 +149,6 @@
                         'data-original-title': 'Explain the command'
                     });
                 }
-                /* $('.oneliner').hover(
-                    function(event) {
-                        target_id = event.target.id;
-                        i = target_id.split('-').slice(-1)[0];
-                        $('#copy-btn-' + i).stop(true, true).fadeIn();
-                    },
-                    function(event) {
-                        target_id = event.target.id;
-                        i = target_id.split('-').slice(-1)[0];
-                        $('#copy-btn-' + i).hide();
-                    }
-                ); */
             });
         </script>
         <script>
