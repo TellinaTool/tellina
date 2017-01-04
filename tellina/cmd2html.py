@@ -21,6 +21,7 @@ def ast2html(node):
   """
   html_spans = []
 
+  # switching among node kinds for the generation of different spans 
   if node.kind == "root":
     for child in node.children:
       html_spans.extend(ast2html(child))
@@ -38,10 +39,18 @@ def ast2html(node):
     for child in node.children:
       html_spans.extend(ast2html(child))
   elif node.kind == "flag":
-    span = "<span class=\"hljs-keyword\">" + node.value + "</span>"
-    html_spans.append(span)
+    ## note there are two corner cases of flags, -exec::; and -exec::+ since they have different endings 
+    if node.value == "-exec::;" or node.value == "-exec::+":
+      head_span = "<span class=\"hljs-keyword\">" + "-exec" + "</span>"
+    else:
+      head_span = "<span class=\"hljs-keyword\">" + node.value + "</span>"
+    html_spans.append(head_span)
     for child in node.children:
       html_spans.extend(ast2html(child))
+    if node.value == "-exec::;":
+      html_spans.append("\\;")
+    elif node.value == "-exec::+":
+      html_spans.append("+");
   elif node.kind == "argument":
     span = "<span class=\"hljs-semantic_types\">" + node.value + "</span>"
     html_spans.append(span)
@@ -62,7 +71,6 @@ def ast2html(node):
       html_spans.extend(ast2html(child))
     html_spans.append(")")
   else:
-    #print node.kind
     html_spans.append(node.value)
 
   return html_spans
