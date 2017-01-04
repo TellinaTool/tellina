@@ -14,7 +14,6 @@ DEBUG = False
 from tellina.helper_interface import translate_fun
 from tellina.cmd2html import cmd2html
 
-
 def about(request):
     return HttpResponse("coming soon...")
 
