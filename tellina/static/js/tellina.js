@@ -35,7 +35,7 @@ String.prototype.replaceAll = function(search, replacement) {
 };
 function htmlForTextWithEmbeddedNewlines(text) {
   var htmls = [];
-  var lines = text.trim().replaceAll("\t", "    ").replaceAll(/ /g, ' ').split("\n");
+  var lines = text.trim().replaceAll(/    /g, '\t').replaceAll("\t", "  ").replaceAll(/ /g, ' ').split("\n");
   // The temporary <div/> is to perform HTML entity encoding reliably.
   // Don't need jQuery but then you need to struggle with browser
   // differences in innerText/textContent yourself

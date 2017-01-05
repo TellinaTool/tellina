@@ -13,7 +13,13 @@ with open(os.path.join('tellina', 'manpage_expl.json'), encoding='UTF-8') as dat
 
 def explain_cmd(request):
   """ This is the responser for flag explanation:
-    it takes in a request consist of a pair (cmd_head, flag_name) and returns the explanation of the flag.
+    it takes in a request consist of a tuple (cmd_head, flag_name, node_kind) and returns the explanation of the flag.
+    Arguments:
+      request {
+        cmd_head: the command to query
+        flag_name: the flag to query
+        node_kind: the type of span that the query is issued from
+      }
     Returns:
       returns the manpage explanation of the cmd_head/flag_name
   """
@@ -21,24 +27,32 @@ def explain_cmd(request):
   if request.method == 'POST':
     cmd_head = request.POST.get('cmd_head')
     flag_name = request.POST.get('flag_name')
+    node_kind = request.POST.get('node_kind')
   else:
     cmd_head = request.GET.get('cmd_head')
     flag_name = request.GET.get('flag_name')
+    node_kind = request.GET.get('node_kind')
 
   if cmd_head:
     # retrieve the explanation of the command
     for cmd_obj in manpage_json:
       if cmd_head in cmd_obj["aliases"]:
-        cmd_expl = " ".join(cmd_obj["aliases"]) + "\n\n" + cmd_obj["description"]
+        #cmd_expl = "Aliases:" + " ".join(cmd_obj["aliases"]) + "\n\n" + cmd_obj["description"]
+      
         if flag_name:
+          # in this case, our goal is to explain a command
           flag_expl_list = []
           for option_desc in cmd_obj["optionDesc"]:
             if flag_name == option_desc["name"].split()[0]:
               flag_expl_list.append(option_desc["description"])
           if flag_expl_list:
-            return HttpResponse("\n".join(flag_expl_list))
+            return HttpResponse("".join(flag_expl_list))
+
         # if the flag is not provided, or we cannot find the flag
-        return HttpResponse(cmd_expl)
+        if node_kind == "argument":
+          return HttpResponse(cmd_obj["rawSynopsis"])
+        else:
+          return HttpResponse(cmd_obj["description"])
   
   # in this case, either the thead is not provided or the head cannot be retrieved
   return HttpResponse("")
@@ -64,7 +78,8 @@ def ast2html(node):
 
   # the documation of the span
   span_doc = "dominate_cmd=\"" + (str(dominator[0]) if dominator[0] else "None") \
-                + "\" dominate_flag=\"" + (str(dominator[1]) if dominator[1] else "None") + "\""
+                + "\" dominate_flag=\"" + (str(dominator[1]) if dominator[1] else "None") \
+                + "\" node_kind=\"" + node.kind + "\"";
 
   html_spans = []
 

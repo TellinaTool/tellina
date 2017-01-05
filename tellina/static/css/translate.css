@@ -14,11 +14,12 @@
 	width: 100%;
 }
 
-.tooltip-inner {
-  min-width: 100px;
+.tooltip-inner  {
   max-width: 100%; 
 }
 
-.tooltip-inner > p {
-	text-align: left;
+.tooltip-inner > .cmd-expl {
+	font-family: "Lucida Console", Monaco, monospace;
+ 	text-align: left;
+ 	white-space:pre
 }
