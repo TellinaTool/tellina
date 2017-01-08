@@ -9,10 +9,12 @@ from django.views.decorators.csrf import csrf_protect
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module"))
 from tellina.models import NLRequest, Translation
 
-DEBUG = False
+WEBSITE_DEVELOP = True
 
-from tellina.helper_interface import translate_fun
 from tellina.cmd2html import cmd2html
+
+if not WEBSITE_DEVELOP:
+    from tellina.helper_interface import translate_fun
 
 def about(request):
     return HttpResponse("coming soon...")
@@ -51,7 +53,7 @@ def translate(request):
         # record request
         nlr = NLRequest(request_str=request_str, frequency=1)
         nlr.save()
-    if not trans_list:
+    if not trans_list and not WEBSITE_DEVELOP:
         # call learning model and store the translations
         batch_outputs, output_logits = translate_fun(request_str)
         top_k_predictions = batch_outputs[0]
