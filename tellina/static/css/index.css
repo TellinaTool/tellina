@@ -1,6 +1,12 @@
+html,body {
+  height: 100%;
+  min-height: 100%;
+}
+
 .main {
 	padding: 60px 20px 20px 20px;
 	margin: 0 auto;
+	height: 88%;
 }
 
 .search-panel {
@@ -40,9 +46,7 @@
     display:inline-block;
     cursor:pointer;
     color:#666666;
-    font-family:Arial;
     font-size:14px;
-    font-weight:bold;
     padding:7px 32px;
     text-decoration:none;
 }
