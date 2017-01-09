@@ -17,7 +17,9 @@ if not WEBSITE_DEVELOP:
     from tellina.helper_interface import translate_fun
 
 def about(request):
-    return HttpResponse("coming soon...")
+    template = loader.get_template('translator/about.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
 def mockup_translate(request):
     template = loader.get_template('mockups/translate.html')
