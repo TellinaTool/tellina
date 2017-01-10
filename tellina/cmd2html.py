@@ -154,14 +154,14 @@ def retrieve_dominators(node):
         #   for -exec::; -exec::+ and potentially others
         if "::" in dominate_flag:
           dominate_flag = dominate_flag[0: dominate_flag.index("::")]
-    elif current_node.kind == "headcommand":
+    elif current_node and current_node.kind == "headcommand":
       dominate_headcmd = current_node.value
       return (dominate_headcmd, dominate_flag) 
 
     # we have already find dominate_headcmd or we have reached root
-    if (not current_node.parent):
+    if current_node and (not current_node.parent):
       return (dominate_headcmd, dominate_flag)
-    else:
+    elif current_node:
       current_node = current_node.parent
 
   return (dominate_headcmd, dominate_flag)
