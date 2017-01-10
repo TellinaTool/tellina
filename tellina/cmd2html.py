@@ -147,7 +147,7 @@ def retrieve_dominators(node):
   current_node = node
 
   while True:
-    if current_node.kind == "flag":
+    if current_node and current_node.kind == "flag":
       if not dominate_flag: 
         dominate_flag = current_node.value
         # this is resulted from a corner case by Victoria, 
