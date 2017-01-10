@@ -164,6 +164,8 @@ def retrieve_dominators(node):
     elif current_node:
       current_node = current_node.parent
 
+  if dominate_headcmd is None:
+    return ('', '')
   return (dominate_headcmd, dominate_flag)
 
 def test():
