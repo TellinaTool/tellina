@@ -25,7 +25,7 @@ SECRET_KEY = '*zca^nlaejb32n)5@cevdlsb@g3ea4in=x_k1x9we788v&6k5r'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kirin.cs.washington.edu']
 
 
 # Application definition
