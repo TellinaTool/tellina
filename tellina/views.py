@@ -6,7 +6,8 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..",
+                             "tellina_learning_module"))
 from tellina.models import NLRequest, Translation
 
 WEBSITE_DEVELOP = True
@@ -47,7 +48,8 @@ def translate(request):
         for nlr in nl_request:
             nlr.frequency += 1
             nlr.save()
-        if Translation.objects.filter(request__request_str=request_str).exists():
+        if Translation.objects.filter(
+                request__request_str=request_str).exists():
             # model translations exist
             trans_list = Translation.objects.filter(
                 request__request_str=request_str)
@@ -69,7 +71,8 @@ def translate(request):
             trans.save()
             trans_list.append(trans)
 
-    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), cmd2html(trans.pred_cmd)) for trans in trans_list]
+    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'),
+                   cmd2html(trans.pred_cmd)) for trans in trans_list]
 
     context = {
         'nl_request': nlr,
