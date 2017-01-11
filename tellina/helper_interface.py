@@ -20,22 +20,24 @@ FLAGS = tf.app.flags.FLAGS
 FLAGS.demo = True
 FLAGS.normalized = True
 
-FLAGS.dim = 200
+FLAGS.encoder_topology = 'birnn'
+
+FLAGS.dim = 400
 FLAGS.batch_size = 16
 FLAGS.num_layers = 1
-FLAGS.learning_rate = 0.001
-FLAGS.encoder_input_keep = 0.6
-FLAGS.encoder_output_keep = 0.6
-FLAGS.decoder_input_keep = 0.6
-FLAGS.decoder_output_keep = 0.6
+FLAGS.learning_rate = 0.0001
+FLAGS.encoder_input_keep = 0.5
+FLAGS.encoder_output_keep = 0.5
+FLAGS.decoder_input_keep = 0.5
+FLAGS.decoder_output_keep = 0.5
 
 FLAGS.use_attention = True
-FLAGS.attention_input_keep = 0.6
-FLAGS.attention_output_keep = 0.6
+FLAGS.attention_input_keep = 0.5
+FLAGS.attention_output_keep = 0.5
 FLAGS.beta = 0.0
 
 FLAGS.decoding_algorithm = 'beam_search'
-FLAGS.beam_size = 100
+FLAGS.beam_size = 50
 FLAGS.alpha = 1.0
 
 FLAGS.nl_vocab_size = 1000
@@ -49,7 +51,7 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
                   log_device_placement=FLAGS.log_device_placement))
 
 # create model and load parameters.
-model, _ = trans.create_model(sess, forward_only=True, buckets=[(20, 50)])
+model, _ = trans.create_model(sess, forward_only=True, buckets=[(30, 50)])
 nl_vocab, _, _, rev_cm_vocab = data_utils.load_vocab(FLAGS)
 
 def translate_fun(sentence):

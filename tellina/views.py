@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module"))
 from tellina.models import NLRequest, Translation
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 
 from tellina.cmd2html import cmd2html
 
@@ -55,7 +55,7 @@ def translate(request):
         # record request
         nlr = NLRequest(request_str=request_str, frequency=1)
         nlr.save()
-    if not trans_list and not WEBSITE_DEVELOP:
+    if not WEBSITE_DEVELOP and not trans_list:
         # call learning model and store the translations
         batch_outputs, output_logits = translate_fun(request_str)
         top_k_predictions = batch_outputs[0]
@@ -89,29 +89,4 @@ def index(request):
     context = {
         'latest_request_list': latest_request_list,
     }
-    return HttpResponse(template.render(context, request))
-
-def task(request):
-    template = loader.get_template('platform/task.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task1(request):
-    template = loader.get_template('platform/task1.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task2(request):
-    template = loader.get_template('platform/task2.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task3(request):
-    template = loader.get_template('platform/task3.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task4(request):
-    template = loader.get_template('platform/task4.html')
-    context = {}
     return HttpResponse(template.render(context, request))
