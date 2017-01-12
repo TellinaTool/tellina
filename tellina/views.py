@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module"))
 from tellina.models import NLRequest, Translation
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 
 from tellina.cmd2html import cmd2html
 
