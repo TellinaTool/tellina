@@ -44,6 +44,7 @@ def translate(request):
         request_str = request_str[:-1]
 
     trans_list = []
+    html_strs = []
     if NLRequest.objects.filter(request_str=request_str).exists():
         # request has been issued before
         nl_request = NLRequest.objects.filter(request_str=request_str)
@@ -53,16 +54,21 @@ def translate(request):
         if Translation.objects.filter(
                 request__request_str=request_str).exists():
             # model translations exist
-            trans_list = Translation.objects.filter(
+            cached_trans = Translation.objects.filter(
                 request__request_str=request_str)
+            for trans in cached_trans:
+                pred_tree = data_tools.bash_parser(trans.pred_cmd)
+                if pred_tree is not None:
+                    trans_list.append(trans)
+                    html_str = cmd2html(pred_tree)
+                    html_strs.append(html_str)
     else:
         # record request
         nlr = NLRequest(request_str=request_str, frequency=1)
         nlr.save()
 
-    html_strs = []
     if not trans_list:
-        if not WEBSITE_DEVELOP
+        if not WEBSITE_DEVELOP:
             # call learning model and store the translations
             batch_outputs, output_logits = translate_fun(request_str)
             top_k_predictions = batch_outputs[0]
@@ -79,11 +85,6 @@ def translate(request):
 
                 html_str = cmd2html(pred_tree)
                 html_strs.append(html_str)
-    else:
-        for trans in trans_list:
-            pred_tree = data_tools.bash_parser(trans.pred_cmd)
-            html_str = cmd2html(pred_tree)
-            html_strs.append(html_str)
 
     translation_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), html_str)
                   for trans, html_str in zip(trans_list, html_strs)]
