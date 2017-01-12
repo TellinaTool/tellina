@@ -57,12 +57,11 @@ def explain_cmd(request):
   # in this case, either the thead is not provided or the head cannot be retrieved
   return HttpResponse("")
 
-def cmd2html(cmd_str):
+def cmd2html(ast):
   """ A wrapper for the function ast2html (see below) that takes in a cmd string 
   and translate into a html string with highlinghting.
   """
-  root = data_tools.bash_parser(cmd_str)
-  return " ".join(ast2html(root))
+  return " ".join(ast2html(ast))
 
 def ast2html(node):
 
@@ -101,7 +100,8 @@ def ast2html(node):
     for child in node.children:
       html_spans.extend(ast2html(child))
   elif node.kind == "flag":
-    ## note there are two corner cases of flags, -exec::; and -exec::+ since they have different endings 
+    # note there are two corner cases of flags:
+    #   -exec::; and -exec::+ since they have different endings
     if node.value == "-exec::;" or node.value == "-exec::+":
       head_span = "<span class=\"hljs-keyword\" " + span_doc + " >" + "-exec" + "</span>"
     else:

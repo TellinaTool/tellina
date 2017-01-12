@@ -6,7 +6,8 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..",
+                             "tellina_learning_module"))
 from tellina.models import NLRequest, Translation
 
 WEBSITE_DEVELOP = False
@@ -47,7 +48,8 @@ def translate(request):
         for nlr in nl_request:
             nlr.frequency += 1
             nlr.save()
-        if Translation.objects.filter(request__request_str=request_str).exists():
+        if Translation.objects.filter(
+                request__request_str=request_str).exists():
             # model translations exist
             trans_list = Translation.objects.filter(
                 request__request_str=request_str)
@@ -63,6 +65,7 @@ def translate(request):
         for i in range(len(top_k_predictions)):
             pred_tree, pred_cmd, outputs = top_k_predictions[i]
             print(pred_cmd)
+            html_str = cmd2html(pred_tree)
             score = top_k_scores[i]
 
             trans = Translation(request=nlr, pred_cmd=pred_cmd,
@@ -70,7 +73,8 @@ def translate(request):
             trans.save()
             trans_list.append(trans)
 
-    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), cmd2html(trans.pred_cmd)) for trans in trans_list]
+    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), html_str)
+                  for trans in trans_list]
 
     context = {
         'nl_request': nlr,
@@ -78,11 +82,11 @@ def translate(request):
     }
     return HttpResponse(template.render(context, request))
 
-@csrf_protect
-def web_search(request):
-    template = loader.get_template('translator/websearch.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+# @csrf_protect
+# def web_search(request):
+#     template = loader.get_template('translator/websearch.html')
+#     context = {}
+#     return HttpResponse(template.render(context, request))
 
 def index(request):
     latest_request_list = NLRequest.objects.order_by('-sub_time')[:10]
