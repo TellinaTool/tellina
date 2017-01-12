@@ -62,6 +62,7 @@ def translate(request):
         top_k_scores = output_logits[0]
         for i in range(len(top_k_predictions)):
             pred_tree, pred_cmd, outputs = top_k_predictions[i]
+            print(pred_cmd)
             score = top_k_scores[i]
 
             trans = Translation(request=nlr, pred_cmd=pred_cmd,
