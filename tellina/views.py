@@ -62,7 +62,7 @@ def translate(request):
 
     html_strs = []
     if not trans_list:
-        if not WEBSITE_DEVELOP
+        if not WEBSITE_DEVELOP:
             # call learning model and store the translations
             batch_outputs, output_logits = translate_fun(request_str)
             top_k_predictions = batch_outputs[0]
