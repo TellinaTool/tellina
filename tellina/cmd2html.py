@@ -5,8 +5,6 @@ import json
 from django.http import HttpResponse
 sys.path.append(os.path.join(os.path.dirname(__file__),"..", "tellina_learning_module"))
 
-from bashlex import data_tools
-
 ## load the manpage expl file, note that the root should be before tellina 
 with open(os.path.join('tellina', 'manpage_expl.json'), encoding='UTF-8') as data_file:
     manpage_json = json.loads(data_file.read())
