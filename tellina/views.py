@@ -62,9 +62,9 @@ def translate(request):
         batch_outputs, output_logits = translate_fun(request_str)
         top_k_predictions = batch_outputs[0]
         top_k_scores = output_logits[0]
+        html_strs = []
         for i in range(len(top_k_predictions)):
             pred_tree, pred_cmd, outputs = top_k_predictions[i]
-            html_str = cmd2html(pred_tree)
             score = top_k_scores[i]
 
             trans = Translation(request=nlr, pred_cmd=pred_cmd,
@@ -72,8 +72,11 @@ def translate(request):
             trans.save()
             trans_list.append(trans)
 
+            html_str = cmd2html(pred_tree)
+            html_strs.append(html_str)
+
     trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), html_str)
-                  for trans in trans_list]
+                  for trans, html_str in zip(trans_list, html_strs)]
 
     context = {
         'nl_request': nlr,
