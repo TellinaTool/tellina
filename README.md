@@ -25,8 +25,13 @@ tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 cd ../../..
 
 #enable spellcheck
-cd tellina_learning_module/tools/spellcheck
+cd tellina_learning_module/nlp_tools/spellcheck
 unxz --keep most_common.txt.xz
+```
+
+To update the tellina_learning_module in the future, run:
+```
+git submodule update --remote
 ```
 
 ### Set up databases:
