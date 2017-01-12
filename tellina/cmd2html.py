@@ -5,8 +5,6 @@ import json
 from django.http import HttpResponse
 sys.path.append(os.path.join(os.path.dirname(__file__),"..", "tellina_learning_module"))
 
-from bashlex import data_tools
-
 ## load the manpage expl file, note that the root should be before tellina 
 with open(os.path.join('tellina', 'manpage_expl.json'), encoding='UTF-8') as data_file:
     manpage_json = json.loads(data_file.read())
@@ -57,12 +55,11 @@ def explain_cmd(request):
   # in this case, either the thead is not provided or the head cannot be retrieved
   return HttpResponse("")
 
-def cmd2html(cmd_str):
+def cmd2html(ast):
   """ A wrapper for the function ast2html (see below) that takes in a cmd string 
   and translate into a html string with highlinghting.
   """
-  root = data_tools.bash_parser(cmd_str)
-  return " ".join(ast2html(root))
+  return " ".join(ast2html(ast))
 
 def ast2html(node):
 
@@ -101,7 +98,8 @@ def ast2html(node):
     for child in node.children:
       html_spans.extend(ast2html(child))
   elif node.kind == "flag":
-    ## note there are two corner cases of flags, -exec::; and -exec::+ since they have different endings 
+    # note there are two corner cases of flags:
+    #   -exec::; and -exec::+ since they have different endings
     if node.value == "-exec::;" or node.value == "-exec::+":
       head_span = "<span class=\"hljs-keyword\" " + span_doc + " >" + "-exec" + "</span>"
     else:
@@ -147,23 +145,25 @@ def retrieve_dominators(node):
   current_node = node
 
   while True:
-    if current_node.kind == "flag":
+    if current_node and current_node.kind == "flag":
       if not dominate_flag: 
         dominate_flag = current_node.value
         # this is resulted from a corner case by Victoria, 
         #   for -exec::; -exec::+ and potentially others
         if "::" in dominate_flag:
           dominate_flag = dominate_flag[0: dominate_flag.index("::")]
-    elif current_node.kind == "headcommand":
+    elif current_node and current_node.kind == "headcommand":
       dominate_headcmd = current_node.value
       return (dominate_headcmd, dominate_flag) 
 
     # we have already find dominate_headcmd or we have reached root
-    if (not current_node.parent):
+    if current_node and (not current_node.parent):
       return (dominate_headcmd, dominate_flag)
-    else:
+    elif current_node:
       current_node = current_node.parent
 
+  if dominate_headcmd is None:
+    return ('', '')
   return (dominate_headcmd, dominate_flag)
 
 def test():

@@ -6,7 +6,10 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..",
+                             "tellina_learning_module"))
+from bashlex import data_tools
+
 from tellina.models import NLRequest, Translation
 
 WEBSITE_DEVELOP = False
@@ -41,47 +44,62 @@ def translate(request):
         request_str = request_str[:-1]
 
     trans_list = []
+    html_strs = []
     if NLRequest.objects.filter(request_str=request_str).exists():
         # request has been issued before
         nl_request = NLRequest.objects.filter(request_str=request_str)
         for nlr in nl_request:
             nlr.frequency += 1
             nlr.save()
-        if Translation.objects.filter(request__request_str=request_str).exists():
+        if Translation.objects.filter(
+                request__request_str=request_str).exists():
             # model translations exist
-            trans_list = Translation.objects.filter(
+            cached_trans = Translation.objects.filter(
                 request__request_str=request_str)
+            for trans in cached_trans:
+                pred_tree = data_tools.bash_parser(trans.pred_cmd)
+                if pred_tree is not None:
+                    trans_list.append(trans)
+                    html_str = cmd2html(pred_tree)
+                    html_strs.append(html_str)
     else:
         # record request
         nlr = NLRequest(request_str=request_str, frequency=1)
         nlr.save()
-    if not trans_list and not WEBSITE_DEVELOP:
-        # call learning model and store the translations
-        batch_outputs, output_logits = translate_fun(request_str)
-        top_k_predictions = batch_outputs[0]
-        top_k_scores = output_logits[0]
-        for i in range(len(top_k_predictions)):
-            pred_tree, pred_cmd, outputs = top_k_predictions[i]
-            score = top_k_scores[i]
 
-            trans = Translation(request=nlr, pred_cmd=pred_cmd,
-                                score=score, num_votes=0)
-            trans.save()
-            trans_list.append(trans)
+    if not trans_list:
+        if not WEBSITE_DEVELOP:
+            # call learning model and store the translations
+            batch_outputs, output_logits = translate_fun(request_str)
+            top_k_predictions = batch_outputs[0]
+            top_k_scores = output_logits[0]
 
-    trans_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), cmd2html(trans.pred_cmd)) for trans in trans_list]
+            for i in range(len(top_k_predictions)):
+                pred_tree, pred_cmd, outputs = top_k_predictions[i]
+                score = top_k_scores[i]
+
+                trans = Translation(request=nlr, pred_cmd=pred_cmd,
+                                    score=score, num_votes=0)
+                trans.save()
+                trans_list.append(trans)
+
+                html_str = cmd2html(pred_tree)
+                html_strs.append(html_str)
+
+    translation_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), html_str)
+                  for trans, html_str in zip(trans_list, html_strs)]
 
     context = {
         'nl_request': nlr,
-        'trans_list': trans_list
+        'trans_list': translation_list
     }
     return HttpResponse(template.render(context, request))
 
-@csrf_protect
-def web_search(request):
-    template = loader.get_template('translator/websearch.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+# @csrf_protect
+# def web_search(request):
+#     template = loader.get_template('translator/websearch.html')
+#     context = {}
+#     return HttpResponse(template.render(context, request))
 
 def index(request):
     latest_request_list = NLRequest.objects.order_by('-sub_time')[:10]
@@ -89,29 +107,4 @@ def index(request):
     context = {
         'latest_request_list': latest_request_list,
     }
-    return HttpResponse(template.render(context, request))
-
-def task(request):
-    template = loader.get_template('platform/task.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task1(request):
-    template = loader.get_template('platform/task1.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task2(request):
-    template = loader.get_template('platform/task2.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task3(request):
-    template = loader.get_template('platform/task3.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def task4(request):
-    template = loader.get_template('platform/task4.html')
-    context = {}
     return HttpResponse(template.render(context, request))
