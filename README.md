@@ -15,7 +15,7 @@ pip3 install -r requirements.txt
 ### Set up tellina_learning_module submodule:
 
 ```
-git submodule update --remote
+git submodule update --init --remote
 git submodule foreach git pull origin master
 
 #untar vocabulary files
@@ -25,8 +25,13 @@ tar -xzvf vocab.tar.xz && rm vocab.tar.xz
 cd ../../..
 
 #enable spellcheck
-cd tellina_learning_module/tools/spellcheck
+cd tellina_learning_module/nlp_tools/spellcheck
 unxz --keep most_common.txt.xz
+```
+
+To update the tellina_learning_module in the future, run:
+```
+git submodule update --remote
 ```
 
 ### Set up databases:
