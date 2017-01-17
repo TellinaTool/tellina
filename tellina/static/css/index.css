@@ -20,35 +20,28 @@ html,body {
 	color: #777777;
 }
 
-.recent-questions {
+.request-list-block {
 	padding-top: 10px;
 	text-align:center;
 }
 
-.recent-questions a{
+.request-list-block a{
 	text-decoration: underline;
 	color: #222222;
 }
 
-.recent-questions a:hover{
+.request-list-block a:hover{
 	text-decoration: underline;
 	color: #337ab7;
 }
 
-#example-request-list{
+.request-list{
     padding-top: 0;
     margin-top: 0;
     display:inline-block;
     float:none;
     text-align: left;
-}
-
-#latest-request-list{
-    padding-top: 0;
-    margin-top: 0;
-    display:inline-block;
-    float:none;
-	text-align: left;
+    vertical-align: top;
 }
 
 /* Tellina it or google it button style*/
