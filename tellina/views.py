@@ -106,7 +106,7 @@ def index(request):
         'remove all pdfs in my current directory',
         'delete all *.txt files in "myDir/"',
         'list files in "myDir" that are modified within 24 hours',
-        'mv all files named "test*.cpp" to "project/code/"',
+        'move all files named "test*.cpp" to "project/code/"',
         'find all files larger than a gigabyte in current folder',
         'find all png files larger than 50M and were modified more than 30 days ago'
     ]
