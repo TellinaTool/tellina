@@ -22,9 +22,9 @@
                     </form>
                 </div>
             </div><!-- /.search-panel -->
-            <div class="row recent-questions">
+            <div class="row request-list-block">
                 {% if example_request_list %}
-                    <div class="col-md-4" id="example-request-list">
+                    <div class="col-md-4 request-list">
                         <h5> Examples </h5>
                         <ul>
                             {% for request_str in example_request_list %}
@@ -35,8 +35,8 @@
                     </div>
                 {% endif %}
                 {% if latest_request_list %}
-                    <div class="col-md-4" id="latest-request-list">
-                        <h5> Recently Asked Questions </h5>
+                    <div class="col-md-4 request-list">
+                        <h5> Recently Asked </h5>
                         <ul>
                             {% for request in latest_request_list %}
                                 <li><a href="/translate?request_str={{request.request_str}}">
