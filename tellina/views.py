@@ -12,7 +12,7 @@ from bashlex import data_tools
 
 from tellina.models import NLRequest, Translation
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 
 from tellina.cmd2html import cmd2html
 
@@ -102,9 +102,18 @@ def translate(request):
 #     return HttpResponse(template.render(context, request))
 
 def index(request):
+    example_request_list = [
+        'remove all pdfs in my current directory',
+        'delete all *.txt files in "myDir/"',
+        'list files in "myDir" that are modified within 24 hours',
+        'mv all files named "test*.cpp" to "project/code/"',
+        'find all files larger than a gigabyte in current folder',
+        'find all png files larger than 50M and were modified more than 30 days ago'
+    ]
     latest_request_list = NLRequest.objects.order_by('-sub_time')[:10]
     template = loader.get_template('translator/index.html')
     context = {
-        'latest_request_list': latest_request_list,
+        'example_request_list': example_request_list,
+        'latest_request_list': latest_request_list
     }
     return HttpResponse(template.render(context, request))

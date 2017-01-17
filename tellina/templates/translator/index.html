@@ -22,9 +22,20 @@
                     </form>
                 </div>
             </div><!-- /.search-panel -->
-            <div id="recent-questions" class="center-block">
-                <div class="request-suggestion">
-                    {% if latest_request_list %}
+            <div class="row recent-questions">
+                {% if example_request_list %}
+                    <div class="col-md-4" id="example-request-list">
+                        <h5> Examples </h5>
+                        <ul>
+                            {% for request_str in example_request_list %}
+                                <li><a href="/translate?request_str={{request_str}}">
+                                    {{request_str}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if latest_request_list %}
+                    <div class="col-md-4" id="latest-request-list">
                         <h5> Recently Asked Questions </h5>
                         <ul>
                             {% for request in latest_request_list %}
@@ -32,8 +43,8 @@
                                     {{request.request_str}}</a></li>
                             {% endfor %}
                         </ul>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     {% endblock %}
