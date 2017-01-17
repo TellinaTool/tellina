@@ -12,7 +12,7 @@ from bashlex import data_tools
 
 from tellina.models import NLRequest, Translation
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 
 from tellina.cmd2html import cmd2html
 
@@ -110,7 +110,7 @@ def index(request):
         'find all files larger than a gigabyte in current folder',
         'find all png files larger than 50M and were modified more than 30 days ago'
     ]
-    latest_request_list = NLRequest.objects.order_by('-sub_time')[:10]
+    latest_request_list = NLRequest.objects.order_by('-sub_time')[:6]
     template = loader.get_template('translator/index.html')
     context = {
         'example_request_list': example_request_list,
