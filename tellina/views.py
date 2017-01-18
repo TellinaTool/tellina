@@ -12,7 +12,7 @@ from bashlex import data_tools
 
 from tellina.models import NLRequest, Translation
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 
 from tellina.cmd2html import cmd2html
 

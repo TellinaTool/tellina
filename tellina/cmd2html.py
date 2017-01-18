@@ -50,6 +50,7 @@ def explain_cmd(request):
         if node_kind == "argument":
           return HttpResponse(cmd_obj["rawSynopsis"])
         else:
+          return HttpResponse("")
           return HttpResponse(cmd_obj["description"])
   
   # in this case, either the thead is not provided or the head cannot be retrieved
