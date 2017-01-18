@@ -233,10 +233,10 @@ body {
     outline: 0;
 }
 
-.btn-copy:hover{
+/*.btn-copy:hover{
     background: #ffbbbb;
     # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);    
-}
+}*/
 
 .btn-expl{
     background: white;
@@ -244,10 +244,10 @@ body {
     outline: 0;
 }
 
-.btn-expl:hover{
+/*.btn-expl:hover{
     background: #ffbbbb;
     # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);
-}
+}*/
 
 /* .btn-copy {
     color: white;
