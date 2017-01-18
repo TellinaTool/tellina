@@ -102,6 +102,10 @@ $(document).ready(function() {
                 }
             });
 
+            if (local_data == "") {
+                return "";
+            }
+
             return  "<div class='cmd-expl'>" 
             + htmlForTextWithEmbeddedNewlines(local_data) 
             + "</div>";

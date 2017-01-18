@@ -49,8 +49,7 @@ def explain_cmd(request):
         # if the flag is not provided, or we cannot find the flag
         if node_kind == "argument":
           return HttpResponse(cmd_obj["rawSynopsis"])
-        else:
-          return HttpResponse("")
+        elif node_kind == "headcommand":
           return HttpResponse(cmd_obj["description"])
   
   # in this case, either the thead is not provided or the head cannot be retrieved
