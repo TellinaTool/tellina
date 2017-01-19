@@ -14,7 +14,7 @@ from tellina.models import NLRequest, Translation
 
 WEBSITE_DEVELOP = False
 
-from tellina.cmd2html import cmd2html
+from tellina.cmd2html import tokens2html
 
 if not WEBSITE_DEVELOP:
     from tellina.helper_interface import translate_fun
@@ -51,8 +51,7 @@ def translate(request):
         for nlr in nl_request:
             nlr.frequency += 1
             nlr.save()
-        if Translation.objects.filter(
-                request__request_str=request_str).exists():
+        if Translation.objects.filter(request__request_str=request_str).exists():
             # model translations exist
             cached_trans = Translation.objects.filter(
                 request__request_str=request_str)
@@ -60,7 +59,7 @@ def translate(request):
                 pred_tree = data_tools.bash_parser(trans.pred_cmd)
                 if pred_tree is not None:
                     trans_list.append(trans)
-                    html_str = cmd2html(pred_tree)
+                    html_str = tokens2html(pred_tree)
                     html_strs.append(html_str)
     else:
         # record request
@@ -83,7 +82,7 @@ def translate(request):
                 trans.save()
                 trans_list.append(trans)
 
-                html_str = cmd2html(pred_tree)
+                html_str = tokens2html(pred_tree)
                 html_strs.append(html_str)
 
     translation_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), html_str)

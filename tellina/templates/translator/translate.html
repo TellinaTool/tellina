@@ -55,7 +55,7 @@
         {% endfor %}
         {% else %}
         <div class="translation-error">
-            <p>Hmm... I don't know how to translate it. Please try Google Search instead.</p>
+            <p>Sorry, I don't know how to translate it. Please try Google Search instead.</p>
         </div>
         {% endif %}
     </div>
@@ -101,6 +101,10 @@ $(document).ready(function() {
                     local_data = data;
                 }
             });
+
+            if (local_data == "") {
+                return "";
+            }
 
             return  "<div class='cmd-expl'>" 
             + htmlForTextWithEmbeddedNewlines(local_data) 
