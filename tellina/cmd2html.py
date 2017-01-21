@@ -4,6 +4,7 @@ import json
 
 from django.http import HttpResponse
 sys.path.append(os.path.join(os.path.dirname(__file__),"..", "tellina_learning_module"))
+from bashlex import data_tools
 
 ## load the manpage expl file, note that the root should be before tellina 
 with open(os.path.join('tellina', 'manpage_expl.json'), encoding='UTF-8') as data_file:
@@ -49,17 +50,23 @@ def explain_cmd(request):
         # if the flag is not provided, or we cannot find the flag
         if node_kind == "argument":
           return HttpResponse(cmd_obj["rawSynopsis"])
-        else:
+        elif node_kind == "headcommand":
           return HttpResponse(cmd_obj["description"])
   
   # in this case, either the thead is not provided or the head cannot be retrieved
   return HttpResponse("")
 
-def cmd2html(ast):
+def cmd2html(cmd_str):
   """ A wrapper for the function ast2html (see below) that takes in a cmd string 
   and translate into a html string with highlinghting.
   """
-  return " ".join(ast2html(ast))
+  return " ".join(ast2html(data_tools.bash_parser(cmd_str)))
+
+def tokens2html(cmd_str):
+  """ A wrapper for the function ast2html (see below) that takes in a cmd string 
+  and translate into a html string with highlinghting.
+  """
+  return " ".join(ast2html(cmd_str))
 
 def ast2html(node):
 
@@ -172,7 +179,8 @@ def test():
     "find Path -type f -iname Regex | xargs -I {} grep -i -l Regex {}",
     "find Path \( -name Regex-01 -or -name Regex-02 \) -print",
     "find Path -not -name Regex",
-    "find <(echo \"hello\")",
+    #"find <(echo \"hello\")",
+    "find . \( -mtime 10d -or -atime Timespan -or -atime Timespan -or -atime Timespan -or -atime Timespan \) -print",
     "find Documents \( -name \"*.py\" -o -name \"*.html\" \)"
   ];
   for cmd_str in cmd_str_list:
