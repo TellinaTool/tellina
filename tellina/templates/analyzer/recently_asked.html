@@ -1,0 +1,20 @@
+{% extends "translator/base.html" %}
+    {% block head %}
+        <!--<link rel="stylesheet"
+               href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
+        -->
+        <link rel="stylesheet" href="/static/css/index.css">
+    {% endblock %}
+    {% block body %}
+        {% if latest_request_list %}
+            <div class="center-block request-list">
+                <h5> Recently Asked </h5>
+                <ul>
+                    {% for request in latest_request_list %}
+                        <li><a href="/translate?request_str={{request.request_str}}">
+                            {{request.request_str}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endblock %}

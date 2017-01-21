@@ -101,6 +101,14 @@ def translate(request):
 #     context = {}
 #     return HttpResponse(template.render(context, request))
 
+def recently_asked(request):
+    latest_request_list = NLRequest.objects.order_by('-sub_time')
+    template = loader.get_template('analyzer/recently_asked.html')
+    context = {
+        'latest_request_list': latest_request_list
+    }
+    return HttpResponse(template.render(context, request))
+
 def index(request):
     example_request_list = [
         'remove all pdfs in my current directory',

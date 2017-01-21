@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^explain_cmd/', cmd2html.explain_cmd, name='explain_cmd'),
 
-    # url(r'^websearch/', views.web_search, name='websearch'),
+    url(r'^recently_asked/', views.recently_asked, name='recently_asked'),
 
     url(r'^mockups/translate.html', views.mockup_translate)
 ]
