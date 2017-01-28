@@ -22,7 +22,7 @@ from . import cmd2html
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^translate/', views.translate, name='translate'),
-    url(r'^about/', views.about, name='about'),
+    url(r'^info/', views.info, name='info'),
     url(r'^admin/', admin.site.urls),
     url(r'^explain_cmd/', cmd2html.explain_cmd, name='explain_cmd'),
 
