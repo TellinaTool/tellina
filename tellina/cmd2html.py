@@ -118,7 +118,7 @@ def ast2html(node):
       html_spans.append("\\;")
     elif node.value == "-exec::+":
       html_spans.append("+");
-  elif node.kind == "argument":
+  elif node.kind == "argument" and node.arg_type != "ReservedWord":
     span = "<span class=\"hljs-semantic_types\" " + span_doc + " >" + node.value + "</span>"
     html_spans.append(span)
     for child in node.children:
