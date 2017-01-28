@@ -7,6 +7,7 @@
            <link rel='stylesheet' href='/static/css/perfect-scrollbar.css'>
            <link href="/static/lib/jquery.upvote/jquery.upvote.css" rel="stylesheet" media="screen">
            <link rel="stylesheet" href="/static/css/translate.css">
+           <link rel="stylesheet" href="/static/css/introjs.min.css">
            {% endblock %}
            {% block body %}
            <div class="translate-panel">
@@ -27,7 +28,7 @@
             <div class="center-block">
                 {% if trans_list %}
                 {% for translation, to_expl_cmd, html_str in trans_list %}
-                <div class="well offset1 span10">
+                <div class="well offset1 span10" id="intro1">
                     <table class="cmd-result">
                         <tr>
                             <td>
@@ -174,5 +175,41 @@ $("#google-command").click(function() {
     href="https://www.google.com/search?q=" + nl_cmd;
     window.open(href);
 });
+</script>
+<script type="text/javascript" src="/static/js/intro.min.js"></script>
+<script type="text/javascript">
+    function startIntro(){
+        var intro = introJs();
+        intro.setOptions({
+            steps: [
+                     {
+                         element: '#intro1',
+                         intro: "This is a bash one-liner. Hover over any part of the command for more information.",
+                         position: 'right'
+                     },
+                     {
+                         element: '#oneliner-1',
+    intro: "Bash commands are <span style=\"color:#f5871f\">orange</span>"
+                     },
+                     {
+                         element: '#oneliner-1',
+    intro: "Command flags are <span style=\"color:#8959a8\">purple</span>."
+                     },
+                     {
+                         element: '#oneliner-1',
+    intro: "Arguments to commands and flags are <span style=\"text-decoration:underline\">underlined</span>. You may have to fill these in manually."
+                     },
+                     {
+                         element: '#copy-btn-1',
+    intro: "Get an explanation of the command."
+                     },
+                     {
+                         element: '#expl-btn-1',
+    intro: "Copy the command to your clipboard."
+                     }
+                 ]
+             });
+             intro.start();
+         }
 </script>
 {% endblock %}
