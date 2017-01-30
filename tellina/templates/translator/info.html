@@ -1,8 +1,8 @@
 {% extends "translator/base.html" %}
 {% block body %}
-<div id="about">
+<div id="info">
 		<div>
-			<h3>About</h3>
+			<h3>Info</h3>
     	<p>Tellina is a natural language to bash commands translator aiming to reduce end-users' programming and learning efforts. For example, it is able to translate a sentence like "Find text file in the current folder" into a bash command <code>find . -name "*.txt"</code>. The system is written in Python and uses <a href="https://github.com/idank/bashlex">bashlex</a>, <a href="https://www.tensorflow.org/versions/r0.9/get_started/os_setup.html">Tensorflow</a> and Django. Source code is available <a href="https://github.com/TellinaTool/tellina">on github</a>.
     </p>
 		</div>
@@ -27,4 +27,9 @@
   		<p>If you have any questions about the tool or the technique, please drop us a line on <a href="https://github.com/TellinaTool/tellina">our Github</a>.</p>
   	</div>
 </div>
+{% endblock %}
+{% block other-js %}
+<script type="text/javascript">
+ function startIntro(){}
+</script>
 {% endblock %}

@@ -4,10 +4,11 @@
                href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
         -->
         <link rel="stylesheet" href="/static/css/index.css">
+        <link rel="stylesheet" href="/static/css/introjs.min.css">
     {% endblock %}
     {% block body %}
         <div class="container main">
-            <h1 style="font-size:56px">Tellina</h1>
+            <h1 style="font-size:56px" id="intro1">Tellina</h1>
             <p class="text-center subtitle" style="font-size:16px">
                 Commanding your terminal with natural language.
             </p>
@@ -56,5 +57,24 @@
                 href="https://www.google.com/search?q=" + nl_cmd;
                 window.open(href);
             });
+        </script>
+        <script type="text/javascript" src="/static/js/intro.min.js"></script>
+        <script type="text/javascript">
+         function startIntro(){
+             var intro = introJs();
+             intro.setOptions({
+                 steps: [
+                     {
+                         element: '#translate',
+                         intro: "Type your query here. Try something like \"remove all pdfs in my current directory\"."
+                     },
+                     {
+                         element: '#submit-to-tellina',
+                         intro: "Now search for a relevant bash command!"
+                     },
+                 ]
+             });
+             intro.start();
+         }
         </script>
     {% endblock %}

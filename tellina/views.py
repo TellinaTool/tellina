@@ -19,8 +19,8 @@ from tellina.cmd2html import tokens2html
 if not WEBSITE_DEVELOP:
     from tellina.helper_interface import translate_fun
 
-def about(request):
-    template = loader.get_template('translator/about.html')
+def info(request):
+    template = loader.get_template('translator/info.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
