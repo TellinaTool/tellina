@@ -13,6 +13,7 @@ from bashlex import data_tools
 from tellina.models import NLRequest, Translation
 
 WEBSITE_DEVELOP = False
+CACHE_TRANSLATIONS = False
 
 from tellina.cmd2html import tokens2html
 
@@ -45,7 +46,7 @@ def translate(request):
 
     trans_list = []
     html_strs = []
-    if NLRequest.objects.filter(request_str=request_str).exists():
+    if CACHE_TRANSLATIONS and NLRequest.objects.filter(request_str=request_str).exists():
         # request has been issued before
         nl_request = NLRequest.objects.filter(request_str=request_str)
         for nlr in nl_request:
@@ -62,9 +63,10 @@ def translate(request):
                     html_str = tokens2html(pred_tree)
                     html_strs.append(html_str)
     else:
-        # record request
-        nlr = NLRequest(request_str=request_str, frequency=1)
-        nlr.save()
+        if not NLRequest.objects.filter(request_str=request_str).exists():
+            # record request
+            nlr = NLRequest(request_str=request_str, frequency=1)
+            nlr.save()
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
