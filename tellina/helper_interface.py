@@ -66,7 +66,7 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
                   log_device_placement=FLAGS.log_device_placement))
 
 # create model and load nerual model parameters.
-model, _ = trans.create_model(sess, forward_only=True, buckets=[(30, 50)])
+model, _ = trans.create_model(sess, forward_only=True, buckets=[(30, 40)])
 nl_vocab, _, _, rev_cm_vocab = data_utils.load_vocab(FLAGS)
 
 def translate_fun(sentence, slot_filling_classifier=slot_filling_classifier):
