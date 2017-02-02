@@ -1,13 +1,19 @@
 # This Makefile wraps commands used to set up the learning module and 
 # start the Tellina server.
 
+LR_MODULE=tellina_learning_module
+
 git: 
 	# Update learning submodule
 	git submodule update --remote
 
 run: 
-	# Set up data files in the learning module
-	tar xf tellina_learning_module/data/bash/vocab.tar.xz --directory tellina_learning_module/data/bash/
+	# Set PYTHONPATH 
+	export PYTHONPATH=`pwd`
+	# Set up data files used in the learning module
+	tar xf $(LR_MODULE)/data/bash/vocab.tar.xz --directory $(LR_MODULE)/data/bash/
+	# Set up nlp tools
+	tar xf $(LR_MODULE)/nlp_tools/spellcheck/most_common.tar.xz --directory $(LR_MODULE)/nlp_tools/spellcheck/
 	# Run server
 	python3 manage.py runserver 0.0.0.0:8000    
 

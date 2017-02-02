@@ -18,17 +18,6 @@ pip3 install -r requirements.txt
 git submodule update --init --remote
 git submodule foreach git pull origin master
 
-#untar vocabulary files
-cd tellina_learning_module/data/bash
-tar -xzvf vocab.tar.xz && rm vocab.tar.xz
-
-cd ../../..
-
-#enable spellcheck
-cd tellina_learning_module/nlp_tools/spellcheck
-unxz --keep most_common.txt.xz
-```
-
 To update the tellina_learning_module in the future, run:
 ```
 git submodule update --remote
@@ -44,8 +33,6 @@ python3 manage.py migrate
 ### Run webapp:
 
 ```
-export PYTHONPATH=`pwd`
-
-python3 manage.py runserver
+make run
 ```
 Visit http://127.0.0.1:8000 in your browser.
