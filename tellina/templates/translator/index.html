@@ -18,7 +18,7 @@
                         <input id="translate" class="form-control search-box" type="text" name="request_str"
                                        autocapitalize="off" autocorrect="off">
                         <div class="small-push"></div>
-                        <button id="submit-to-tellina" class="search-btn" type="submit">Translate</button>
+                        <button id="submit-to-tellina" class="search-btn" type="submit">Translate to Bash</button>
                         <button id="google-command" type="button" class="search-btn" target="_blank"> Search with Google </button>
                     </form>
                 </div>
@@ -66,11 +66,11 @@
                  steps: [
                      {
                          element: '#translate',
-                         intro: "Type your query here. Try something like \"remove all pdfs in my current directory\"."
+                         intro: "Type your query here. Tellina works best when you enter full sentences. Try something like \"remove all pdfs in my current directory\"."
                      },
                      {
                          element: '#submit-to-tellina',
-                         intro: "Now search for a relevant bash command!"
+                         intro: "Now search for a relevant bash command! Click <span style=\"font-weight:bold\">Help</span> on the next page to continue the tutorial."
                      },
                  ]
              });
