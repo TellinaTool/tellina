@@ -7,9 +7,9 @@ git:
 
 run: 
 	# Set up data files in the learning module
-	tar xf tellina_learning_module/data/bash/vocab.tar.xz tellina_learning_module/data/bash/
+	tar xf tellina_learning_module/data/bash/vocab.tar.xz --directory tellina_learning_module/data/bash/
 	# Run server
-	python3 manage runserver 0.0.0.0:8000    
+	python3 manage.py runserver 0.0.0.0:8000    
 
 clean: 
 	# Destroy database and migrations	 
