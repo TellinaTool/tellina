@@ -38,7 +38,8 @@ def explain_cmd(request):
       if cmd_head in cmd_obj["aliases"]:
         #cmd_expl = "Aliases:" + " ".join(cmd_obj["aliases"]) + "\n\n" + cmd_obj["description"]
       
-        if flag_name:
+        # note that we use "None" due to the serialized field is of string type
+        if flag_name != "None":
           # in this case, our goal is to explain a command
           flag_expl_list = []
           for option_desc in cmd_obj["optionDesc"]:
@@ -46,6 +47,8 @@ def explain_cmd(request):
               flag_expl_list.append(option_desc["description"])
           if flag_expl_list:
             return HttpResponse("".join(flag_expl_list))
+          else:
+            return HttpResponse("")
 
         # if the flag is not provided, or we cannot find the flag
         if node_kind == "argument":
