@@ -20,6 +20,7 @@ FLAGS = tf.app.flags.FLAGS
 
 FLAGS.demo = True
 FLAGS.fill_argument_slots = True
+FLAGS.num_nn_slot_filling = 10
 
 FLAGS.normalized = True
 FLAGS.encoder_topology = 'birnn'
@@ -54,7 +55,8 @@ if FLAGS.fill_argument_slots:
                            .format(FLAGS.sc_vocab_size))
     train_X, train_Y = data_utils.load_slot_filling_data(model_param_dir)
     slot_filling_classifier = \
-            classifiers.KNearestNeighborModel(1, train_X, train_Y)
+            classifiers.KNearestNeighborModel(FLAGS.num_nn_slot_filling, 
+					      train_X, train_Y)
     print('Slot filling classifier parameters loaded.')
 else:
     slot_filling_classifier = None
