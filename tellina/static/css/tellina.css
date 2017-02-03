@@ -8,6 +8,14 @@ body {
     padding-bottom: 50px;
 }
 
+p {
+  text-align:left;
+}
+
+li {
+  text-align: left;
+}
+
 .main {
     padding: 60px 20px 20px 20px;
     margin: 0 auto;
