@@ -20,7 +20,7 @@ FLAGS = tf.app.flags.FLAGS
 
 FLAGS.demo = True
 FLAGS.fill_argument_slots = True
-FLAGS.num_nn_slot_filling = 10
+FLAGS.num_nn_slot_filling = 5
 
 FLAGS.normalized = True
 FLAGS.encoder_topology = 'birnn'
@@ -46,7 +46,7 @@ FLAGS.alpha = 1.0
 FLAGS.nl_vocab_size = 1000
 FLAGS.cm_vocab_size = 1000
 
-FLAGS.data_dir = os.path.join(commandline_helper_dir, "data", "bash")
+FLAGS.data_dir = os.path.join(commandline_helper_dir, "data", "bash.final")
 FLAGS.model_dir = os.path.join(commandline_helper_dir, "model", "seq2seq")
 
 if FLAGS.fill_argument_slots:
