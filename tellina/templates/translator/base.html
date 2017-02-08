@@ -25,11 +25,12 @@
                 <li><a href="/">Home</a></li>
                 <!-- <li><a href="https://github.com/todpole3/tellina"><i class="icon-github"></i> Github</a></li> -->
                 <li><a href="/info">Info</a></li>
-                <li style="font-weight: bold"><a onclick="startIntro();">Tutorial</a></li>
+                <li style="font-weight: bold"><a style="cursor:pointer" onclick="startIntro();">Tutorial</a></li>
               </ul>
             </div>
         </nav>
         {% block body %}{% endblock %}
+        <div class="modal"><!-- Place at bottom of page --></div>
         <script src="/static/js/jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/underscore.js"></script>
         <!--<script src="/static/js/bootstrap.min.js"></script>-->
