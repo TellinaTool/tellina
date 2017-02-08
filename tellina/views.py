@@ -6,8 +6,8 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..",
-                             "tellina_learning_module"))
+sys.path.append(os.path.join(os.path.dirname(__file__),
+                             "..", "tellina_learning_module"))
 from bashlex import data_tools
 
 from tellina.models import NLRequest, Translation
