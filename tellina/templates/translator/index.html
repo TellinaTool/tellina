@@ -25,7 +25,7 @@
             </div><!-- /.search-panel -->
             <div class="row request-list-block">
                 {% if example_request_list %}
-                    <div class="col-md-4 request-list">
+                    <div class="col-md-4 request-list" id="example-queries">
                         <h5> Examples </h5>
                         <ul>
                             {% for request_str in example_request_list %}
@@ -55,7 +55,7 @@
             $("#google-command").click(function() {
                 nl_cmd = $("#translate").val();
                 href="https://www.google.com/search?q=" + nl_cmd;
-                window.open(href);
+                window.open(href);ex
             });
         </script>
         <script type="text/javascript" src="/static/js/intro.min.js"></script>
@@ -66,12 +66,16 @@
                  steps: [
                      {
                          element: '#translate',
-                         intro: "Type your query here. Tellina works best when you enter full sentences. Try something like \"remove all pdfs in my current directory\"."
+                         intro: "Type your query here. Tellina works best when you enter full sentences."
                      },
                      {
+                         element: '#example-queries',
+                         intro: "<p>This panel shows you some example commands which Tellina understood well.</p> <p>Click on one of them to see the translation results.</p> (Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial.)"
+                     }
+                     /* {
                          element: '#submit-to-tellina',
                          intro: "Now click here to translate it to a Bash command! Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial."
-                     },
+                     }, */
                  ]
              });
              intro.start();
