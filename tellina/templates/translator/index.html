@@ -65,26 +65,32 @@
         </script>
         <script type="text/javascript" src="/static/js/intro.min.js"></script>
         <script type="text/javascript">
-         function startIntro(){
-             var intro = introJs();
-             intro.setOptions({
-                 steps: [
-                     {
-                         element: '#translate',
-                         intro: '<p>Type your query here. Tellina works best when you enter full sentences.</p> <p>Tips: <ul><li>put strings and regular expressions in quotes <code>""</code>;</li><li>add <code>/</code> to a directory name such that Tellina will interpret it as a folder.</li></ul>'
-                     },
-                     {
-                         element: '#example-queries',
-                         intro: '<p>This panel shows you some example commands which Tellina understood well.</p> <p>Click on one of them to see the translation results. (Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial.)</p>'
-                     }
-                     /* {
-                         element: '#submit-to-tellina',
-                         intro: "Now click here to translate it to a Bash command! Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial."
-                     }, */
-                 ]
-             });
-             intro.start();
-             $('.introjs-skipbutton').hide();
-         }
+        $(document).ready(function () {
+            if (!empty($_GET['tutorial']) && $_GET['tutorial'] == 'start' ){
+                startIntro();
+            }
+
+            function startIntro(){
+                 var intro = introJs();
+                 intro.setOptions({
+                     steps: [
+                         {
+                             element: '#translate',
+                             intro: '<p>Type your query here. Tellina works best when you enter full sentences.</p> <p>Tips: <ul><li>put strings and regular expressions in quotes <code>""</code>;</li><li>add <code>/</code> to a directory name such that Tellina will interpret it as a folder.</li></ul>'
+                         },
+                         {
+                             element: '#example-queries',
+                             intro: '<p>This panel shows you some example commands which Tellina understood well.</p> <p>Click on one of them to see the translation results. (Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial.)</p>'
+                         }
+                         /* {
+                             element: '#submit-to-tellina',
+                             intro: "Now click here to translate it to a Bash command! Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial."
+                         }, */
+                     ]
+                 });
+                 intro.start();
+                 $('.introjs-skipbutton').hide();
+            }
+        }
         </script>
     {% endblock %}
