@@ -46,7 +46,8 @@ FLAGS.alpha = 1.0
 FLAGS.nl_vocab_size = 1000
 FLAGS.cm_vocab_size = 1000
 
-FLAGS.data_dir = os.path.join(commandline_helper_dir, "data", "bash.final")
+FLAGS.dataset = 'bash.final'
+FLAGS.data_dir = os.path.join(commandline_helper_dir, "data", FLAGS.dataset)
 FLAGS.model_dir = os.path.join(commandline_helper_dir, "model", "seq2seq")
 
 if FLAGS.fill_argument_slots:

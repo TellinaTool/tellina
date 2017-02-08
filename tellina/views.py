@@ -13,7 +13,7 @@ from bashlex import data_tools
 from tellina.models import NLRequest, Translation
 
 WEBSITE_DEVELOP = False
-CACHE_TRANSLATIONS = False
+CACHE_TRANSLATIONS = True
 
 from tellina.cmd2html import tokens2html
 
@@ -67,6 +67,8 @@ def translate(request):
             # record request
             nlr = NLRequest(request_str=request_str, frequency=1)
             nlr.save()
+        else:
+            nlr = NLRequest.objects.get(request_str = request_str)
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
@@ -77,13 +79,13 @@ def translate(request):
 
             for i in range(len(top_k_predictions)):
                 pred_tree, pred_cmd, outputs = top_k_predictions[i]
+                # data_tools.pretty_print(pred_tree)
                 score = top_k_scores[i]
 
                 trans = Translation(request=nlr, pred_cmd=pred_cmd,
                                     score=score, num_votes=0)
                 trans.save()
                 trans_list.append(trans)
-
                 html_str = tokens2html(pred_tree)
                 html_strs.append(html_str)
 
