@@ -1,6 +1,6 @@
 jQuery.fn.reverse = [].reverse;
 
-var debug = false;
+var debug = true;
 
 if (!debug) {
     console = console || {};
