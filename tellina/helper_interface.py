@@ -20,7 +20,7 @@ FLAGS = tf.app.flags.FLAGS
 
 FLAGS.demo = True
 FLAGS.fill_argument_slots = True
-FLAGS.num_nn_slot_filling = 5
+FLAGS.num_nn_slot_filling = 10
 
 FLAGS.normalized = True
 FLAGS.encoder_topology = 'birnn'
