@@ -74,20 +74,22 @@ def translate(request):
         if not WEBSITE_DEVELOP:
             # call learning model and store the translations
             batch_outputs, output_logits = translate_fun(request_str)
-            top_k_predictions = batch_outputs[0]
-            top_k_scores = output_logits[0]
 
-            for i in range(len(top_k_predictions)):
-                pred_tree, pred_cmd, outputs = top_k_predictions[i]
-                # data_tools.pretty_print(pred_tree)
-                score = top_k_scores[i]
+            if batch_outputs:
+                top_k_predictions = batch_outputs[0]
+                top_k_scores = output_logits[0]
 
-                trans = Translation(request=nlr, pred_cmd=pred_cmd,
+                for i in range(len(top_k_predictions)):
+                    pred_tree, pred_cmd, outputs = top_k_predictions[i]
+                    # data_tools.pretty_print(pred_tree)
+                    score = top_k_scores[i]
+
+                    trans = Translation(request=nlr, pred_cmd=pred_cmd,
                                     score=score, num_votes=0)
-                trans.save()
-                trans_list.append(trans)
-                html_str = tokens2html(pred_tree)
-                html_strs.append(html_str)
+                    trans.save()
+                    trans_list.append(trans)
+                    html_str = tokens2html(pred_tree)
+                    html_strs.append(html_str)
 
     translation_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), html_str)
                   for trans, html_str in zip(trans_list, html_strs)]

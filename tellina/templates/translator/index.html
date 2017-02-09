@@ -66,17 +66,22 @@
         <script type="text/javascript" src="/static/js/intro.min.js"></script>
         <script type="text/javascript">
         $(document).ready(function () {
-            if ($_GET['tutorial'] != null && $_GET['tutorial'] == 'start' ){
+            /* if ($_GET['tutorial'] != null && $_GET['tutorial'] == 'start' ){
                 startIntro();
-            }
-
+            } */
+            console.log(window.location.hash);
+            if (window.location.hash == '#tutorial')
+                startIntro();
+        });
+            
+            
              function startIntro(){
                  var intro = introJs();
                  intro.setOptions({
                      steps: [
                          {
                              element: '#translate',
-                             intro: '<p>Type your query here. Tellina works best when you enter full sentences.</p> <p>Tips: <ul><li>put strings and regular expressions in quotes <code>""</code>;</li><li>add <code>/</code> to a directory name such that Tellina will interpret it as a folder.</li></ul>'
+                             intro: '<p>Type your query here. Tellina works best when you enter full sentences.</p> <p>It is also able to recognize specific file names, path names, date, size etc.</p> <p>Some tips on using Tellina: <ul><li>put strings and regular expressions in quotes <code>""</code>;</li><li>add <code>/</code> to a directory name such that Tellina will interpret it as a folder.</li></ul>'
                          },
                          {
                              element: '#example-queries',
@@ -92,6 +97,5 @@
                  intro.start();
                  $('.introjs-skipbutton').hide();
              }
-        });
         </script>
     {% endblock %}
