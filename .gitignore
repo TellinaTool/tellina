@@ -1,4 +1,4 @@
-tellina/migrations/000*
+tellina/migrations
 *.pyc
 .DS_Store
 db.sqlite3
