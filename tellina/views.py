@@ -35,8 +35,10 @@ def translate(request):
     template = loader.get_template('translator/translate.html')
     if request.method == 'POST':
         request_str = request.POST.get('request_str')
+        ip_address = request.POST.get('ip_address')
     else:
         request_str = request.GET.get('request_str')
+        ip_address = request.GET.get('ip_address')
 
     if not request_str or not request_str.strip():
         return redirect('/')
@@ -46,13 +48,12 @@ def translate(request):
 
     trans_list = []
     html_strs = []
-    if CACHE_TRANSLATIONS and NLRequest.objects.filter(request_str=request_str).exists():
-        # request has been issued before
-        nl_request = NLRequest.objects.filter(request_str=request_str)
-        for nlr in nl_request:
-            nlr.frequency += 1
-            nlr.save()
-        if Translation.objects.filter(request__request_str=request_str).exists():
+    if CACHE_TRANSLATIONS and NLRequest.objects.filter(
+            request_str=request_str).exists():
+        # if the natural language request string has been translated before,
+        # directly output previously cached translations
+        if Translation.objects.filter(
+                request__request_str=request_str).exists():
             # model translations exist
             cached_trans = Translation.objects.filter(
                 request__request_str=request_str)
@@ -62,13 +63,12 @@ def translate(request):
                     trans_list.append(trans)
                     html_str = tokens2html(pred_tree)
                     html_strs.append(html_str)
-    else:
-        if not NLRequest.objects.filter(request_str=request_str).exists():
-            # record request
-            nlr = NLRequest(request_str=request_str, frequency=1)
-            nlr.save()
-        else:
-            nlr = NLRequest.objects.get(request_str = request_str)
+    # check if the natural language request has been issued by the IP
+    # address before
+    nl_request = NLRequest.objects.get(request_str=request_str,
+                                        ip_address=ip_address)
+    if not nl_request:
+        nl_request = NLRequest(request_str=request_str, ip_address=ip_address)
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
@@ -84,7 +84,7 @@ def translate(request):
                     # data_tools.pretty_print(pred_tree)
                     score = top_k_scores[i]
 
-                    trans = Translation(request=nlr, pred_cmd=pred_cmd,
+                    trans = Translation(request=nl_request, pred_cmd=pred_cmd,
                                     score=score, num_votes=0)
                     trans.save()
                     trans_list.append(trans)
@@ -95,19 +95,14 @@ def translate(request):
                   for trans, html_str in zip(trans_list, html_strs)]
 
     context = {
-        'nl_request': nlr,
+        'nl_request': nl_request,
         'trans_list': translation_list
     }
     return HttpResponse(template.render(context, request))
 
-# @csrf_protect
-# def web_search(request):
-#     template = loader.get_template('translator/websearch.html')
-#     context = {}
-#     return HttpResponse(template.render(context, request))
 
 def recently_asked(request):
-    latest_request_list = NLRequest.objects.order_by('-sub_time')
+    latest_request_list = NLRequest.objects.order_by('-submission_time')
     template = loader.get_template('analyzer/recently_asked.html')
     context = {
         'latest_request_list': latest_request_list
@@ -123,7 +118,7 @@ def index(request):
         'find all files larger than a gigabyte in the current folder',
         'find all png files larger than 50M that were last modified more than 30 days ago'
     ]
-    latest_request_list = NLRequest.objects.order_by('-sub_time')[:6]
+    latest_request_list = NLRequest.objects.order_by('-submission_time')[:6]
     template = loader.get_template('translator/index.html')
     context = {
         'example_request_list': example_request_list,

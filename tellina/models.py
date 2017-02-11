@@ -2,14 +2,25 @@ from django.db import models
 from django.utils import timezone
 
 class NLRequest(models.Model):
+    """
+    A natural language request issued by the user.
+    :member request_str: the natural language string issued by the user
+    :member ip_address: the user's ip address
+    :member submission_time: the time when the natural language request is
+        submitted
+    :member frequency: number of times the query has been issued
+    """
     request_str = models.TextField()
-
-    # used to display a list of query suggestions in the main page
-    sub_time = models.DateTimeField(default=timezone.now)
-    frequency = models.PositiveIntegerField(default=0)
+    ip_address = models.TextField(default='')
+    submission_time = models.DateTimeField(default=timezone.now)
+    frequency = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return self.request_str
+
+    def inc_frequency(self):
+        self.frequency += 1
+        self.save()
 
 
 class Translation(models.Model):

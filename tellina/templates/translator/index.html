@@ -16,9 +16,9 @@
             </p>
             <div class="search-panel">
                 <div class="form-group">
-                    <form class="form-block" action="/translate/" method="POST">{% csrf_token %}
-                        <input id="translate" class="form-control search-box" type="text" name="request_str"
-                                       autocapitalize="off" autocorrect="off">
+                    <form class="form-block" method="POST">{% csrf_token %}
+                        <input id="nl_request_str" class="form-control search-box" type="text"
+                               autocapitalize="off" autocorrect="off">
                         <div class="small-push"></div>
                         <button id="submit-to-tellina" class="search-btn" type="submit">Translate to Bash</button>
                         <button id="google-command" type="button" class="search-btn" target="_blank"> Search with Google </button>
@@ -52,50 +52,57 @@
         </div>
     {% endblock %}
     {% block other-js %}
-        <script>
-            $("#translate").focus();
-            $("#google-command").click(function() {
-                nl_cmd = $("#translate").val();
-                href="https://www.google.com/search?q=" + nl_cmd;
-                window.open(href);
-            });
-            $("#submit-to-tellina").click(function() {
-                 $("body").addClass("loading");
-            });
-        </script>
         <script type="text/javascript" src="/static/js/intro.min.js"></script>
         <script type="text/javascript">
-        $(document).ready(function () {
-            /* if ($_GET['tutorial'] != null && $_GET['tutorial'] == 'start' ){
-                startIntro();
-            } */
-            console.log(window.location.hash);
-            if (window.location.hash == '#tutorial')
-                startIntro();
-        });
-            
-            
-             function startIntro(){
-                 var intro = introJs();
-                 intro.setOptions({
-                     steps: [
-                         {
-                             element: '#translate',
-                             intro: '<p>Type your natural language command here. Tellina works best when you enter full sentences.</p> <p>Tellina also works best if you are specific. For example: <ul><li>instead of "some files", use "pdf files";</li><li>instead of "sometime ago", use "5 days ago".</li></ul></p> <p>Some tips on using Tellina: <ul><li>put names, strings and regular expressions in quotes <code>""</code>;</li><li>add <code>/</code> to the end of a directory name so that Tellina will interpret it as a folder.</li></ul>'
-                         },
-                         {
-                             element: '#example-queries',
-                             intro: '<p>This panel shows you some example sentences you could supply to Tellina.</p> <p>Click on one of them to see the translation results. (Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial.)</p>',
-                             position: 'right'
-                         }
-                         /* {
-                             element: '#submit-to-tellina',
-                             intro: "Now click here to translate it to a Bash command! Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial."
-                         }, */
-                     ]
-                 });
-                 intro.start();
-                 $('.introjs-skipbutton').hide();
-             }
+            $(document).ready(function () {
+                console.log(window.location.hash);
+                if (window.location.hash == '#tutorial')
+                    startIntro();
+
+                $("#translate").focus();
+
+                // get user's ip address when the page is loaded
+                var ip_address;
+                $.get("http://ipinfo.io", function(response) {
+                    ip_address = response.ip;
+                    // console.log('IP Address for study session logged: ' + ip_address);
+                }, "jsonp");
+
+                $("#google-command").click(function() {
+                    nl_cmd = $("#translate").val();
+                    href="https://www.google.com/search?q=" + nl_cmd;
+                    window.open(href);
+                });
+
+                $("#submit-to-tellina").click(function() {
+                     // show waiting icon
+                     $("body").addClass("loading");
+
+                     $.get(`/translate`, {request_str: nl_request_str, ip_address: ip_address})
+                });
+            });
+
+            function startIntro(){
+                var intro = introJs();
+                intro.setOptions({
+                    steps: [
+                        {
+                            element: '#translate',
+                            intro: '<p>Type your natural language command here. Tellina works best when you enter full sentences.</p> <p>Tellina also works best if you are specific. For example: <ul><li>instead of "some files", use "pdf files";</li><li>instead of "sometime ago", use "5 days ago".</li></ul></p> <p>Some tips on using Tellina: <ul><li>put names, strings and regular expressions in quotes <code>""</code>;</li><li>add <code>/</code> to the end of a directory name so that Tellina will interpret it as a folder.</li></ul>'
+                        },
+                        {
+                            element: '#example-queries',
+                            intro: '<p>This panel shows you some example sentences you could supply to Tellina.</p> <p>Click on one of them to see the translation results. (Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial.)</p>',
+                            position: 'right'
+                        }
+                        /* {
+                            element: '#submit-to-tellina',
+                            intro: "Now click here to translate it to a Bash command! Click <span style=\"font-weight:bold\">Tutorial</span> on the next page to continue the tutorial."
+                        }, */
+                    ]
+                });
+                intro.start();
+                $('.introjs-skipbutton').hide();
+            }
         </script>
     {% endblock %}
