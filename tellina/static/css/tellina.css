@@ -125,7 +125,7 @@ body.loading .modal {
     font-size: 14px;
 }
 
-#translate:focus {
+#nl_request_input:focus {
     border-color: #808080;
     -moz-box-shadow: 0 0 8px rgba(128, 128, 128, 0.6);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(128, 128, 128, 0.6);

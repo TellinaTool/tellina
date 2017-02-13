@@ -71,5 +71,6 @@ model, _ = trans.create_model(sess, forward_only=True, buckets=[(30, 40)])
 nl_vocab, _, _, rev_cm_vocab = data_utils.load_vocab(FLAGS)
 
 def translate_fun(sentence, slot_filling_classifier=slot_filling_classifier):
+    print('start running translation model')
     return decode_tools.translate_fun(sentence, sess, model, nl_vocab, rev_cm_vocab, 
                     FLAGS, slot_filling_classifier)

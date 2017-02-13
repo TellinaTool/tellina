@@ -13,9 +13,9 @@
 <div class="translate-panel">
     {% if nl_request %}
     <div class="form-group">
-        <form class="form-block" method="POST">{% csrf_token %}
+        <form class="form-block" action="/translate/" method="POST">{% csrf_token %}
             <div class="input-group">
-                <input id="nl_request_str" class="form-control search-box" type="text" name="request_str"
+                <input id="nl_request_input" class="form-control search-box" type="text" name="request_str"
                        autocapitalize="off" autocorrect="off" value="{{nl_request.request_str}}">
                 <span class="input-group-btn">
                     <button id="submit-to-tellina" class="btn btn-default" type="submit">Tellina</button>
@@ -181,7 +181,8 @@ $(document).ready(function() {
     var ip_address;
     $.get("http://ipinfo.io", function(response) {
         ip_address = response.ip;
-        // console.log('IP Address for study session logged: ' + ip_address);
+        $.get(`/remember_ip_address`, {ip_address: ip_address});
+        console.log('IP Address for study session logged: ' + ip_address);
     }, "jsonp");
 
     $("#google-command").click(function() {
@@ -193,8 +194,6 @@ $(document).ready(function() {
     $("#submit-to-tellina").click(function() {
         // show waiting icon
         $("body").addClass("loading");
-
-        $.get(`/translate`, {request_str: nl_request_str, ip_address: ip_address})
     });
 });
 

@@ -1,6 +1,7 @@
 import os
 import sys
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template import loader
@@ -10,12 +11,23 @@ sys.path.append(os.path.join(os.path.dirname(__file__),
                              "..", "tellina_learning_module"))
 from bashlex import data_tools
 
-from tellina.models import NLRequest, Translation
+from tellina.models import NLRequest, Translation, NLRequestIPAddress
 
 WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = True
 
 from tellina.cmd2html import tokens2html
+from . import functions
+
+def ip_address_required(f):
+    @functions.wraps(f)
+    def g(request, *args, **kwargs):
+        ip_address = request.COOKIES['ip_address']
+        if not ip_address:
+            # use empty IP address if cookie reading fails
+            ip_address = ''
+        return f(request, *args, ip_address=ip_address, **kwargs)
+    return g
 
 if not WEBSITE_DEVELOP:
     from tellina.helper_interface import translate_fun
@@ -31,14 +43,13 @@ def mockup_translate(request):
     return HttpResponse(template.render(context, request))
 
 @csrf_protect
-def translate(request):
+@ip_address_required
+def translate(request, ip_address):
     template = loader.get_template('translator/translate.html')
     if request.method == 'POST':
         request_str = request.POST.get('request_str')
-        ip_address = request.POST.get('ip_address')
     else:
         request_str = request.GET.get('request_str')
-        ip_address = request.GET.get('ip_address')
 
     if not request_str or not request_str.strip():
         return redirect('/')
@@ -58,6 +69,7 @@ def translate(request):
             cached_trans = Translation.objects.filter(
                 request__request_str=request_str)
             for trans in cached_trans:
+                print(trans.pred_cmd)
                 pred_tree = data_tools.bash_parser(trans.pred_cmd)
                 if pred_tree is not None:
                     trans_list.append(trans)
@@ -65,10 +77,17 @@ def translate(request):
                     html_strs.append(html_str)
     # check if the natural language request has been issued by the IP
     # address before
-    nl_request = NLRequest.objects.get(request_str=request_str,
-                                        ip_address=ip_address)
-    if not nl_request:
-        nl_request = NLRequest(request_str=request_str, ip_address=ip_address)
+    try:
+        nl_request = NLRequest.objects.get(request_str=request_str)
+        # nl_request.inc_frequency()
+    except ObjectDoesNotExist:
+        nl_request = NLRequest.objects.create(request_str=request_str)
+
+    # save the natural language request issued by this IP Address
+    if not NLRequestIPAddress.objects.filter(
+            request__request_str=request_str, ip_address=ip_address).exists():
+        NLRequestIPAddress.objects.create(
+            request=nl_request, ip_address=ip_address)
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
@@ -84,9 +103,10 @@ def translate(request):
                     # data_tools.pretty_print(pred_tree)
                     score = top_k_scores[i]
 
-                    trans = Translation(request=nl_request, pred_cmd=pred_cmd,
-                                    score=score, num_votes=0)
-                    trans.save()
+                    trans = Translation.objects.create(
+                        request=nl_request, pred_cmd=pred_cmd,
+                        score=score, num_votes=0)
+
                     trans_list.append(trans)
                     html_str = tokens2html(pred_tree)
                     html_strs.append(html_str)
@@ -100,6 +120,11 @@ def translate(request):
     }
     return HttpResponse(template.render(context, request))
 
+def remember_ip_address(request):
+    ip_address = request.GET['ip_address']
+    resp = HttpResponse()
+    resp.set_cookie('ip_address', ip_address)
+    return resp
 
 def recently_asked(request):
     latest_request_list = NLRequest.objects.order_by('-submission_time')

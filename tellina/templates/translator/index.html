@@ -16,9 +16,9 @@
             </p>
             <div class="search-panel">
                 <div class="form-group">
-                    <form class="form-block" method="POST">{% csrf_token %}
-                        <input id="nl_request_str" class="form-control search-box" type="text"
-                               autocapitalize="off" autocorrect="off">
+                    <form class="form-block" action="/translate/" method="POST">{% csrf_token %}
+                        <input id="nl_request_input" class="form-control search-box" type="text"
+                               name="request_str" autocapitalize="off" autocorrect="off">
                         <div class="small-push"></div>
                         <button id="submit-to-tellina" class="search-btn" type="submit">Translate to Bash</button>
                         <button id="google-command" type="button" class="search-btn" target="_blank"> Search with Google </button>
@@ -31,8 +31,7 @@
                         <h5> Examples </h5>
                         <ul>
                             {% for request_str in example_request_list %}
-                                <li><a href="/translate?request_str={{request_str}}">
-                                    {{request_str}}</a></li>
+                                <li class="nl_request_link"><a>{{request_str}}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -42,8 +41,7 @@
                         <h5> Recently Asked </h5>
                         <ul>
                             {% for request in latest_request_list %}
-                                <li><a href="/translate?request_str={{request.request_str}}">
-                                    {{request.request_str}}</a></li>
+                                <li class="nl_request_link"><a>{{request.request_str}}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -59,35 +57,42 @@
                 if (window.location.hash == '#tutorial')
                     startIntro();
 
-                $("#translate").focus();
-
-                // get user's ip address when the page is loaded
-                var ip_address;
-                $.get("http://ipinfo.io", function(response) {
-                    ip_address = response.ip;
-                    // console.log('IP Address for study session logged: ' + ip_address);
-                }, "jsonp");
+                $("#nl_request_input").focus();
 
                 $("#google-command").click(function() {
-                    nl_cmd = $("#translate").val();
+                    nl_cmd = $("#nl_request_input").val();
                     href="https://www.google.com/search?q=" + nl_cmd;
                     window.open(href);
+                });
+
+                $(".nl_request_link").click(function() {
+                    // show waiting icon
+                    $("body").addClass("loading");
+
+                    var nl_request_str = $(this).text();
+                    window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
                 });
 
                 $("#submit-to-tellina").click(function() {
                      // show waiting icon
                      $("body").addClass("loading");
-
-                     $.get(`/translate`, {request_str: nl_request_str, ip_address: ip_address})
                 });
             });
+
+            // get user's ip address as a global variable
+            var ip_address;
+            $.get("http://ipinfo.io", function(response) {
+                ip_address = response.ip;
+                $.get(`/remember_ip_address`, {ip_address: ip_address});
+                console.log('IP Address for study session logged: ' + ip_address);
+            }, "jsonp");
 
             function startIntro(){
                 var intro = introJs();
                 intro.setOptions({
                     steps: [
                         {
-                            element: '#translate',
+                            element: '#nl_request_input',
                             intro: '<p>Type your natural language command here. Tellina works best when you enter full sentences.</p> <p>Tellina also works best if you are specific. For example: <ul><li>instead of "some files", use "pdf files";</li><li>instead of "sometime ago", use "5 days ago".</li></ul></p> <p>Some tips on using Tellina: <ul><li>put names, strings and regular expressions in quotes <code>""</code>;</li><li>add <code>/</code> to the end of a directory name so that Tellina will interpret it as a folder.</li></ul>'
                         },
                         {
