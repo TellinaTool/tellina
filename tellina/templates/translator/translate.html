@@ -186,7 +186,7 @@ $(document).ready(function() {
     }, "jsonp");
 
     $("#google-command").click(function() {
-        nl_cmd = $("#translate").val();
+        nl_cmd = $("#nl_request_input").val();
         href="https://www.google.com/search?q=" + nl_cmd;
         window.open(href);
     });
