@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['kirin.cs.washington.edu', '127.0.0.1', '69.91.132.97']
 # Application definition
 
 INSTALLED_APPS = [
-    'tellina.apps.TranslatorConfig',
+    'website.apps.TranslatorConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'tellina.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR + '/tellina/templates/'],
+        'DIRS': [os.path.join(BASE_DIR, 'website/static/html/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,5 +122,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR + "/tellina/static/",
+    BASE_DIR + "/website/static/",
 ]

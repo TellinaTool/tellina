@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -7,16 +6,16 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 
-sys.path.append(os.path.join(os.path.dirname(__file__),
-                             "..", "tellina_learning_module"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "..",
+                             "tellina_learning_module"))
 from bashlex import data_tools
 
-from tellina.models import NLRequest, Translation, NLRequestIPAddress
+from website.models import NLRequest, Translation, NLRequestIPAddress
 
 WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = True
 
-from tellina.cmd2html import tokens2html
+from website.cmd2html import tokens2html
 from . import functions
 
 def ip_address_required(f):
@@ -30,15 +29,10 @@ def ip_address_required(f):
     return g
 
 if not WEBSITE_DEVELOP:
-    from tellina.helper_interface import translate_fun
+    from website.helper_interface import translate_fun
 
 def info(request):
     template = loader.get_template('translator/info.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def mockup_translate(request):
-    template = loader.get_template('mockups/translate.html')
     context = {}
     return HttpResponse(template.render(context, request))
 
@@ -79,7 +73,6 @@ def translate(request, ip_address):
     # address before
     try:
         nl_request = NLRequest.objects.get(request_str=request_str)
-        # nl_request.inc_frequency()
     except ObjectDoesNotExist:
         nl_request = NLRequest.objects.create(request_str=request_str)
 
@@ -100,7 +93,6 @@ def translate(request, ip_address):
 
                 for i in range(len(top_k_predictions)):
                     pred_tree, pred_cmd, outputs = top_k_predictions[i]
-                    # data_tools.pretty_print(pred_tree)
                     score = top_k_scores[i]
 
                     trans = Translation.objects.create(

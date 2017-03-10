@@ -30,6 +30,12 @@ class Translation(models.Model):
     def __str__(self):
         return "{}\n{}".format(self.request, self.pred_cmd)
 
+    def inc_num_votes(self):
+        self.num_votes += 1
+
+    def dec_num_votes(self):
+        self.num_votes -= 1
+
 
 class NLRequestIPAddress(models.Model):
     """
