@@ -7,7 +7,6 @@ git:
 	# Update learning submodule
 	git submodule update --remote
 
-setup_db:
 	# Setup database tables
 	python3 manage.py makemigrations
 	python3 manage.py migrate
