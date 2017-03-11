@@ -13,7 +13,7 @@ from bashlex import data_tools
 
 from website.models import NLRequest, Translation, NLRequestIPAddress, Vote
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = True
 
 from website.cmd2html import tokens2html
