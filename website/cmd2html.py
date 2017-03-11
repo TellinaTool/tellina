@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),"..", "tellina_learning_m
 from bashlex import data_tools
 
 ## load the manpage expl file, note that the root should be before tellina 
-with open(os.path.join('tellina', 'manpage_expl.json'), encoding='UTF-8') as data_file:
+with open(os.path.join('website', 'manpage_expl.json'), encoding='UTF-8') as data_file:
     manpage_json = json.loads(data_file.read())
 
 def explain_cmd(request):
@@ -182,7 +182,6 @@ def test():
     "find Path -type f -iname Regex | xargs -I {} grep -i -l Regex {}",
     "find Path \( -name Regex-01 -or -name Regex-02 \) -print",
     "find Path -not -name Regex",
-    #"find <(echo \"hello\")",
     "find . \( -mtime 10d -or -atime Timespan -or -atime Timespan -or -atime Timespan -or -atime Timespan \) -print",
     "find Documents \( -name \"*.py\" -o -name \"*.html\" \)"
   ];

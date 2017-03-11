@@ -16,8 +16,8 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from . import views
-from . import cmd2html
+from website import views
+from website import cmd2html
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),

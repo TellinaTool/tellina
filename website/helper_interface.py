@@ -6,8 +6,9 @@ import tensorflow as tf
 import os
 import sys
 
-commandline_helper_dir = os.path.join(os.path.dirname(__file__), "..", "tellina_learning_module")
-sys.path.append(commandline_helper_dir)
+learning_module_dir = os.path.join(os.path.dirname(__file__), "..",
+                                   "tellina_learning_module")
+sys.path.append(learning_module_dir)
 
 from encoder_decoder import classifiers
 from encoder_decoder import data_utils
@@ -47,8 +48,8 @@ FLAGS.nl_vocab_size = 1000
 FLAGS.cm_vocab_size = 1000
 
 FLAGS.dataset = 'bash.final'
-FLAGS.data_dir = os.path.join(commandline_helper_dir, "data", FLAGS.dataset)
-FLAGS.model_dir = os.path.join(commandline_helper_dir, "model", "seq2seq")
+FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
+FLAGS.model_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 
 if FLAGS.fill_argument_slots:
     # create slot filling classifier
