@@ -28,16 +28,17 @@
     <div id="suggestions">
         <div class="center-block">
             {% if trans_list %}
-            {% for translation, to_expl_cmd, html_str in trans_list %}
+            {% for translation, upvoted, downvoted, starred, to_expl_cmd, html_str in trans_list %}
                 <div class="well offset1 span10">
                     <table class="cmd-result">
                         <tr>
                             <td style="width: 30px">
-                                <div style="vertical-align: top;" id="pred-cmd-vote-{{forloop.counter}}" data-id="{{forloop.counter}}" class="upvote upvote-serverfault">
-                                    <a class="upvote"></a>
+                                <div style="vertical-align: top;" id="pred-cmd-vote-{{forloop.counter}}" data-id="{{translation.id}}"
+                                     class="upvote upvote-serverfault">
+                                    <a class="upvote">{{upvoted}}</a>
                                     <span class="count" style="margin-left: 12px">{{translation.num_votes}}</span>
-                                    <a class="downvote"></a>
-                                    <a class="star" style="margin-left:4px"></a>
+                                    <a class="downvote">{{downvoted}}</a>
+                                    <a class="star" style="margin-left:4px">{{starred}}</a>
                                 </div>
                             </td>
                             <td>
@@ -82,18 +83,6 @@
 <script src="/static/js/intro.min.js"></script>
 <script src="/static/js/hljs-9.8.0.min.js"></script>
 <script src="/static/lib/hljs.themes/bash.js"></script>
-<script>
-    var num_suggestions = 20;
-    for (var i=1; i<=num_suggestions; i++) {
-        $('#pred-cmd-vote-' + i).upvote({id: i, count: parseInt($('#pred-cmd-vote-' + i).children('span').text()),
-                                         callback: callback});
-    }
-
-    var callback = function(data) {
-        console.log(data.id);
-        $.get('/vote', {id: data.id, up: data.upvoted, down: data.downvoted, star:data.starred});
-    }
-</script>
 <script>
     $(document).ready(function() {
         // We don't need to use the following function call anymore:
@@ -216,6 +205,38 @@
             // show waiting icon
             $("body").addClass("loading");
         });
+
+        var num_suggestions = 20;
+        for (var i=1; i<=num_suggestions; i++) {
+            var vote_elem_id = '#pred-cmd-vote-' + i;
+            // console.log($(vote_elem_id).children("a[class*='upvote']"));
+            // console.log($(vote_elem_id).children("a[class*='downvote']"));
+            var upvoted= 1;
+            var downvoted = 1;
+            var starred = 1;
+            if ($(vote_elem_id).children("a[class*='upvote']").text() == '')
+                upvoted = 0;
+            if ($(vote_elem_id).children("a[class*='downvote']").text() == '')
+                downvoted = 0;
+            if ($(vote_elem_id).children("a[class*='star']").text() == '')
+                starred = 0;
+            $(vote_elem_id).upvote({count: parseInt($(vote_elem_id).children('span').text()),
+                                             upvoted: upvoted,
+                                             downvoted: downvoted,
+                                             starred: starred,
+                                             callback: function(data) {
+                                                console.log(data.id);
+                                                console.log(data.upvoted);
+                                                console.log(data.downvoted);
+                                                console.log(data.starred);
+                                                $.get('/vote', {id: data.id,
+                                                                upvoted: data.upvoted,
+                                                                downvoted: data.downvoted,
+                                                                starred:data.starred,
+                                                                ip_address: ip_address});
+                                             }
+                                            });
+        }
     });
 
     function startIntro(){

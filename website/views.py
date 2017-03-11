@@ -1,3 +1,4 @@
+import collections
 import os, sys
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,9 +11,9 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..",
                              "tellina_learning_module"))
 from bashlex import data_tools
 
-from website.models import NLRequest, Translation, NLRequestIPAddress
+from website.models import NLRequest, Translation, NLRequestIPAddress, Vote
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = True
 
 from website.cmd2html import tokens2html
@@ -96,21 +97,78 @@ def translate(request, ip_address):
                     score = top_k_scores[i]
 
                     trans = Translation.objects.create(
-                        request=nl_request, pred_cmd=pred_cmd,
-                        score=score, num_votes=0)
+                        request=nl_request, pred_cmd=pred_cmd, score=score)
 
                     trans_list.append(trans)
                     html_str = tokens2html(pred_tree)
                     html_strs.append(html_str)
 
-    translation_list = [(trans, trans.pred_cmd.replace('\\', '\\\\'), html_str)
-                  for trans, html_str in zip(trans_list, html_strs)]
+    translation_list = []
+    for trans, html_str in zip(trans_list, html_strs):
+        upvoted, downvoted, starred = "", "", ""
+        if Vote.objects.filter(translation=trans, ip_address=ip_address)\
+            .exists():
+            v = Vote.objects.get(translation=trans, ip_address=ip_address)
+            upvoted = 1 if v.upvoted else ""
+            downvoted = 1 if v.downvoted else ""
+            starred = 1 if v.starred else ""
+        translation_list.append((trans, upvoted, downvoted, starred,
+                             trans.pred_cmd.replace('\\', '\\\\'), html_str))
 
+    # sort translation_list based on voting results
+    translation_list.sort(key=lambda x: x[0].num_votes + x[0].score,
+                          reverse=True)
     context = {
         'nl_request': nl_request,
         'trans_list': translation_list
     }
     return HttpResponse(template.render(context, request))
+
+@ip_address_required
+def vote(request, ip_address):
+    id = request.GET['id']
+    upvoted = request.GET['upvoted']
+    downvoted = request.GET['downvoted']
+    starred = request.GET['starred']
+
+    translation = Translation.objects.get(id=id)
+
+    # store voting record in the DB
+    if Vote.objects.filter(translation=translation, ip_address=ip_address)\
+        .exists():
+        vote = Vote.objects.get(translation=translation, ip_address=ip_address)
+        if upvoted == 'true' and not vote.upvoted:
+            translation.num_upvotes += 1
+        if downvoted == 'true' and not vote.downvoted:
+            translation.num_downvotes += 1
+        if starred == 'true' and not vote.starred:
+            translation.num_stars += 1
+        if upvoted == 'false' and vote.upvoted:
+            translation.num_upvotes -= 1
+        if downvoted == 'false' and vote.downvoted:
+            translation.num_downvotes -= 1
+        if starred == 'false' and vote.starred:
+            translation.num_stars -= 1
+        vote.upvoted = (upvoted == 'true')
+        vote.downvoted = (downvoted == 'true')
+        vote.starred = (starred == 'true')
+        vote.save()
+    else:
+        Vote.objects.create(
+            translation=translation, ip_address=ip_address,
+            upvoted=(upvoted == 'true'),
+            downvoted=(downvoted == 'true'),
+            starred=(starred == 'true')
+        )
+        if upvoted == 'true':
+            translation.num_upvotes += 1
+        if downvoted == 'true':
+            translation.num_downvotes += 1
+        if starred == 'true':
+            translation.num_stars += 1
+    translation.save()
+
+    return HttpResponse()
 
 def remember_ip_address(request):
     ip_address = request.GET['ip_address']

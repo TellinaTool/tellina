@@ -80,12 +80,12 @@
             });
 
             // get user's ip address as a global variable
-            var ip_address;
-            $.get("http://ipinfo.io", function(response) {
+            var ip_address = '';
+            /* $.get("http://ipinfo.io", function(response) {
                 ip_address = response.ip;
                 $.get(`/remember_ip_address`, {ip_address: ip_address});
                 console.log('IP Address for study session logged: ' + ip_address);
-            }, "jsonp");
+            }, "jsonp"); */
 
             function startIntro(){
                 var intro = introJs();
