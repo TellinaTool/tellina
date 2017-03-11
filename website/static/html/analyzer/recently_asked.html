@@ -10,9 +10,10 @@
             <div class="center-block request-list">
                 <h5> Recently Asked </h5>
                 <ul>
-                    {% for request in latest_request_list %}
+                    {% for request, org, city, region, country in latest_request_list %}
                         <li><a href="/translate?request_str={{request.request_str}}">
-                            {{request.request_str}}</a></li>
+                            {{request.request_str}}</a> <i>by anonymous from {{org}}, {{city}}, {{region}}, {{country}}</i>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>

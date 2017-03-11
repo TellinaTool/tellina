@@ -1,5 +1,5 @@
-import collections
 import os, sys
+import requests
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -177,10 +177,24 @@ def remember_ip_address(request):
     return resp
 
 def recently_asked(request):
-    latest_request_list = NLRequest.objects.order_by('-submission_time')
+    latest_request_list = NLRequestIPAddress.objects.order_by(
+        '-request__submission_time')
     template = loader.get_template('analyzer/recently_asked.html')
+
+    # Display user's physical location in front end instead of exposing their
+    # IP addresses
+    latest_request_with_locations = []
+    for request_ip_address in latest_request_list:
+        ip_address = request_ip_address.ip_address
+        r = requests.get('http://ipinfo.io/{}/json'.format(ip_address))
+        org = r.json()['org']
+        city = r.json()['city']
+        region = r.json()['region']
+        country = r.json()['country']
+        latest_request_with_locations.append((request_ip_address.request,
+                                              org, city, region, country))
     context = {
-        'latest_request_list': latest_request_list
+        'latest_request_list': latest_request_with_locations
     }
     return HttpResponse(template.render(context, request))
 
