@@ -20,14 +20,12 @@ from website import views
 from website import cmd2html
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^translate', views.translate, name='translate'),
-    url(r'^info$', views.info, name='info'),
-    url(r'^explain_cmd$', cmd2html.explain_cmd, name='explain_cmd'),
-
-    url(r'^remember_ip_address$', views.remember_ip_address,
-        name='remember_ip_address'),
-    url(r'^recently_asked$', views.recently_asked, name='recently_asked'),
-
+    url(r'^$', views.index),
+    url(r'^translate', views.translate),
+    url(r'^info$', views.info),
+    url(r'^explain_cmd$', cmd2html.explain_cmd),
+    url(r'^remember_ip_address$', views.remember_ip_address),
+    url(r'^recently_asked$', views.recently_asked),
+    url(r'^vote', views.vote),
     url(r'^admin', admin.site.urls)
 ]
