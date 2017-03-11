@@ -29,5 +29,5 @@ urlpatterns = [
         name='remember_ip_address'),
     url(r'^recently_asked$', views.recently_asked, name='recently_asked'),
 
-    url(r'^admin', admin.site.urls)
+    url(r'^admin/', admin.site.urls)
 ]
