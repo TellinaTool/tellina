@@ -11,7 +11,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..",
                              "tellina_learning_module"))
 from bashlex import data_tools
 
-from website.models import NLRequest, Translation, NLRequestIPAddress, Vote
+from website.models import NLRequest, Translation, \
+    NLRequestIPAddress, Vote, User
 
 WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = True
@@ -70,18 +71,35 @@ def translate(request, ip_address):
                     trans_list.append(trans)
                     html_str = tokens2html(pred_tree)
                     html_strs.append(html_str)
-    # check if the natural language request has been issued by the IP
-    # address before
+
     try:
         nl_request = NLRequest.objects.get(request_str=request_str)
     except ObjectDoesNotExist:
         nl_request = NLRequest.objects.create(request_str=request_str)
 
-    # save the natural language request issued by this IP Address
+    try:
+        user = User.objects.get(ip_address=ip_address)
+    except ObjectDoesNotExist:
+        r = requests.get('http://ipinfo.io/{}/json'.format(user.ip_address))
+        organization = r.json()['org']
+        city = r.json()['city']
+        region = r.json()['region']
+        country = r.json()['country']
+        user = User.objects.create(
+            ip_address=ip_address,
+            organization=organization,
+            city=city,
+            region=region,
+            country=country
+        )
+
+    # check if the natural language request has been issued by the IP
+    # address before
+    # if not, save the natural language request issued by this IP Address
     if not NLRequestIPAddress.objects.filter(
-            request__request_str=request_str, ip_address=ip_address).exists():
+            request=nl_request, user=user).exists():
         NLRequestIPAddress.objects.create(
-            request=nl_request, ip_address=ip_address)
+            request=nl_request, user=user)
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
@@ -178,21 +196,24 @@ def remember_ip_address(request):
 
 def recently_asked(request):
     latest_request_list = NLRequestIPAddress.objects.order_by(
-        '-request__submission_time')
+        'submission_time')
     template = loader.get_template('analyzer/recently_asked.html')
 
     # Display user's physical location in front end instead of exposing their
     # IP addresses
     latest_request_with_locations = []
     for request_ip_address in latest_request_list:
-        ip_address = request_ip_address.ip_address
-        r = requests.get('http://ipinfo.io/{}/json'.format(ip_address))
-        org = r.json()['org']
-        city = r.json()['city']
-        region = r.json()['region']
-        country = r.json()['country']
+        user = request_ip_address.user
+        if user.org is None or user.city is None or user.region is None or\
+            user.country is None:
+            r = requests.get('http://ipinfo.io/{}/json'.format(user.ip_address))
+            user.organization = r.json()['org']
+            user.city = r.json()['city']
+            user.region = r.json()['region']
+            user.country = r.json()['country']
+            user.save()
         latest_request_with_locations.append((request_ip_address.request,
-                                              org, city, region, country))
+            user.organization, user.city, user.region, user.country))
     context = {
         'latest_request_list': latest_request_with_locations
     }

@@ -10,7 +10,6 @@ class NLRequest(models.Model):
     :member frequency: number of times the query has been issued
     """
     request_str = models.TextField()
-    submission_time = models.DateTimeField(default=timezone.now)
     frequency = models.PositiveIntegerField(default=1)
 
     def __str__(self):
@@ -74,7 +73,9 @@ class NLRequestIPAddress(models.Model):
     :member ip_address: the user's ip address
     """
     request = models.ForeignKey(NLRequest, on_delete=models.CASCADE)
-    ip_address = models.TextField(default='')
+    # ip_address = models.TextField(default='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    submission_time = models.DateTimeField(default=timezone.now)
 
 
 class Vote(models.Model):
@@ -84,7 +85,21 @@ class Vote(models.Model):
 
     """
     translation = models.ForeignKey(Translation, on_delete=models.CASCADE)
-    ip_address = models.TextField(default='')
+    # ip_address = models.TextField(default='')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     upvoted = models.BooleanField(default=False)
     downvoted = models.BooleanField(default=False)
     starred = models.BooleanField(default=False)
+
+
+class User(models.Model):
+    """
+    Each record stores the information of a user.
+    """
+    ip_address = models.TextField(default='')
+    name = models.TextField(default='anonymous')
+    organization = models.TextField(null=True)
+    city = models.TextField(null=True)
+    region = models.TextField(null=True)
+    country = models.TextField(null=True)
+
