@@ -65,6 +65,18 @@ class Translation(models.Model):
         return self.num_upvotes - self.num_downvotes
 
 
+class User(models.Model):
+    """
+    Each record stores the information of a user.
+    """
+    ip_address = models.TextField(default='')
+    name = models.TextField(default='anonymous')
+    organization = models.TextField(null=True)
+    city = models.TextField(null=True)
+    region = models.TextField(null=True)
+    country = models.TextField(null=True)
+
+
 class NLRequestIPAddress(models.Model):
     """
     Each record stores the IP address associated with a natural language
@@ -74,7 +86,7 @@ class NLRequestIPAddress(models.Model):
     """
     request = models.ForeignKey(NLRequest, on_delete=models.CASCADE)
     # ip_address = models.TextField(default='')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     submission_time = models.DateTimeField(default=timezone.now)
 
 
@@ -86,20 +98,8 @@ class Vote(models.Model):
     """
     translation = models.ForeignKey(Translation, on_delete=models.CASCADE)
     # ip_address = models.TextField(default='')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     upvoted = models.BooleanField(default=False)
     downvoted = models.BooleanField(default=False)
     starred = models.BooleanField(default=False)
-
-
-class User(models.Model):
-    """
-    Each record stores the information of a user.
-    """
-    ip_address = models.TextField(default='')
-    name = models.TextField(default='anonymous')
-    organization = models.TextField(null=True)
-    city = models.TextField(null=True)
-    region = models.TextField(null=True)
-    country = models.TextField(null=True)
 

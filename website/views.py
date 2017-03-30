@@ -14,7 +14,7 @@ from bashlex import data_tools
 from website.models import NLRequest, Translation, \
     NLRequestIPAddress, Vote, User
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = True
 
 from website.cmd2html import tokens2html
@@ -80,7 +80,7 @@ def translate(request, ip_address):
     try:
         user = User.objects.get(ip_address=ip_address)
     except ObjectDoesNotExist:
-        r = requests.get('http://ipinfo.io/{}/json'.format(user.ip_address))
+        r = requests.get('http://ipinfo.io/{}/json'.format(ip_address))
         organization = r.json()['org']
         city = r.json()['city']
         region = r.json()['region']
@@ -124,9 +124,8 @@ def translate(request, ip_address):
     translation_list = []
     for trans, html_str in zip(trans_list, html_strs):
         upvoted, downvoted, starred = "", "", ""
-        if Vote.objects.filter(translation=trans, ip_address=ip_address)\
-            .exists():
-            v = Vote.objects.get(translation=trans, ip_address=ip_address)
+        if Vote.objects.filter(translation=trans, user=user).exists():
+            v = Vote.objects.get(translation=trans, user=user)
             upvoted = 1 if v.upvoted else ""
             downvoted = 1 if v.downvoted else ""
             starred = 1 if v.starred else ""
@@ -228,7 +227,9 @@ def index(request):
         'find all files larger than a gigabyte in the current folder',
         'find all png files larger than 50M that were last modified more than 30 days ago'
     ]
-    latest_request_list = NLRequest.objects.order_by('-submission_time')[:6]
+    latest_request_list = [nl_request_ip_address.request
+                           for nl_request_ip_address in
+                           NLRequestIPAddress.objects.order_by('-submission_time')[:6]]
     template = loader.get_template('translator/index.html')
     context = {
         'example_request_list': example_request_list,
