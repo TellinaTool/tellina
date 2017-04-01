@@ -14,7 +14,7 @@ from bashlex import data_tools
 from website.models import NLRequest, Translation, \
     NLRequestIPAddress, Vote, User
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = True
 
 from website.cmd2html import tokens2html
@@ -203,7 +203,7 @@ def recently_asked(request):
     latest_request_with_locations = []
     for request_ip_address in latest_request_list:
         user = request_ip_address.user
-        if user.org is None or user.city is None or user.region is None or\
+        if user.organization is None or user.city is None or user.region is None or\
             user.country is None:
             r = requests.get('http://ipinfo.io/{}/json'.format(user.ip_address))
             user.organization = r.json()['org']
