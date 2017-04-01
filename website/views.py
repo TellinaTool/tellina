@@ -195,7 +195,7 @@ def remember_ip_address(request):
 
 def recently_asked(request):
     latest_request_list = NLRequestIPAddress.objects.order_by(
-        'submission_time')
+        '-submission_time')
     template = loader.get_template('analyzer/recently_asked.html')
 
     # Display user's physical location in front end instead of exposing their
