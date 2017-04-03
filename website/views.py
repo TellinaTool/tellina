@@ -26,7 +26,7 @@ def ip_address_required(f):
         ip_address = request.COOKIES['ip_address']
         if not ip_address:
             # use empty IP address if cookie reading fails
-            ip_address = ''
+            ip_address = '110.110.110.110'
         return f(request, *args, ip_address=ip_address, **kwargs)
     return g
 
