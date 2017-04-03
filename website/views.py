@@ -23,8 +23,9 @@ from . import functions
 def ip_address_required(f):
     @functions.wraps(f)
     def g(request, *args, **kwargs):
-        ip_address = request.COOKIES['ip_address']
-        if not ip_address:
+        try:
+            ip_address = request.COOKIES['ip_address']
+        except KeyError:
             # use empty IP address if cookie reading fails
             ip_address = '110.110.110.110'
         return f(request, *args, ip_address=ip_address, **kwargs)
