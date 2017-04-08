@@ -26,14 +26,14 @@ FLAGS.num_nn_slot_filling = 5
 FLAGS.normalized = True
 FLAGS.encoder_topology = 'birnn'
 
-FLAGS.dim = 400
+FLAGS.sc_token_dim = 200
 FLAGS.batch_size = 16
 FLAGS.num_layers = 1
 FLAGS.learning_rate = 0.0001
-FLAGS.encoder_input_keep = 0.5
-FLAGS.encoder_output_keep = 0.5
-FLAGS.decoder_input_keep = 0.5
-FLAGS.decoder_output_keep = 0.5
+FLAGS.sc_input_keep = 0.5
+FLAGS.sc_output_keep = 0.5
+FLAGS.tg_input_keep = 0.5
+FLAGS.tg_output_keep = 0.5
 
 FLAGS.use_attention = True
 FLAGS.attention_input_keep = 0.5
@@ -44,8 +44,8 @@ FLAGS.decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 100
 FLAGS.alpha = 1.0
 
-FLAGS.nl_vocab_size = 1000
-FLAGS.cm_vocab_size = 1000
+FLAGS.sc_vocab_size = 3076
+FLAGS.sc_vocab_size = 3076
 
 FLAGS.dataset = 'bash.final'
 FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
