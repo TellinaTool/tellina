@@ -125,8 +125,8 @@ def translate(request, ip_address):
     translation_list = []
     for trans, html_str in zip(trans_list, html_strs):
         upvoted, downvoted, starred = "", "", ""
-        if Vote.objects.filter(translation=trans, user=user).exists():
-            v = Vote.objects.get(translation=trans, user=user)
+        if Vote.objects.filter(translation=trans, ip_address=ip_address).exists():
+            v = Vote.objects.get(translation=trans, ip_address=ip_address)
             upvoted = 1 if v.upvoted else ""
             downvoted = 1 if v.downvoted else ""
             starred = 1 if v.starred else ""
@@ -134,8 +134,8 @@ def translate(request, ip_address):
                              trans.pred_cmd.replace('\\', '\\\\'), html_str))
 
     # sort translation_list based on voting results
-    translation_list.sort(key=lambda x: x[0].num_votes + x[0].score,
-                          reverse=True)
+    translation_list.sort(
+        key=lambda x: x[0].num_votes + x[0].score, reverse=True)
     context = {
         'nl_request': nl_request,
         'trans_list': translation_list
