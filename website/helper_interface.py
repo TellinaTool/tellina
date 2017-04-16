@@ -51,18 +51,6 @@ FLAGS.dataset = 'bash.final'
 FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
 FLAGS.model_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 
-if FLAGS.fill_argument_slots:
-    # create slot filling classifier
-    model_param_dir = os.path.join(FLAGS.data_dir, 'train.{}.mappings.X.Y.npz'
-                           .format(FLAGS.sc_vocab_size))
-    train_X, train_Y = data_utils.load_slot_filling_data(model_param_dir)
-    slot_filling_classifier = \
-            classifiers.KNearestNeighborModel(FLAGS.num_nn_slot_filling, 
-					      train_X, train_Y)
-    print('Slot filling classifier parameters loaded.')
-else:
-    slot_filling_classifier = None
-
 # create tensorflow session
 sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
                   log_device_placement=FLAGS.log_device_placement))
@@ -70,6 +58,18 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
 # create model and load nerual model parameters.
 model, _ = trans.create_model(sess, forward_only=True, buckets=[(30, 40)])
 nl_vocab, _, _, rev_cm_vocab = data_utils.load_vocab(FLAGS)
+
+if FLAGS.fill_argument_slots:
+    # create slot filling classifier
+    model_param_dir = os.path.join(FLAGS.data_dir, 'train.{}.mappings.X.Y.npz'
+                           .format(FLAGS.sc_vocab_size))
+    train_X, train_Y = data_utils.load_slot_filling_data(model_param_dir)
+    slot_filling_classifier = \
+            classifiers.KNearestNeighborModel(FLAGS.num_nn_slot_filling,
+					      train_X, train_Y)
+    print('Slot filling classifier parameters loaded.')
+else:
+    slot_filling_classifier = None
 
 def translate_fun(sentence, slot_filling_classifier=slot_filling_classifier):
     print('start running translation model')
