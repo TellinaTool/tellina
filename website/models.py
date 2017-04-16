@@ -97,8 +97,8 @@ class Vote(models.Model):
 
     """
     translation = models.ForeignKey(Translation, on_delete=models.CASCADE)
-    # ip_address = models.TextField(default='')
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    ip_address = models.TextField(default='')
+    # user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     upvoted = models.BooleanField(default=False)
     downvoted = models.BooleanField(default=False)
     starred = models.BooleanField(default=False)
