@@ -27,7 +27,7 @@ FLAGS.normalized = True
 FLAGS.encoder_topology = 'birnn'
 
 FLAGS.sc_token_dim = 200
-FLAGS.batch_size = 16
+FLAGS.batch_size = 32
 FLAGS.num_layers = 1
 FLAGS.learning_rate = 0.0001
 FLAGS.sc_input_keep = 0.5
@@ -35,25 +35,26 @@ FLAGS.sc_output_keep = 0.5
 FLAGS.tg_input_keep = 0.5
 FLAGS.tg_output_keep = 0.5
 
-FLAGS.use_attention = True
-FLAGS.attention_input_keep = 0.5
-FLAGS.attention_output_keep = 0.5
-FLAGS.beta = 0.0
+FLAGS.tg_token_use_attention = True
+FLAGS.tg_token_attn_fun = 'non-linear'
+FLAGS.attention_input_keep = 1.0
+FLAGS.attention_output_keep = 1.0
+FLAGS.beta = 0.8
 
 FLAGS.decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 100
 FLAGS.alpha = 1.0
 
 FLAGS.sc_vocab_size = 3076
-FLAGS.sc_vocab_size = 3076
+FLAGS.tg_vocab_size = 3113
 
-FLAGS.dataset = 'bash.final'
+FLAGS.dataset = 'bash'
 FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
 FLAGS.model_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 
 if FLAGS.fill_argument_slots:
     # create slot filling classifier
-    model_param_dir = os.path.join(FLAGS.data_dir, 'train.{}.mappings.X.Y.npz'
+    model_param_dir = os.path.join(FLAGS.model_dir, 'train.{}.mappings.X.Y.npz'
                            .format(FLAGS.sc_vocab_size))
     train_X, train_Y = data_utils.load_slot_filling_data(model_param_dir)
     slot_filling_classifier = \
