@@ -8,7 +8,7 @@ git:
 	git submodule update --remote
 
 	# Setup database tables
-	python3 manage.py makemigrations
+	python3 manage.py makemigrations website
 	python3 manage.py migrate
 
 run: 
@@ -24,4 +24,4 @@ run:
 
 clean: 
 	# Destroy database and migrations	 
-	rm -rf db.sqlite3 tellina/migrations 
+	rm -rf db.sqlite3 website/migrations 
