@@ -25,14 +25,13 @@ git submodule foreach git pull origin master
 ```
 To update the tellina_learning_module in the future, run:
 ```
-git submodule update --remote
+make git
 ```
 
 ### Set up databases:
 
 ```
-python3 manage.py makemigrations
-python3 manage.py migrate
+make db
 ```
 
 ### Run webapp:
