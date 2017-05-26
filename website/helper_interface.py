@@ -30,36 +30,38 @@ FLAGS.sc_token_dim = 150
 FLAGS.batch_size = 32
 FLAGS.num_layers = 1
 FLAGS.learning_rate = 0.0001
-FLAGS.sc_input_keep = 0.5
-FLAGS.sc_output_keep = 0.5
-FLAGS.tg_input_keep = 0.5
-FLAGS.tg_output_keep = 0.5
+FLAGS.sc_input_keep = 0.6
+FLAGS.sc_output_keep = 0.6
+FLAGS.tg_input_keep = 0.6
+FLAGS.tg_output_keep = 0.6
 
 FLAGS.tg_token_use_attention = True
 FLAGS.tg_token_attn_fun = 'non-linear'
-FLAGS.attention_input_keep = 1.0
-FLAGS.attention_output_keep = 1.0
+FLAGS.attention_input_keep = 0.6
+FLAGS.attention_output_keep = 0.6
 FLAGS.beta = 0.0
 
 FLAGS.decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 100
 FLAGS.alpha = 1.0
 
-FLAGS.sc_token_embedding_size = 2824
-FLAGS.sc_vocab_size = 2824
-FLAGS.tg_token_embedding_size = 3112
-FLAGS.tg_vocab_size = 3112
+FLAGS.nl_vocab_size = 3100
+FLAGS.cm_vocab_size = 3400
+FLAGS.sc_token_embedding_size = 700
+FLAGS.sc_vocab_size = 3100
+FLAGS.tg_token_embedding_size = 400
+FLAGS.tg_vocab_size = 3400
 
 FLAGS.dataset = 'bash'
 FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
-FLAGS.model_dir = os.path.join(learning_module_dir, "model", "seq2seq")
+FLAGS.model_root_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 
 # create tensorflow session
 sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
                   log_device_placement=FLAGS.log_device_placement))
 
 # create model and load nerual model parameters.
-model, _ = trans.create_model(sess, forward_only=True, buckets=[(30, 40)])
+model = trans.create_model(sess, forward_only=True, buckets=[(30, 40)])
 vocabs = data_utils.load_vocab(FLAGS)
 
 if FLAGS.fill_argument_slots:
@@ -74,6 +76,6 @@ else:
 
 def translate_fun(sentence, slot_filling_classifier=slot_filling_classifier):
     print('start running translation model')
-    print(slot_filling_classifier)
+    print(sentence)
     return decode_tools.translate_fun(sentence, sess, model, vocabs, FLAGS,
                                       slot_filling_classifier)
