@@ -13,6 +13,8 @@ db:
 	python3 manage.py migrate
 
 run: 
+	# Set CUDAPATH
+	source ~/.profile
 	# Set PYTHONPATH 
 	export PYTHONPATH=`pwd`
 	# Set up data files used in the learning module
