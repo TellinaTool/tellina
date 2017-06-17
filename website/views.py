@@ -15,7 +15,7 @@ from website.models import NLRequest, Translation, \
     NLRequestIPAddress, Vote, User
 
 WEBSITE_DEVELOP = False
-CACHE_TRANSLATIONS = True
+CACHE_TRANSLATIONS = False
 
 from website.cmd2html import tokens2html
 from . import functions
@@ -26,8 +26,8 @@ def ip_address_required(f):
         try:
             ip_address = request.COOKIES['ip_address']
         except KeyError:
-            # use empty IP address if cookie reading fails
-            ip_address = '110.110.110.110'
+            # use an (invalid) dummy IP address if cookie reading failed
+            ip_address = '123.456.789.012'
         return f(request, *args, ip_address=ip_address, **kwargs)
     return g
 
@@ -81,11 +81,17 @@ def translate(request, ip_address):
     try:
         user = User.objects.get(ip_address=ip_address)
     except ObjectDoesNotExist:
-        r = requests.get('http://ipinfo.io/{}/json'.format(ip_address))
-        organization = r.json()['org']
-        city = r.json()['city']
-        region = r.json()['region']
-        country = r.json()['country']
+        if ip_address == '123.456.789.012':
+            organization = ''
+            city = '--'
+            region = '--'
+            country = '--'
+        else:
+            r = requests.get('http://ipinfo.io/{}/json'.format(ip_address))
+            organization = r.json()['org']
+            city = r.json()['city']
+            region = r.json()['region']
+            country = r.json()['country']
         user = User.objects.create(
             ip_address=ip_address,
             organization=organization,
@@ -112,7 +118,7 @@ def translate(request, ip_address):
                 top_k_scores = output_logits[0]
 
                 for i in range(len(top_k_predictions)):
-                    pred_tree, pred_cmd, outputs = top_k_predictions[i]
+                    pred_tree, pred_cmd = top_k_predictions[i]
                     score = top_k_scores[i]
 
                     trans = Translation.objects.create(
