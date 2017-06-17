@@ -11,20 +11,6 @@
 {% endblock %}
 {% block body %}
 <div class="translate-panel">
-    {% if nl_request %}
-    <div class="form-group">
-        <form class="form-block" action="/translate/" method="POST">{% csrf_token %}
-            <div class="input-group">
-                <input id="nl_request_input" class="form-control search-box" type="text" name="request_str"
-                       autocapitalize="off" autocorrect="off" value="{{nl_request.request_str}}">
-                <span class="input-group-btn">
-                    <button id="submit-to-tellina" class="btn btn-default" type="submit">Tellina</button>
-                    <button id="google-command" type="button" class="btn btn-default" target="_blank">Google</button>
-                </span>
-            </div>
-        </form>
-    </div>
-    {% endif %}
     <div id="suggestions">
         <div class="center-block">
             {% if trans_list %}
