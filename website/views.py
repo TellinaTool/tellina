@@ -116,7 +116,7 @@ def translate(request, ip_address):
                         cmd = Command.objects.get(str=pred_cmd)
                     except ObjectDoesNotExist:
                         cmd = Command.objects.create(str=pred_cmd)
-                        
+
                     trans = Translation.objects.create(
                         request_str=nl, pred_cmd=cmd, score=score)
 
@@ -133,7 +133,7 @@ def translate(request, ip_address):
             downvoted = 1 if v.downvoted else ""
             starred = 1 if v.starred else ""
         translation_list.append((trans, upvoted, downvoted, starred,
-                             trans.pred_cmd.replace('\\', '\\\\'), html_str))
+            trans.pred_cmd.str.replace('\\', '\\\\'), html_str))
 
     # sort translation_list based on voting results
     translation_list.sort(
