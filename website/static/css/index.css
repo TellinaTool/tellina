@@ -10,9 +10,9 @@ html,body {
 }
 
 .search-panel {
-	width: 60%;
+	width: 100%;
 	text-align: center;
-	padding-top: 20px;
+	padding-top: 72px;
 	margin: 0 auto; 
 }
 
@@ -20,7 +20,11 @@ html,body {
 	color: #777777;
 }
 
-.request-list-block {
+.nl-request-link a {
+    color: #00cc99
+}
+
+/* .request-list-block {
 	padding-top: 10px;
 	text-align:center;
 }
@@ -42,26 +46,43 @@ html,body {
     float:none;
     text-align: left;
     vertical-align: top;
+} */
+
+.instruction-panel {
+    margin: 0px 20px 0px 70px;
+    background-color: rgba(76, 175, 80, 0.1);
+    color: rgb(72, 72, 72);
+    font-size: 16px;
+    font-weight: 300;
 }
 
-/* Tellina it or google it button style*/
+.instruction-panel > h1 {
+    text-align: left;
+    font-size: 20px;
+}
 
-.search-btn {
-    background-color:#f7f7f7;
-    border:1px solid #ffffff;
-    display:inline-block;
-    cursor:pointer;
-    color:#666666;
-    font-size:14px;
-    padding:7px 32px;
-    text-decoration:none;
+.instruction-panel > h2 {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 300;
+    color: #43a047;
 }
-.search-btn:hover {
-    background-color:#ffffff;
-    border:1px solid #dcdcdc;
-    color: black;
+
+.instruction-panel > ul > li{
+    list-style-type:none;
+    margin: 20px 0;
 }
-.search-btn:active {
-    position:relative;
-    top:1px;
+
+.instruction-panel > ul > li > ul > li{
+    margin-left: -20px;
+}
+
+.instruction-panel > ul > li:before{
+    content: "\e013";
+    font-family: 'Glyphicons Halflings';
+    font-size: 12px;
+    float: left;
+    margin-top: 4px;
+    margin-left: -24px;
+    color: rgb(72, 72, 72);
 }

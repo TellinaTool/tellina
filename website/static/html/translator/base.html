@@ -1,43 +1,84 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Tellina - a natural language to bash translation tool</title>
+        <title>Tellina - a natural language to command translation tool</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <!--<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">-->
-        <link href="/static/css/font-awesome.min.css" rel="stylesheet" media="screen">
-        <!--<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">-->
-        <link href="/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-
-        <link href="/static/css/tellina.css" rel="stylesheet" media="screen">
-        <link href='http://fonts.googleapis.com/css?family=Berkshire+Swash' rel='stylesheet' type='text/css'>
         <meta name="description" content="natural language command to bash translation interface">
+
+        <!-- Fonts -->
+
+        <!-- CSS -->
+        <link href="/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+        <link href="/static/css/font-awesome.min.css" rel="stylesheet" media="screen">
+        <link href="/static/css/main.css" rel="stylesheet" media="screen">
+
+        <!-- Web Resources -->
         <link rel="shortcut icon" href="/static/img/tellina.png"/>
 
         {% block head %}{% endblock %}
     </head>
 
     <body>
-        <nav class="navbar navbar-inverse navbar-static-top navbar-full">
-             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
-                <!-- <li><a href="https://github.com/todpole3/tellina"><i class="icon-github"></i> Github</a></li> -->
-                <li><a href="/info">Info</a></li>
-                <li><a style="cursor:pointer" onclick="startIntro();">Tutorial</a></li>
-              </ul>
+        <header>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-xs-12">
+                        <div class="col-md-2 col-xs-12">
+                            <span class="logo">
+                                Tellina
+                            </span>
+                        </div>
+                        <div class="col-md-10 col-xs-12">
+                            <div class="input-group nl-request-input">
+                                <span class="input-group-btn">
+                                    <button id="submit-to-google" class="btn btn-secondary" type="button">
+                                        <i class="glyphicon glyphicon-globe"></i>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control" placeholder="Type a natural language command...">
+                                <span class="input-group-btn">
+                                    <button id="submit-to-tellina" class="btn btn-secondary" type="button">
+                                        Go!
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                        <nav class="navbar navbar-default" role="navigation">
+                            <div class="container-fluid">
+                                <div class="navbar-header">
+                                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    </button>
+                                </div>
+
+                                <!-- Collect the nav links, forms, and other content for toggling -->
+                                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                    <ul class="nav navbar-nav">
+                                        <li class="example-or-recently-asked"><a href="">Examples</a></li>
+                                        <li><a href="">Research</a></li>
+                                    </ul>
+
+                                </div><!-- /.navbar-collapse -->
+                            </div><!-- /.container-fluid -->
+                        </nav>
+                    </div>
+                </div>
             </div>
-        </nav>
+        </header>
+
         {% block body %}{% endblock %}
+
         <div class="modal"><!-- Place at bottom of page --></div>
+
+        <!-- JS -->
         <script src="/static/js/jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/underscore.js"></script>
-        <!--<script src="/static/js/bootstrap.min.js"></script>-->
         <script src="/static/lib/bootstrap/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
-        <!--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>-->
         <script src="/static/js/tellina.js"></script>
         {% block other-js %}{% endblock %}
     </body>

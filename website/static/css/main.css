@@ -100,6 +100,10 @@ body.loading .modal {
     z-index: 2;
 }
 
+.tiny-push {
+    height: 10px;
+}
+
 .small-push {
     height: 20px;
 }
@@ -125,13 +129,6 @@ body.loading .modal {
     font-size: 14px;
 }
 
-#nl_request_input:focus {
-    border-color: #808080;
-    -moz-box-shadow: 0 0 8px rgba(128, 128, 128, 0.6);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(128, 128, 128, 0.6);
-    outline: 0 none;
-}
-
 .oneliner-index h4 {
     font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-left: 20px;
@@ -143,11 +140,6 @@ body.loading .modal {
 
 .explanation h4 {
     font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.search-box {
-    border-radius: 0px;
-    box-shadow: 2px 2px 1px 1px #f7f7f7;
 }
 
 /* .oneliner .line {
@@ -177,21 +169,18 @@ body.loading .modal {
     height:auto;
 }
 
-.menu {
-    width: auto;
-    position: absolute;
-    top: -30px;
-    left: 240px;
-    /*font-family: 'Berkshire Swash', cursive;*/
-    font-size: 24px;
-}
-
-.menu a:hover {
-    color:#ff6666 !important;
-}
-
 .translate-menu {
     left: 120px;
+}
+
+.input-group .nl-request-input {
+    width: 100%;
+    border-radius: 12px;
+}
+
+.input-group .nl-request-input:focus {
+    border-color: #808080;
+    outline: 0 none;
 }
 
 .request-suggestion a {
@@ -305,3 +294,82 @@ body.loading .modal {
     margin-top: 0em;
     padding-top: 0em;
 } */
+
+/* -- navigation bar -- */
+
+.navbar-default {
+  background: none;
+  border-color: transparent;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.navbar-default .navbar-nav > li > a {
+  font-size: 15px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 200;
+  color: #666;
+  padding: 5px 15px;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+  color: #f48e5c;
+}
+
+.navbar-nav {
+  float: right;
+  display: inline-block;
+}
+
+.navbar {
+  min-height: 0;
+}
+
+header {
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.96);
+  padding: 8px 0;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+}
+
+header .logo {
+  float: left;
+  font-size: 24px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 200;
+  color: #666;
+}
+
+header .social-info {
+  margin-bottom: 0;
+  padding-top: 8px;
+  text-align: right;
+}
+
+header .social-info li {
+  display: inline-block;
+}
+
+header .social-info li:first-child a {
+  border-left: 1px solid #dedede;
+}
+
+header .social-info li a {
+  color: #aeaeae;
+  padding: 3px 8px;
+  border-right: 1px solid #dedede;
+}
+
+header .social-info li a:hover {
+  color: #f48e5c;
+}
+
+.body-panel {
+    padding-top: 80px;
+}
