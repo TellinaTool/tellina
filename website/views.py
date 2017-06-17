@@ -66,7 +66,6 @@ def translate(request, ip_address):
             cached_trans = Translation.objects.filter(
                 request__request_str=request_str)
             for trans in cached_trans:
-                print(trans.pred_cmd)
                 pred_tree = data_tools.bash_parser(trans.pred_cmd)
                 if pred_tree is not None:
                     trans_list.append(trans)
