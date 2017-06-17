@@ -7,12 +7,12 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..",
-                             "tellina_learning_module"))
+sys.path.append(os.path.join(
+    os.path.dirname(__file__), "..", "tellina_learning_module"))
+
 from bashlex import data_tools
 
-from website.models import NLRequest, Translation, \
-    NLRequestIPAddress, Vote, User
+from website.models import NLRequest, Translation, Vote, User
 
 WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = True
@@ -56,22 +56,17 @@ def translate(request, ip_address):
 
     trans_list = []
     html_strs = []
-    if CACHE_TRANSLATIONS and NLRequest.objects.filter(
-            request_str=request_str).exists():
-        # if the natural language request string has been translated before,
-        # directly output previously cached translations
-        if Translation.objects.filter(
-                request__request_str=request_str).exists():
-            # model translations exist
-            cached_trans = Translation.objects.filter(
-                request__request_str=request_str)
-            for trans in cached_trans:
-                print(trans.pred_cmd)
-                pred_tree = data_tools.bash_parser(trans.pred_cmd)
-                if pred_tree is not None:
-                    trans_list.append(trans)
-                    html_str = tokens2html(pred_tree)
-                    html_strs.append(html_str)
+    if CACHE_TRANSLATIONS and \
+            Translation.objects.filter(request_str=request_str).exists():
+        # model translations exist
+        cached_trans = Translation.objects.filter(request_str=request_str)
+        for trans in cached_trans:
+            print(trans.pred_cmd)
+            pred_tree = data_tools.bash_parser(trans.pred_cmd)
+            if pred_tree is not None:
+                trans_list.append(trans)
+                html_str = tokens2html(pred_tree)
+                html_strs.append(html_str)
 
     try:
         nl_request = NLRequest.objects.get(request_str=request_str)
@@ -82,10 +77,10 @@ def translate(request, ip_address):
         user = User.objects.get(ip_address=ip_address)
     except ObjectDoesNotExist:
         r = requests.get('http://ipinfo.io/{}/json'.format(ip_address))
-        organization = r.json()['org']
-        city = r.json()['city']
-        region = r.json()['region']
-        country = r.json()['country']
+        organization = '--' if r.json()['org'] is None else r.json()['org']
+        city = '--' if r.json()['city'] is None else r.json()['city']
+        region = '--' if r.json()['region'] is None else r.json()['region']
+        country = '--' if r.json()['country'] is None else r.json()['country']
         user = User.objects.create(
             ip_address=ip_address,
             organization=organization,
@@ -97,10 +92,8 @@ def translate(request, ip_address):
     # check if the natural language request has been issued by the IP
     # address before
     # if not, save the natural language request issued by this IP Address
-    if not NLRequestIPAddress.objects.filter(
-            request=nl_request, user=user).exists():
-        NLRequestIPAddress.objects.create(
-            request=nl_request, user=user)
+    if not NLRequest.objects.filter(request=nl_request, user=user).exists():
+        NLRequest.objects.create(request=nl_request, user=user)
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
@@ -195,25 +188,20 @@ def remember_ip_address(request):
     return resp
 
 def recently_asked(request):
-    latest_request_list = NLRequestIPAddress.objects.order_by(
-        '-submission_time')
-    template = loader.get_template('analyzer/recently_asked.html')
+    latest_request_list = NLRequest.objects.order_by('-submission_time')
+    template = loader.get_template('translator/query_history.html')
 
     # Display user's physical location in front end instead of exposing their
     # IP addresses
     latest_request_with_locations = []
-    for request_ip_address in latest_request_list:
-        user = request_ip_address.user
-        if user.organization is None or user.city is None or user.region is None or\
-            user.country is None:
-            r = requests.get('http://ipinfo.io/{}/json'.format(user.ip_address))
-            user.organization = r.json()['org']
-            user.city = r.json()['city']
-            user.region = r.json()['region']
-            user.country = r.json()['country']
-            user.save()
-        latest_request_with_locations.append((request_ip_address.request,
-            user.organization, user.city, user.region, user.country))
+    for request in latest_request_list:
+        user = request.user
+        latest_request_with_locations.append((request.request_str,
+                                              request.submission_time,
+                                              user.organization,
+                                              user.city,
+                                              user.region,
+                                              user.country))
     context = {
         'latest_request_list': latest_request_with_locations
     }
@@ -228,9 +216,8 @@ def index(request):
         'find all files larger than a gigabyte in the current folder',
         'find all png files larger than 50M that were last modified more than 30 days ago'
     ]
-    latest_request_list = [nl_request_ip_address.request
-                           for nl_request_ip_address in
-                           NLRequestIPAddress.objects.order_by('-submission_time')[:6]]
+    latest_request_list = [nl_request for nl_request in
+                           NLRequest.objects.order_by('-submission_time')[:10]]
     template = loader.get_template('translator/index.html')
     context = {
         'example_request_list': example_request_list,
