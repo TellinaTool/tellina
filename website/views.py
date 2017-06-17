@@ -12,9 +12,9 @@ sys.path.append(os.path.join(
 
 from bashlex import data_tools
 
-from website.models import NLRequest, Translation, Vote, User
+from website.models import NL, Command, NLRequest, Translation, Vote, User
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
 from website.cmd2html import tokens2html
@@ -67,11 +67,7 @@ def translate(request, ip_address):
                 html_str = tokens2html(pred_tree)
                 html_strs.append(html_str)
 
-    try:
-        nl_request = NLRequest.objects.get(request_str=request_str)
-    except ObjectDoesNotExist:
-        nl_request = NLRequest.objects.create(request_str=request_str)
-
+    # check if the user is in the database
     try:
         user = User.objects.get(ip_address=ip_address)
     except ObjectDoesNotExist:
@@ -94,11 +90,14 @@ def translate(request, ip_address):
             country=country
         )
 
-    # check if the natural language request has been issued by the IP
-    # address before
-    # if not, save the natural language request issued by this IP Address
-    if not NLRequest.objects.filter(request=nl_request, user=user).exists():
-        NLRequest.objects.create(request=nl_request, user=user)
+    # check if the natural language request is in the database
+    try:
+        nl = NL.objects.get(str=request_str)
+    except ObjectDoesNotExist:
+        nl = NL.objects.create(str=request_str)
+
+    # save the natural language request issued by this IP Address
+    nl_request = NLRequest.objects.create(request_str=nl, user=user)
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
@@ -113,8 +112,13 @@ def translate(request, ip_address):
                     pred_tree, pred_cmd = top_k_predictions[i]
                     score = top_k_scores[i]
 
+                    try:
+                        cmd = Command.objects.get(str=pred_cmd)
+                    except ObjectDoesNotExist:
+                        cmd = Command.objects.create(str=pred_cmd)
+                        
                     trans = Translation.objects.create(
-                        request=nl_request, pred_cmd=pred_cmd, score=score)
+                        request_str=nl, pred_cmd=cmd, score=score)
 
                     trans_list.append(trans)
                     html_str = tokens2html(pred_tree)
