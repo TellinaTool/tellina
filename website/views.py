@@ -14,7 +14,7 @@ from bashlex import data_tools
 
 from website.models import NL, Command, NLRequest, Translation, Vote, User
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = False
 
 from website.cmd2html import tokens2html
