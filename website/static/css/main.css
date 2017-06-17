@@ -173,29 +173,9 @@ body.loading .modal {
     left: 120px;
 }
 
-.input-group .nl-request-input {
+.input-group .nl-request {
     width: 100%;
     border-radius: 12px;
-}
-
-.input-group .nl-request-input:focus {
-    border-color: #808080;
-    outline: 0 none;
-}
-
-.request-suggestion a {
- /*   color:#484848 !important;
-}
-
-.request-suggestion a:hover {
-    color:#484848 !important;
-}
-
-.request-suggestion h4 {
-    color:#484848 !important;
-    font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 18px;
-}*/
 }
 
 #top-search {

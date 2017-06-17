@@ -1,4 +1,4 @@
-html,body {
+html, body {
   height: 100%;
   min-height: 100%;
 }
@@ -7,21 +7,6 @@ html,body {
 	padding: 60px 20px 20px 20px;
 	margin: 0 auto;
 	height: 88%;
-}
-
-.search-panel {
-	width: 100%;
-	text-align: center;
-	padding-top: 72px;
-	margin: 0 auto; 
-}
-
-.subtitle {
-	color: #777777;
-}
-
-.nl-request-link a {
-    color: #00cc99
 }
 
 /* .request-list-block {
@@ -59,6 +44,7 @@ html,body {
 .instruction-panel > h1 {
     text-align: left;
     font-size: 20px;
+    font-weight: 400;
 }
 
 .instruction-panel > h2 {
