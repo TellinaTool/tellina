@@ -91,4 +91,38 @@
 
     {% block other-js %}
         <script type="text/javascript" src="/static/js/intro.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                console.log(window.location.hash);
+
+                $("#nl_request_input").focus();
+
+                $("#submit-to-google").click(function() {
+                    nl_cmd = $("#nl_request_input").val();
+                    href="https://www.google.com/search?q=" + nl_cmd;
+                    window.open(href);
+                });
+
+                $("#submit-to-tellina").click(function() {
+                     // show waiting icon
+                     $("body").addClass("loading");
+                });
+
+                $(".nl_request_link").click(function() {
+                    // show waiting icon
+                    $("body").addClass("loading");
+                    var nl_request_str = $(this).text();
+                    window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
+                });
+
+                // get user's ip address as a global variable
+                var ip_address = '';
+                $.get("http://ipinfo.io", function(response) {
+                    ip_address = response.ip;
+                    $.get(`/remember_ip_address`, {ip_address: ip_address});
+                    console.log('IP Address for study session logged: ' + ip_address);
+                }, "jsonp");
+            });
+        </script>
     {% endblock %}
