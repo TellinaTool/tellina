@@ -29,13 +29,13 @@
                             </span>
                         </div>
                         <div class="col-md-10 col-xs-12">
-                            <div class="input-group nl-request-input">
+                            <div class="input-group nl-request">
                                 <span class="input-group-btn">
                                     <button id="submit-to-google" class="btn btn-secondary" type="button">
                                         <i class="glyphicon glyphicon-globe"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control" placeholder="Type a natural language command...">
+                                <input type="text" class="form-control nl-request-input" placeholder="Type a natural language command...">
                                 <span class="input-group-btn">
                                     <button id="submit-to-tellina" class="btn btn-secondary" type="button">
                                         Go!
@@ -80,6 +80,30 @@
         <script src="/static/js/underscore.js"></script>
         <script src="/static/lib/bootstrap/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/tellina.js"></script>
+        <script>
+            $(document).ready(function () {
+                // get user's ip address as a global variable
+                var ip_address = '';
+                $.get("http://ipinfo.io", function(response) {
+                    ip_address = response.ip;
+                    $.get(`/remember_ip_address`, {ip_address: ip_address});
+                    console.log('IP Address for study session logged: ' + ip_address);
+                }, "jsonp");
+
+                $("#submit-to-google").click(function() {
+                    var nl_request_str = $(".nl-request-input").val();
+                    href="https://www.google.com/search?q=" + nl_request_str;
+                    window.open(href);
+                });
+
+                $("#submit-to-tellina").click(function() {
+                     // show waiting icon
+                     $("body").addClass("loading");
+                     var nl_request_str = $(".nl-request-input").val();
+                     window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
+                });
+            });
+        </script>
         {% block other-js %}{% endblock %}
     </body>
 </html>
