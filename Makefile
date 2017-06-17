@@ -14,7 +14,7 @@ db:
 
 run: 
 	# Set CUDAPATH
-	source ~/.profile
+	# source ~/.profile
 	# Set PYTHONPATH 
 	export PYTHONPATH=`pwd`
 	# Set up data files used in the learning module
