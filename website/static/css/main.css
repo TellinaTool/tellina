@@ -305,6 +305,19 @@ body.loading .modal {
   min-height: 0;
 }
 
+.logo > a {
+  font-size: 24px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 200;
+  color: #666;
+  padding: 5px 15px;
+}
+
+.logo > a:hover {
+  color: #f48e5c;
+  text-decoration: none;
+}
+
 header {
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
@@ -316,14 +329,6 @@ header {
   position: fixed;
   width: 100%;
   z-index: 999;
-}
-
-header .logo {
-  float: left;
-  font-size: 24px;
-  font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 200;
-  color: #666;
 }
 
 header .social-info {
@@ -348,8 +353,4 @@ header .social-info li a {
 
 header .social-info li a:hover {
   color: #f48e5c;
-}
-
-.body-panel {
-    padding-top: 80px;
 }

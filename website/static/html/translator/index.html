@@ -32,7 +32,7 @@
                 </div>
                 {% if latest_request_list %}
                     <div class="recent-post-panel col-sm-6 col-xs-12">
-                        {% for request in latest_request_list %}
+                        {% for request, top_ranked_cmd in latest_request_list %}
                             <div class="row">
                                 <div class="[ panel panel-default ] panel-google-plus">
                                     <!-- <div class="dropdown">
@@ -55,13 +55,17 @@
                                     <div class="panel-request">
                                         <!-- <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/-CxXg7_7ylq4/AAAAAAAAAAI/AAAAAAAAAQ8/LhCIKQC5Aq4/s46-c-k-no/photo.jpg" alt="Mouse0270" /> -->
                                         <i class="glyphicon glyphicon-user"></i>&nbsp;
-                                        <span class="nl-request">{{request.request_str}}</span><br>
+                                        <span class="nl-request">{{request.request_str.str}}</span><br>
                                         <span class="post-time"><i class="glyphicon glyphicon-time"></i>&nbsp;{{request.submission_time}}</span>&nbsp;
                                         <span class="post-location"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;{{request.user.organization}},
                                             {{request.user.city}}, {{request.user.region}}, {{request.user.country}}</span>
                                     </div>
                                     <div class="panel-body">
-                                        <p></p>
+                                        <div style="margin-left: 30px">
+                                            <code class="command bash hljs">
+                                                {{top_ranked_cmd}}
+                                            </code>
+                                        </div>
                                     </div>
                                     <div class="panel-footer">
                                         <button type="button" class="[ btn btn-default ]">
