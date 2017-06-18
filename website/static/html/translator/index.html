@@ -3,6 +3,8 @@
         <link rel="stylesheet" href="/static/css/index.css">
         <link rel="stylesheet" href="/static/css/snapshot.css">
         <link rel="stylesheet" href="/static/css/introjs.min.css">
+
+        <link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
     {% endblock %}
 
     {% block body %}
@@ -68,7 +70,7 @@
                                         </div>
                                     </div>
                                     <div class="panel-footer">
-                                        <button type="button" class="[ btn btn-default ]">
+                                        <button type="button" class="[ btn btn-default expand-translation-instance]">
                                             <span class="[ glyphicon glyphicon-share-alt ]"></span>
                                         </button>
                                         <button type="button" class="[ btn btn-default ]">-1</button>
@@ -95,7 +97,8 @@
 
     {% block other-js %}
         <script type="text/javascript" src="/static/js/intro.min.js"></script>
-
+        <script src="/static/js/hljs-9.8.0.min.js"></script>
+        <script src="/static/lib/hljs.themes/bash.js"></script>
         <script>
             $(document).ready(function () {
                 console.log(window.location.hash);
@@ -105,7 +108,12 @@
                 $(".nl_request_link").click(function() {
                     // show waiting icon
                     $("body").addClass("loading");
-                    var nl_request_str = $(this).text();
+                    var nl_request_str = $(this).parent().find('.panel-request').find('nl-request').text();
+                    window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
+                });
+
+                $("expand-translation-instance).click(function() {
+                    var nl_request = $(this).text();
                     window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
                 });
             });
