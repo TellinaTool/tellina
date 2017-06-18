@@ -15,7 +15,7 @@ from bashlex import data_tools
 
 from website.models import NL, Command, NLRequest, Translation, Vote, User
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = False
 
 from website.cmd2html import tokens2html
@@ -62,7 +62,6 @@ def translate(request, ip_address):
         # model translations exist
         cached_trans = Translation.objects.filter(request_str=request_str)
         for trans in cached_trans:
-            print(trans.pred_cmd)
             pred_tree = data_tools.bash_parser(trans.pred_cmd)
             if pred_tree is not None:
                 trans_list.append(trans)
@@ -229,7 +228,7 @@ def latest_requests_with_translations():
     for request in NLRequest.objects.order_by('-submission_time'):
         translations = Translation.objects.filter(request_str=request.request_str)
         if translations:
-            max_score = translations.aggregate(Max('score'))['maxscore']
+            max_score = translations.aggregate(Max('score'))['score__max']
             for top_translation in Translation.objects.filter(
                     request_str=request.request_str, score=max_score):
                 break

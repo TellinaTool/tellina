@@ -27,7 +27,7 @@ FLAGS.normalized = True
 FLAGS.encoder_topology = 'birnn'
 
 FLAGS.sc_token_dim = 150
-FLAGS.batch_size = 32
+FLAGS.batch_size = 128
 FLAGS.num_layers = 1
 FLAGS.learning_rate = 0.0001
 FLAGS.sc_input_keep = 0.6
@@ -47,7 +47,7 @@ FLAGS.alpha = 1.0
 
 FLAGS.nl_vocab_size = 3100
 FLAGS.cm_vocab_size = 3400
-FLAGS.sc_token_embedding_size = 700
+FLAGS.sc_token_embedding_size = 630
 FLAGS.sc_vocab_size = 3100
 FLAGS.tg_token_embedding_size = 400
 FLAGS.tg_vocab_size = 3400
