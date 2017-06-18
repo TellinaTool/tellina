@@ -199,26 +199,10 @@ def remember_ip_address(request):
     return resp
 
 def recently_asked(request):
-    latest_request_list = NLRequest.objects.order_by('-submission_time')
     template = loader.get_template('translator/query_history.html')
 
-    # Display user's physical location in front end instead of exposing their
-    # IP addresses
-    latest_requests_with_translations = []
-    for request in latest_request_list:
-        translations = Translation.objects.filter(request_str=request.request_str)
-        if translations:
-            max_score = translations.aggregate(Max('score'))['maxscore']
-            for top_translation in Translation.objects.filter(
-                    request_str=request.request_str, score=max_score):
-                break
-            top_translation = top_translation.pred_cmd.str
-        else:
-            top_translation = 'No translation available.'
-        latest_requests_with_translations.append((request, top_translation))
-
     context = {
-        'latest_request_list': latest_requests_with_translations
+        'latest_request_list': latest_requests_with_translations()
     }
     return HttpResponse(template.render(context, request))
 
@@ -231,11 +215,27 @@ def index(request):
         'find all files larger than a gigabyte in the current folder',
         'find all png files larger than 50M that were last modified more than 30 days ago'
     ]
-    latest_request_list = [nl_request for nl_request in
-                           NLRequest.objects.order_by('-submission_time')[:10]]
+
     template = loader.get_template('translator/index.html')
     context = {
         'example_request_list': example_request_list,
-        'latest_request_list': latest_request_list
+        'latest_request_list': latest_requests_with_translations()
     }
     return HttpResponse(template.render(context, request))
+
+def latest_requests_with_translations():
+    latest_requests_with_translations = []
+
+    for request in NLRequest.objects.order_by('-submission_time'):
+        translations = Translation.objects.filter(request_str=request.request_str)
+        if translations:
+            max_score = translations.aggregate(Max('score'))['maxscore']
+            for top_translation in Translation.objects.filter(
+                    request_str=request.request_str, score=max_score):
+                break
+            top_translation = top_translation.pred_cmd.str
+        else:
+            top_translation = 'No translation available.'
+        latest_requests_with_translations.append((request, top_translation))
+
+    return latest_requests_with_translations
