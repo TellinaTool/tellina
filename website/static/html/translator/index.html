@@ -63,14 +63,14 @@
                                             {{request.user.city}}, {{request.user.region}}, {{request.user.country}}</span>
                                     </div>
                                     <div class="panel-body">
-                                        <div style="margin-left: 30px">
-                                            <code class="command bash hljs">
+                                        <div style="margin: 0px 20px 0px 20px">
+                                            <code class="panel-command command bash hljs">
                                                 {{top_ranked_cmd}}
                                             </code>
                                         </div>
                                     </div>
                                     <div class="panel-footer">
-                                        <button type="button" class="[ btn btn-default expand-translation-instance]">
+                                        <button type="button" class="[ btn btn-default expand-translation-instance ]">
                                             <span class="[ glyphicon glyphicon-share-alt ]"></span>
                                         </button>
                                         <button type="button" class="[ btn btn-default ]">-1</button>
@@ -102,18 +102,26 @@
         <script>
             $(document).ready(function () {
                 console.log(window.location.hash);
+                // get user's ip address as a global variable
+                var ip_address = '';
+                $.get("http://ipinfo.io", function(response) {
+                    ip_address = response.ip;
+                    $.get(`/remember_ip_address`, {ip_address: ip_address});
+                    console.log('IP Address for study session logged: ' + ip_address);
+                }, "jsonp");
 
                 $(".nl-request-input").focus();
 
                 $(".nl_request_link").click(function() {
                     // show waiting icon
                     $("body").addClass("loading");
-                    var nl_request_str = $(this).parent().find('.panel-request').find('nl-request').text();
+                    var nl_request = $(this).text();
                     window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
                 });
 
-                $("expand-translation-instance).click(function() {
-                    var nl_request = $(this).text();
+                $(".expand-translation-instance").click(function() {
+                    var nl_request_str = $(this).parent().parent().find('.panel-request').find('.nl-request').text();
+                    console.log(nl_request_str);
                     window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
                 });
             });
