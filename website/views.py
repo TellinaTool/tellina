@@ -2,6 +2,7 @@ import os, sys
 import requests
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template import loader
@@ -203,17 +204,21 @@ def recently_asked(request):
 
     # Display user's physical location in front end instead of exposing their
     # IP addresses
-    latest_request_with_locations = []
+    latest_requests_with_translations = []
     for request in latest_request_list:
-        user = request.user
-        latest_request_with_locations.append((request.request_str,
-                                              request.submission_time,
-                                              user.organization,
-                                              user.city,
-                                              user.region,
-                                              user.country))
+        translations = Translation.objects.filter(request_str=request.request_str)
+        if translations:
+            max_score = translations.aggregate(Max('score'))['maxscore']
+            for top_translation in Translation.objects.filter(
+                    request_str=request.request_str, score=max_score):
+                break
+            top_translation = top_translation.pred_cmd.str
+        else:
+            top_translation = 'No translation available.'
+        latest_requests_with_translations.append((request, top_translation))
+
     context = {
-        'latest_request_list': latest_request_with_locations
+        'latest_request_list': latest_requests_with_translations
     }
     return HttpResponse(template.render(context, request))
 

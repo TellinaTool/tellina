@@ -53,7 +53,7 @@ def explain_cmd(request):
         # if the flag is not provided, or we cannot find the flag
         if node_kind == "argument":
           return HttpResponse(cmd_obj["rawSynopsis"])
-        elif node_kind == "headcommand":
+        elif node_kind == "utility":
           return HttpResponse(cmd_obj["description"])
   
   # in this case, either the thead is not provided or the head cannot be retrieved
@@ -102,7 +102,7 @@ def ast2html(node):
       else:
         html_spans.append("|")
       html_spans.extend(ast2html(child))
-  elif node.kind == "headcommand":
+  elif node.kind == "utility":
     span = "<span class=\"hljs-built_in\" " + span_doc + " >" + node.value + "</span>"
     html_spans.append(span)
     for child in node.children:
@@ -147,7 +147,7 @@ def ast2html(node):
 
 def retrieve_dominators(node):
   """ Given a node, retrieve its dominator, 
-    i.e., its headcommand and/or its dominate flag
+    i.e., its utility and/or its dominate flag
   """ 
   dominate_headcmd = None
   dominate_flag = None
@@ -162,7 +162,7 @@ def retrieve_dominators(node):
         #   for -exec::; -exec::+ and potentially others
         if "::" in dominate_flag:
           dominate_flag = dominate_flag[0: dominate_flag.index("::")]
-    elif current_node and current_node.kind == "headcommand":
+    elif current_node and current_node.kind == "utility":
       dominate_headcmd = current_node.value
       return (dominate_headcmd, dominate_flag) 
 

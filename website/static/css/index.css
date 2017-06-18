@@ -33,6 +33,10 @@ html, body {
     vertical-align: top;
 } */
 
+.body-panel {
+    padding-top: 80px;
+}
+
 .instruction-panel {
     margin: 0px 20px 0px 70px;
     background-color: rgba(76, 175, 80, 0.1);
