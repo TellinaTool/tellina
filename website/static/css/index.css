@@ -81,3 +81,9 @@ html, body {
     text-align: left;
     font-size: 20px;
 }
+
+.footer{
+    text-align: left;
+    margin-left: 70px;
+    color: rgb(108, 108, 108);
+}
