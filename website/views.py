@@ -214,6 +214,7 @@ def recently_asked(request):
             top_translation = top_translation.pred_cmd.str
         else:
             top_translation = 'No translation available.'
+        print(request, top_translation)
         latest_requests_with_translations.append((request, top_translation))
 
     context = {
