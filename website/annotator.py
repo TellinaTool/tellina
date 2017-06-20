@@ -22,8 +22,21 @@ def access_code_required(f):
 
 def url_panel(request):
     """
-    Display a list of urls for a particular utility to annotate.
+    Display a list of urls for a particular utility.
     """
+    template = loader.get_template('annotator/url_panel.html')
+
+    utility = request.GET.get('utility')
+    print(utility)
+    url_list = []
+    for url_tag in URLTag.objects.filter(tag=utility).order_by('url'):
+        url_list.append(url_tag.url.str)
+
+    context = {
+        'utility': utility,
+        'url_list': url_list
+    }
+    return HttpResponse(template.render(context=context, request=request))
 
 
 def utility_panel(request):
