@@ -1,13 +1,11 @@
 {% extends "translator/base.html" %}
 {% block head %}
-<!--<link rel="stylesheet"
-    href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/default.min.css">
--->
-<link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
-<link rel='stylesheet' href='/static/css/perfect-scrollbar.css'>
-<link href="/static/lib/jquery.upvote/jquery.upvote.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="/static/css/translate.css">
-<link rel="stylesheet" href="/static/css/introjs.min.css">
+    <link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
+    <link rel='stylesheet' href='/static/css/perfect-scrollbar.css'>
+    <link href="/static/lib/jquery.upvote/jquery.upvote.css" rel="stylesheet" media="screen">
+
+    <link rel="stylesheet" href="/static/css/translate.css">
+    <link rel="stylesheet" href="/static/css/introjs.min.css">
 {% endblock %}
 {% block body %}
 <div class="translate-panel">
@@ -67,7 +65,7 @@
 <script src='/static/js/perfect-scrollbar.js'></script>
 <script src='/static/js/perfect-scrollbar.jquery.js'></script>
 <script src="/static/js/intro.min.js"></script>
-<script src="/static/js/hljs-9.8.0.min.js"></script>
+<script src="/static/lib/hljs.themes/hljs-9.8.0.min.js"></script>
 <script src="/static/lib/hljs.themes/bash.js"></script>
 <script>
     $(document).ready(function() {

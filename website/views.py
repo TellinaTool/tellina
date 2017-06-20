@@ -15,11 +15,12 @@ from bashlex import data_tools
 
 from website.models import NL, Command, NLRequest, Translation, Vote, User
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
+from website import functions
 from website.cmd2html import tokens2html
-from . import functions
+
 
 def ip_address_required(f):
     @functions.wraps(f)
@@ -34,11 +35,6 @@ def ip_address_required(f):
 
 if not WEBSITE_DEVELOP:
     from website.helper_interface import translate_fun
-
-def info(request):
-    template = loader.get_template('translator/info.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
 
 @csrf_protect
 @ip_address_required
@@ -197,14 +193,6 @@ def remember_ip_address(request):
     resp.set_cookie('ip_address', ip_address)
     return resp
 
-def recently_asked(request):
-    template = loader.get_template('translator/query_history.html')
-
-    context = {
-        'latest_request_list': latest_requests_with_translations()
-    }
-    return HttpResponse(template.render(context, request))
-
 def index(request):
     example_request_list = [
         'remove all pdfs in my current directory',
@@ -242,3 +230,9 @@ def latest_requests_with_translations():
             break
 
     return latest_requests_with_translations
+
+def info(request):
+    template = loader.get_template('translator/info.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
