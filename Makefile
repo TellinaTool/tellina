@@ -27,4 +27,5 @@ run:
 
 clean: 
 	# Destroy database and migrations	 
-	rm -rf db.sqlite3 website/migrations 
+	rm -rf website/migrations 
+	rm -rf db.sqlite3
