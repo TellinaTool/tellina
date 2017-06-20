@@ -16,16 +16,21 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from website import views
-from website import cmd2html
+from website import annotator, cmd2html, views
 
 urlpatterns = [
     url(r'^$', views.index),
     url(r'^translate', views.translate),
     url(r'^info$', views.info),
-    url(r'^explain_cmd$', cmd2html.explain_cmd),
+
     url(r'^remember_ip_address$', views.remember_ip_address),
-    url(r'^recently_asked$', views.recently_asked),
     url(r'^vote', views.vote),
+
+    url(r'^login', annotator.login),
+    url(r'^uri_panel', annotator.url_panel),
+    url(r'^utility_panel', annotator.utility_panel),
+
+    url(r'^explain_cmd$', cmd2html.explain_cmd),
+
     url(r'^admin', admin.site.urls)
 ]
