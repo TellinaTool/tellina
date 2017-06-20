@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^vote', views.vote),
 
     url(r'^login', annotator.login),
-    url(r'^uri_panel', annotator.url_panel),
+    url(r'^url_panel', annotator.url_panel),
     url(r'^utility_panel', annotator.utility_panel),
 
     url(r'^explain_cmd$', cmd2html.explain_cmd),
