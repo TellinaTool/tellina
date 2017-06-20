@@ -22,7 +22,7 @@ class URL(models.Model):
     :member html_content: snapshot of the URL content at the time of annotation.
     """
     str = models.TextField()
-    html_content = models.TextField()
+    html_content = models.TextField(default='')
 
 
 class User(models.Model):
@@ -41,9 +41,17 @@ class User(models.Model):
 
 class CommandTag(models.Model):
     """
-    Each record stores the tag of a command.
+    Each record stores a (command, tag) pair.
     """
     cmd = models.ForeignKey(Command, on_delete=models.CASCADE)
+    tag = models.TextField()
+
+
+class URLTag(models.Model):
+    """
+    Each record stores a (url, tag) pair.
+    """
+    url = models.ForeignKey(URL, on_delete=models.CASCADE)
     tag = models.TextField()
 
 
