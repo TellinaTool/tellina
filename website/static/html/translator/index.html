@@ -22,7 +22,7 @@
 
                         <ul>
                             <li>Type a grammatical imperative English sentence (not a question) stating your goal.</li>
-                            <li>Tellina works best for specific inputs. For example:
+                            <li>Tellina works best for specific inputs. For example,
                                 <ul>
                                     <li>instead of "some files", use "pdf files";</li>
                                     <li>instead of "sometime ago", use "5 days ago".</li>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="small-push"></div>
                     <footer>
-                        <div class="footer"><small>This website is under active construction. Last updated on Jun 17, 2017.</small></div>
+                        <div class="footer"><small>This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
                     </footer>
                 </div>
                 {% if latest_request_list %}
@@ -63,7 +63,7 @@
                                         <i class="glyphicon glyphicon-user"></i>&nbsp;
                                         <span class="nl-request">{{request.request_str.str}}</span><br>
                                         <span class="post-time"><i class="glyphicon glyphicon-time"></i>&nbsp;{{request.submission_time}}</span>&nbsp;
-                                        <span class="post-location"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;{{request.user.organization}},
+                                        <span class="post-location"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;
                                             {{request.user.city}}, {{request.user.region}}, {{request.user.country}}</span>
                                     </div>
                                     <div class="panel-body">
@@ -75,7 +75,10 @@
                                     </div>
                                     <div class="panel-footer">
                                         <button type="button" class="[ btn btn-default expand-translation-instance ]">
-                                            <span class="[ glyphicon glyphicon-share-alt ]"></span>
+                                            <span class="[ glyphicon glyphicon-option-vertical ]"></span>
+                                        </button>
+                                        <button type="button" class="[ btn btn-default copy-current-command ]">
+                                            <span class="[ glyphicon glyphicon-copy ]"></span>
                                         </button>
                                         <button type="button" class="[ btn btn-default ]">-1</button>
                                         <button type="button" class="[ btn btn-default ]">+1</button>
