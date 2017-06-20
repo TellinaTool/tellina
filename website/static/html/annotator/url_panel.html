@@ -1,0 +1,21 @@
+{% extends "annotator/base.html" %}
+    {% block head %}
+        <link rel="stylesheet" href="/static/css/annotator/panel.css">
+    {% endblock %}
+
+    {% block body %}
+        <div class="container body-panel">
+            <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0" style="text-align:left">
+                {% if url_list %}
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-success"><a href="/utility_panel">{{utility}}</a></li>
+                        {% for url in url_list %}
+                            <li class="list-group-item">{{forloop.counter}}. <a href="{{url}}">{{url}}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block other-js %}{% endblock %}

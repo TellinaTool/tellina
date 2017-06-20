@@ -9,16 +9,12 @@
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
                         {% for utility in utility_group1 %}
-                            <button type="button" class="btn btn-default annotate-utility">
-                                {{utility}}
-                            </button>
+                            <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
                         {% endfor %}
                         <br>
                         <br>
                         {% for utility in utility_group2 %}
-                            <button type="button" class="btn btn-default annotate-utility">
-                                {{utility}}
-                            </button>
+                            <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
                         {% endfor %}
                         <hr>
                     {% endfor %}
@@ -27,4 +23,11 @@
         </div>
     {% endblock %}
 
-    {% block other-js %}{% endblock %}
+    {% block other-js %}
+    <script>
+        $(".annotate-utility").click(function() {
+            var utility = $(this).text();
+            window.location.replace(`url_panel?utility=${utility}`);
+        });
+    </script>
+    {% endblock %}
