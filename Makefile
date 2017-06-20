@@ -6,7 +6,12 @@ LR_MODULE=tellina_learning_module
 git: 
 	# Update learning submodule
 	git submodule update --remote
-
+	# Set up data files used in the learning module
+	tar xf $(LR_MODULE)/data/bash/vocab.tar.xz --directory $(LR_MODULE)/data/bash/
+	tar xf $(LR_MODULE)/data/bash.final/vocab.tar.xz --directory $(LR_MODULE)/data/bash.final/
+	# Set up nlp tools
+	tar xf $(LR_MODULE)/nlp_tools/spellcheck/most_common.tar.xz --directory $(LR_MODULE)/nlp_tools/spellcheck/
+	
 db:
 	# Setup database tables
 	python3 manage.py makemigrations website
@@ -17,11 +22,6 @@ run:
 	# source ~/.profile
 	# Set PYTHONPATH 
 	export PYTHONPATH=`pwd`
-	# Set up data files used in the learning module
-	tar xf $(LR_MODULE)/data/bash/vocab.tar.xz --directory $(LR_MODULE)/data/bash/
-	tar xf $(LR_MODULE)/data/bash.final/vocab.tar.xz --directory $(LR_MODULE)/data/bash.final/
-	# Set up nlp tools
-	tar xf $(LR_MODULE)/nlp_tools/spellcheck/most_common.tar.xz --directory $(LR_MODULE)/nlp_tools/spellcheck/
 	# Run server
 	python3 manage.py runserver 0.0.0.0:8000    
 
