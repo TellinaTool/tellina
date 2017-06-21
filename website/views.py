@@ -36,6 +36,23 @@ def ip_address_required(f):
 if not WEBSITE_DEVELOP:
     from website.helper_interface import translate_fun
 
+
+def get_nl(nl_str):
+    try:
+        nl = NL.objects.get(str=nl_str)
+    except ObjectDoesNotExist:
+        nl = NL.objects.create(str=nl_str)
+    return nl
+
+
+def get_command(command_str):
+    try:
+        cmd = Command.objects.get(str=command_str)
+    except ObjectDoesNotExist:
+        cmd = Command.objects.create(str=command_str)
+    return cmd
+
+
 @csrf_protect
 @ip_address_required
 def translate(request, ip_address):
@@ -51,12 +68,16 @@ def translate(request, ip_address):
     while request_str.endswith('/'):
         request_str = request_str[:-1]
 
+    # check if the natural language request is in the database
+    nl = get_nl(request_str)
+
     trans_list = []
     html_strs = []
+
     if CACHE_TRANSLATIONS and \
-            Translation.objects.filter(request_str=request_str).exists():
+            Translation.objects.filter(nl=nl).exists():
         # model translations exist
-        cached_trans = Translation.objects.filter(request_str=request_str)
+        cached_trans = Translation.objects.filter(nl=nl)
         for trans in cached_trans:
             pred_tree = data_tools.bash_parser(trans.pred_cmd)
             if pred_tree is not None:
@@ -87,14 +108,8 @@ def translate(request, ip_address):
             country=country
         )
 
-    # check if the natural language request is in the database
-    try:
-        nl = NL.objects.get(str=request_str)
-    except ObjectDoesNotExist:
-        nl = NL.objects.create(str=request_str)
-
     # save the natural language request issued by this IP Address
-    nl_request = NLRequest.objects.create(request_str=nl, user=user)
+    nl_request = NLRequest.objects.create(nl=nl, user=user)
 
     if not trans_list:
         if not WEBSITE_DEVELOP:
@@ -109,13 +124,10 @@ def translate(request, ip_address):
                     pred_tree, pred_cmd = top_k_predictions[i]
                     score = top_k_scores[i]
 
-                    try:
-                        cmd = Command.objects.get(str=pred_cmd)
-                    except ObjectDoesNotExist:
-                        cmd = Command.objects.create(str=pred_cmd)
+                    cmd = get_command(pred_cmd)
 
                     trans = Translation.objects.create(
-                        request_str=nl, pred_cmd=cmd, score=score)
+                        nl=nl, pred_cmd=cmd, score=score)
 
                     trans_list.append(trans)
                     html_str = tokens2html(pred_tree)
@@ -214,11 +226,11 @@ def latest_requests_with_translations():
     latest_requests_with_translations = []
 
     for request in NLRequest.objects.order_by('-submission_time'):
-        translations = Translation.objects.filter(request_str=request.request_str)
+        translations = Translation.objects.filter(nl__str=request.request_str)
         if translations:
             max_score = translations.aggregate(Max('score'))['score__max']
             for top_translation in Translation.objects.filter(
-                    request_str=request.request_str, score=max_score):
+                    nl__str=request.request_str, score=max_score):
                 break
             top_translation = top_translation.pred_cmd.str
         else:
