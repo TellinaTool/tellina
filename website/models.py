@@ -29,6 +29,7 @@ class User(models.Model):
     """
     Each record stores the information of a user.
     """
+    access_code = models.TextField(default='')
     ip_address = models.TextField(default='')
     first_name = models.TextField(default='anonymous')
     last_name = models.TextField(default='anonymous')
@@ -88,7 +89,7 @@ class Translation(models.Model):
     :member num_downvotes: number of downvotes this translation has received
     :member num_stars: number of stars this translation has received
     """
-    request_str = models.ForeignKey(NL, on_delete=models.CASCADE)
+    nl = models.ForeignKey(NL, on_delete=models.CASCADE)
     pred_cmd = models.ForeignKey(Command, on_delete=models.CASCADE)
     score = models.FloatField()
     num_upvotes = models.PositiveIntegerField(default=0)
@@ -129,7 +130,7 @@ class NLRequest(models.Model):
     :member user: the user who submitted the request
     :member submission_time: the time when the request is submitted
     """
-    request_str = models.ForeignKey(NL, on_delete=models.CASCADE)
+    nl = models.ForeignKey(NL, on_delete=models.CASCADE)
     submission_time = models.DateTimeField(default=timezone.now)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 

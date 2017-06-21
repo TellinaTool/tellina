@@ -20,15 +20,25 @@ from website import annotator, cmd2html, views
 
 urlpatterns = [
     url(r'^$', views.index),
-    url(r'^translate', views.translate),
+    url(r'^translate$', views.translate),
     url(r'^info$', views.info),
 
     url(r'^remember_ip_address$', views.remember_ip_address),
-    url(r'^vote', views.vote),
+    url(r'^vote$', views.vote),
 
-    url(r'^login', annotator.login),
-    url(r'^url_panel', annotator.url_panel),
-    url(r'^utility_panel', annotator.utility_panel),
+    url(r'^login$', annotator.login),
+    url(r'^register_user', annotator.register_user),
+    url(r'^user_login$', annotator.user_login),
+
+    url(r'^url_panel$', annotator.url_panel),
+    url(r'^utility_panel$', annotator.utility_panel),
+
+    url(r'^collect_page$', annotator.collect_page),
+    url(r'^previous_url$', annotator.previous_url),
+    url(r'^next_url$', annotator.next_url),
+    url(r'^submit_annotation$', annotator.submit_annotation),
+    url(r'^submit_edit$', annotator.submit_edit),
+    url(r'^delete_annotation$', annotator.delete_annotation),
 
     url(r'^explain_cmd$', cmd2html.explain_cmd),
 

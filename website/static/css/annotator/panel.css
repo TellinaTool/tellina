@@ -1,3 +1,31 @@
 .body-panel {
     padding-top: 90px;
 }
+
+.url-content-panel {
+    overflow: hidden;
+}
+
+.url-content-data {
+    width: 100%;
+}
+
+.url-panel > h1 {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.collect-panel > h1 {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.collect-box {
+    padding-top: 20px;
+}
+
+.annotation-box {
+    padding-top: 20px;
+}
