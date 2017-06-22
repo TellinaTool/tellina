@@ -40,26 +40,36 @@
                     <h1>Collect all bash commands with the utility <code>{{utility}}</code> and the corresponding English description</h1>
                     <h1>You may submit other bash commands in the page to earn bonus, but this is not required.</h1>
                     <hr>
-                    {% for command, nl in annotation_list %}
-                        <div class="collect-box" id="collect-box-{{forloop.counter}}" style="display: None">
-                            <textarea class="form-control command-input vresize" placeholder="Copy a bash command..."></textarea>
-                            <br>
-                            <textarea class="form-control nl-input vresize" placeholder="Type a natural language description..."></textarea>
-                            <br>
-                            <button type="button" class="btn btn-primary btn-sm submit-pair" id="submit-pair-{{forloop.counter}}" style="float: right">Submit</button>
-                            <button type="button" class="btn btn-primary btn-sm save-edit" id="save-edit-{{forloop.counter}}" style="float: right; display: None">Save</button>
-                            <button type="button" class="btn btn-warning btn-sm cancel-edit" id="cancel-edit-{{forloop.counter}}" style="float: right; margin-right: 20px; display: None">Cancel</button>
-                            <button type="button" class="btn btn-danger btn-sm delete-pair" id="delete-pair-{{forloop.counter}}" style="float: right; margin-right: 20px; display: None">Delete</button>
-                            <br>
-                        </div>
-                        <div class="annotation-box" id="annotation-box-{{forloop.counter}}">
-                            <p class="submission-index">#<strong>{{forloop.counter}}</strong></p>
-                            <p class="command-submission">{{command}}</p>
-                            <p class="nl-submission">{{nl}}</p>
-                            <button type="button" class="btn btn-success btn-sm edit-pair" id="edit-pair-{{forloop.counter}}" style="float: right">Edit</button><br>
-                            <hr>
+                    <div class="collect-box-group">
+                        {% for command, nl in annotation_list %}
+                            <div class="collect-box" id="collect-box-{{forloop.counter}}" style="display: None">
+                                <textarea class="form-control command-input vresize" placeholder="Copy a bash command..."></textarea>
+                                <br>
+                                <textarea class="form-control nl-input vresize" placeholder="Type a natural language description..."></textarea>
+                                <br>
+                                <button type="button" class="btn btn-primary btn-sm submit-pair" id="submit-pair-{{forloop.counter}}" style="float: right">Submit</button>
+                                <button type="button" class="btn btn-primary btn-sm save-edit" id="save-edit-{{forloop.counter}}" style="float: right; display: None">Save</button>
+                                <button type="button" class="btn btn-warning btn-sm cancel-edit" id="cancel-edit-{{forloop.counter}}" style="float: right; margin-right: 20px; display: None">Cancel</button>
+                                <button type="button" class="btn btn-danger btn-sm delete-pair" id="delete-pair-{{forloop.counter}}" style="float: right; margin-right: 20px; display: None">Delete</button>
+                                <br>
                             </div>
-                    {% endfor %}
+                            <div class="annotation-box" id="annotation-box-{{forloop.counter}}">
+                                <p class="submission-index">#<strong>{{forloop.counter}}</strong></p>
+                                <p class="command-submission">{{command}}</p>
+                                <p class="nl-submission">{{nl}}</p>
+                                <button type="button" class="btn btn-success btn-sm edit-pair" id="edit-pair-{{forloop.counter}}" style="float: right">Edit</button><br>
+                                <hr>
+                                </div>
+                        {% endfor %}
+                    </div>
+                    <div class="collection-complete">
+                        <div class="small-push"></div>
+                        {% if completed %}
+                            <label><input type="checkbox" id="collection-completed" value="" checked> All bash commands that meet the requirements on this web page have been entered.</label>
+                        {% else %}
+                            <label><input type="checkbox" id="collection-completed" value=""> All bash commands that meet the requirements on this web page have been entered.</label>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -158,6 +168,15 @@
                     })
                 })
 
+                /* --- collection complete check --- */
+                $('#collection-completed').change(function() {
+                    if ($(this).is(":checked")) {
+                        $.get(`update_progress`, {url: url, status: 'completed'});
+                    } else {
+                        $.get(`update_progress`, {url: url, status: 'in-progress'});
+                    }
+                });
+
                 /* --- textual input auto-resize --- */
                 var observe;
                 if (window.attachEvent) {
@@ -204,7 +223,7 @@
 
             function add_collect_panel(annotation_id) {
                 /* add a new collect box */
-                $(".collect-panel").append(
+                $(".collect-box-group").append(
                     `<div class="collect-box" id="collect-box-${annotation_id}">
                         <textarea class="form-control command-input vresize" placeholder="Copy a bash command..."></textarea>
                         <br>

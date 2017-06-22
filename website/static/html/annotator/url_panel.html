@@ -38,8 +38,10 @@
                         {% for url, status in url_list %}
                             <li class="list-group-item">
                                 <span><a class="url-link">{{url.str}}</a></span>
-                                {% if status == 'submitted' %}
-                                    <button type="button" class="btn btn-success btn-xs">Submitted</button>
+                                {% if status == 'in-progress' %}
+                                    <button type="button" class="btn btn-warning btn-xs">In-progress</button>
+                                {% elif status == 'completed' %}
+                                    <button type="button" class="btn btn-success btn-xs">Completed</button>
                                 {% endif %}
                             </li>
                         {% endfor %}

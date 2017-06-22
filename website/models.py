@@ -68,6 +68,15 @@ class Annotation(models.Model):
     submission_time = models.DateTimeField(default=timezone.now)
 
 
+class AnnotationProgress(models.Model):
+    """
+    Each record stores a user's annotation progress on a particular URL.
+    """
+    url = models.ForeignKey(URL, on_delete=models.CASCADE)
+    annotator = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.TextField()
+
+
 class AnnotationJudgement(models.Model):
     """
     Each record is a judgement of whether an annotation is correct or not.
