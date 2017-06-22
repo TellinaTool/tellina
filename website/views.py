@@ -21,8 +21,8 @@ CACHE_TRANSLATIONS = False
 from website import functions
 from website.cmd2html import tokens2html
 
-from website.scripts.import_data import load_urls
-load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
+# from website.scripts.import_data import load_urls
+# load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
 
 
 def ip_address_required(f):
@@ -227,18 +227,22 @@ def index(request):
 
 def latest_requests_with_translations():
     latest_requests_with_translations = []
+    max_num_translation = 0
 
     for request in NLRequest.objects.order_by('-submission_time'):
-        translations = Translation.objects.filter(nl__str=request.request_str)
+        translations = Translation.objects.filter(nl=request.nl)
         if translations:
             max_score = translations.aggregate(Max('score'))['score__max']
             for top_translation in Translation.objects.filter(
-                    nl__str=request.request_str, score=max_score):
+                    nl=request.nl, score=max_score):
                 break
             top_translation = top_translation.pred_cmd.str
         else:
             top_translation = 'No translation available.'
         latest_requests_with_translations.append((request, top_translation))
+        max_num_translation += 1
+        if max_num_translation % 20 == 0:
+            break
 
     return latest_requests_with_translations
 

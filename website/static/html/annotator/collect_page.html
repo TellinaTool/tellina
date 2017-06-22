@@ -37,7 +37,8 @@
                     {% endif %}
                 </div>
                 <div class="collect-panel col-md-4 col-xs-12" style="text-align:left">
-                    <h1>Collect all bash commands with <code>{{utility}}</code> and the corresponding English description</h1>
+                    <h1>Collect all bash commands with the utility <code>{{utility}}</code> and the corresponding English description</h1>
+                    <h1>You may submit other bash commands in the page to earn bonus, but this is not required.</h1>
                     <hr>
                     {% for command, nl in annotation_list %}
                         <div class="collect-box" id="collect-box-{{forloop.counter}}" style="display: None">

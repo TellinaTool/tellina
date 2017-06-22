@@ -5,13 +5,13 @@ class NL(models.Model):
     """
     Natural language command.
     """
-    str = models.TextField()
+    str = models.TextField(primary_key=True)
 
 class Command(models.Model):
     """
     Command line.
     """
-    str = models.TextField()
+    str = models.TextField(primary_key=True)
     language = models.TextField(default='bash')
 
 class URL(models.Model):
@@ -21,7 +21,7 @@ class URL(models.Model):
     :member str: url address.
     :member html_content: snapshot of the URL content at the time of annotation.
     """
-    str = models.TextField()
+    str = models.TextField(primary_key=True)
     html_content = models.TextField(default='')
 
 
