@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^login$', annotator.login),
     url(r'^register_user', annotator.register_user),
     url(r'^user_login$', annotator.user_login),
+    url(r'^logout$', annotator.user_logout),
 
     url(r'^url_panel$', annotator.url_panel),
     url(r'^utility_panel$', annotator.utility_panel),
