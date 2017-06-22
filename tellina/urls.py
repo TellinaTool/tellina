@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^submit_annotation$', annotator.submit_annotation),
     url(r'^submit_edit$', annotator.submit_edit),
     url(r'^delete_annotation$', annotator.delete_annotation),
+    url(r'^update_progress', annotator.update_progress),
 
     url(r'^explain_cmd$', cmd2html.explain_cmd),
 

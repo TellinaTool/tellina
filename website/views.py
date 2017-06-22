@@ -14,6 +14,7 @@ sys.path.append(os.path.join(
 from bashlex import data_tools
 
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
+from website.utils import get_nl, get_command
 
 WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
@@ -21,8 +22,8 @@ CACHE_TRANSLATIONS = False
 from website import functions
 from website.cmd2html import tokens2html
 
-# from website.scripts.import_data import load_urls
-# load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
+from website.scripts.import_data import load_urls
+load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
 
 
 def ip_address_required(f):
@@ -38,22 +39,6 @@ def ip_address_required(f):
 
 if not WEBSITE_DEVELOP:
     from website.helper_interface import translate_fun
-
-
-def get_nl(nl_str):
-    try:
-        nl = NL.objects.get(str=nl_str)
-    except ObjectDoesNotExist:
-        nl = NL.objects.create(str=nl_str)
-    return nl
-
-
-def get_command(command_str):
-    try:
-        cmd = Command.objects.get(str=command_str)
-    except ObjectDoesNotExist:
-        cmd = Command.objects.create(str=command_str)
-    return cmd
 
 
 @csrf_protect

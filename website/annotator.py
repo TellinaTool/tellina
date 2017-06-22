@@ -5,8 +5,8 @@ from django.template import loader
 
 from website import functions
 from website.models import NL, Command, URL, User, CommandTag, URLTag, \
-    Annotation, AnnotationJudgement
-from website.views import get_nl, get_command
+    Annotation, AnnotationJudgement, AnnotationProgress
+from website.utils import get_nl, get_command, get_url
 
 WHITE_LIST = {'find', 'xargs'}
 BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby',
@@ -29,14 +29,6 @@ def access_code_required(f):
             return login(request)
         return f(request, *args, access_code=access_code, **kwargs)
     return g
-
-
-def get_url(url_str):
-    try:
-        url = URL.objects.get(str=url_str)
-    except ObjectDoesNotExist:
-        url = URL.objects.create(str=url_str)
-    return url
 
 
 def safe_get_user(access_code):
@@ -72,10 +64,17 @@ def collect_page(request, access_code):
     context = {
         'utility': utility,
         'url': hypothes_prefix + url.str,
-        'annotation_list': annotation_list
+        'annotation_list': annotation_list,
+        'completed': False,
+        'access_code': access_code
     }
-    if user:
-        context['access_code'] = access_code
+
+    try:
+        record = AnnotationProgress.objects.get(annotator=user, url=url)
+        if record.status == 'completed':
+            context['completed'] = True
+    except ObjectDoesNotExist:
+        pass
 
     return HttpResponse(template.render(context=context, request=request))
 
@@ -89,6 +88,8 @@ def submit_annotation(request, access_code):
 
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)
+    if not AnnotationProgress.objects.filter(annotator=user, url=url):
+        AnnotationProgress.objects.create(annotator=user, url=url, status='in-progress')
 
     resp = json_response({'nl': annotation.nl.str, 'command': annotation.cmd.str},
                          status='ANNOTATION_SAVED')
@@ -107,8 +108,7 @@ def submit_edit(request, access_code):
 
     Annotation.objects.filter(url=url, nl=original_nl, cmd=original_command).delete()
 
-    annotation = Annotation.objects.create(
-        url=url, nl=nl, cmd=command, annotator=user)
+    annotation = Annotation.objects.create(url=url, nl=nl, cmd=command, annotator=user)
 
     resp = json_response({'nl': annotation.nl.str, 'command': annotation.cmd.str},
                          status='EDIT_SAVED')
@@ -126,6 +126,22 @@ def delete_annotation(request, access_code):
     Annotation.objects.filter(url=url, nl=nl, cmd=command).delete()
 
     return json_response(status='DELETION_SUCCESS')
+
+
+@access_code_required
+def update_progress(request, access_code):
+    user = User.objects.get(access_code=access_code)
+    url = get_url(request.GET.get('url'))
+    status = request.GET.get('status')
+
+    try:
+        record = AnnotationProgress.objects.get(annotator=user, url=url)
+        record.status = status
+        record.save()
+    except ObjectDoesNotExist:
+        AnnotationProgress.objects.create(annotator=user, url=url, status=status)
+
+    return json_response(status='PROGRESS_UPDATED')
 
 
 @access_code_required
@@ -192,8 +208,11 @@ def url_panel(request, access_code):
 
     url_list = []
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
-        status = 'submitted' if Annotation.objects.filter(url=url_tag.url) else 'unsubmitted'
-        url_list.append((url_tag.url, status))
+        try:
+            record = AnnotationProgress.objects.get(annotator=user, url=url_tag.url)
+            url_list.append((url_tag.url, record.status))
+        except ObjectDoesNotExist:
+            url_list.append((url_tag.url, ''))
 
     context = {
         'utility': utility,
@@ -235,6 +254,7 @@ def utility_panel(request, access_code):
 
     return HttpResponse(template.render(context=context, request=request))
 
+# --- Registration & Login --- #
 
 @access_code_required
 def user_logout(request, access_code):
@@ -275,4 +295,3 @@ def login(request):
     template = loader.get_template('annotator/login.html')
 
     return HttpResponse(template.render(context={}, request=request))
-
