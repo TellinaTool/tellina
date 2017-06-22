@@ -15,7 +15,7 @@ from bashlex import data_tools
 
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
 from website import functions

@@ -33,6 +33,7 @@ String.prototype.replaceAll = function(search, replacement) {
   var target = this;
     return target.split(search).join(replacement);
 };
+
 function htmlForTextWithEmbeddedNewlines(text) {
   var htmls = [];
   var lines = text.trim().replaceAll(/    /g, '\t').replaceAll("\t", "  ").replaceAll(/ /g, ' ').split("\n");

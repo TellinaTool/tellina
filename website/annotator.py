@@ -1,5 +1,3 @@
-import json
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.http import HttpResponse, JsonResponse
@@ -27,7 +25,8 @@ def access_code_required(f):
         try:
             access_code = request.COOKIES['access_code']
         except KeyError:
-            raise Exception("No access code set!")
+            # raise Exception("No access code set!")
+            return login(request)
         return f(request, *args, access_code=access_code, **kwargs)
     return g
 
@@ -237,6 +236,23 @@ def utility_panel(request, access_code):
     return HttpResponse(template.render(context=context, request=request))
 
 
+@access_code_required
+def user_logout(request, access_code):
+    resp = json_response(status='LOGOUT_SUCCESS')
+    resp.delete_cookie('access_code')
+    return resp
+
+
+def user_login(request):
+    access_code = request.GET.get('access_code')
+    if User.objects.filter(access_code=access_code):
+        resp = json_response({'access_code': access_code}, status='LOGIN_SUCCESS')
+        resp.set_cookie('access_code', access_code)
+    else:
+        resp = json_response(status='USER_DOES_NOT_EXIST')
+    return resp
+
+
 def register_user(request):
     first_name = request.GET.get('firstname')
     last_name = request.GET.get('lastname')
@@ -250,15 +266,6 @@ def register_user(request):
                               'access_code': access_code},
                              status='REGISTRATION_SUCCESS')
     return  resp
-
-def user_login(request):
-    access_code = request.GET.get('access_code')
-    if User.objects.filter(access_code=access_code):
-        resp = json_response({'access_code': access_code}, status='LOGIN_SUCCESS')
-        resp.set_cookie('access_code', access_code)
-    else:
-        resp = json_response(status='USER_DOES_NOT_EXIST')
-    return resp
 
 
 def login(request):
