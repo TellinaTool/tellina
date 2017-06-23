@@ -4,7 +4,7 @@
     {% endblock %}
 
     {% block body %}
-        {% block navbar %}
+        <!-- {% block navbar %}
             <nav class="navbar navbar-default" role="navigation">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -27,10 +27,10 @@
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav>
-        {% endblock %}
+        {% endblock %} -->
 
-        <div class="container" style="padding-top: 30px">
-            <div class="row">
+        <div class="container" style="padding: 20px 0px 20px 0px">
+            <div class="row" style="padding-left: 0; padding-right 0;">
                 <div class="url-content-panel col-md-8 col-xs-12" style="text-align:left">
                     {% if url %}
                         <object class="url-content-data" data="{{url}}"></object>
@@ -93,6 +93,7 @@
 
             $(document).ready(function () {
                 $('.url-content-data').height($(window).height() * .9);
+                // $('.url-content-data').width($(window).width() * .5);
 
                 annotation_id = num_annotations + 1;
 
