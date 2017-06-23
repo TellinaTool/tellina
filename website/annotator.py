@@ -87,7 +87,6 @@ def submit_annotation(request, access_code):
 
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)
-    url.annotators.add(user)
 
     if not AnnotationProgress.objects.filter(annotator=user, url=url):
         AnnotationProgress.objects.create(annotator=user, url=url, status='in-progress')
