@@ -8,16 +8,16 @@ from website.models import NL, Command, Tag, URL
 
 
 def get_nl(nl_str):
-    return NL.objects.get_or_create(str=nl_str)
-
+    nl, _ = NL.objects.get_or_create(str=nl_str)
+    return nl
 
 def get_command(command_str):
-    return Command.objects.get_or_create(str=command_str)
-
+    cmd, _ = Command.objects.get_or_create(str=command_str)
+    return cmd
 
 def get_tag(tag_str):
-    return Tag.objects.get_or_create(str=tag_str)
-
+    tag, _ = Tag.objects.get_or_create(str=tag_str)
+    return tag
 
 def get_url(url_str):
     try:
