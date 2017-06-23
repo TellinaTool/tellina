@@ -29,3 +29,11 @@
 .annotation-box {
     padding-top: 20px;
 }
+
+.annotate-utility-in-progress {
+    background-color: #FAEBD7;
+}
+
+.annotate-utility-completed {
+    background-color: rgba(76, 175, 80, 0.1);
+}
