@@ -20,6 +20,7 @@
     text-align: left;
     font-size: 16px;
     font-weight: 300;
+    overflow: hidden;
 }
 
 .collect-box {
@@ -28,4 +29,8 @@
 
 .annotation-box {
     padding-top: 20px;
+}
+
+.command-submission {
+    background: #F0F0F0;
 }
