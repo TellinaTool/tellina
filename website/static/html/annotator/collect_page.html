@@ -29,14 +29,14 @@
             </nav>
         {% endblock %} -->
 
-        <div class="container" style="padding: 20px 0px 20px 0px">
-            <div class="row" style="padding-left: 0; padding-right 0;">
+        <div class="container-fluid" style="">
+            <div class="row" style="padding-left: 20px; margin-right: 20px;">
                 <div class="url-content-panel col-md-8 col-xs-12" style="text-align:left">
                     {% if url %}
                         <object class="url-content-data" data="{{url}}"></object>
                     {% endif %}
                 </div>
-                <div class="collect-panel col-md-4 col-xs-12" style="text-align:left">
+                <div class="collect-panel col-lg-3 col-md-4 col-xs-12" style="text-align:left">
                     <h1>Collect all bash commands with the utility <code>{{utility}}</code> and the corresponding English description</h1>
                     <h1>You may submit other bash commands in the page to earn bonus, but this is not required.</h1>
                     <hr>
@@ -93,6 +93,7 @@
 
             $(document).ready(function () {
                 $('.url-content-data').height($(window).height() * .9);
+                $('.collect-panel').css({"min-width": "400px"});
                 // $('.url-content-data').width($(window).width() * .5);
 
                 annotation_id = num_annotations + 1;
