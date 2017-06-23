@@ -83,11 +83,12 @@ def submit_annotation(request, access_code):
     user = User.objects.get(access_code=access_code)
     url = get_url(request.GET.get('url'))
     nl = get_nl(request.GET.get('nl'))
+    tag = get_tag(request.GET.get('utility'))
     command = get_command(request.GET.get('command'))
+    command.tags.add(tag)
 
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)
-    url.annotators.add(user)
 
     if not AnnotationProgress.objects.filter(annotator=user, url=url):
         AnnotationProgress.objects.create(annotator=user, url=url, status='in-progress')
@@ -236,17 +237,18 @@ def utility_panel(request, access_code):
     template = loader.get_template('annotator/utility_panel.html')
     user = safe_get_user(access_code)
 
-    urls_in_progress = AnnotationProgress.objects.values('url')
+    utilities_in_progress = set([])
+    for obj in Annotation.objects.values('cmd'):
+        cmd = get_command(obj['cmd'])
+        for tag in cmd.tags.all():
+            utilities_in_progress.add(tag.str)
+
     utilities = []
     for obj in URLTag.objects.values('tag').annotate(the_count=Count('tag'))\
             .order_by('-the_count'):
-        url_annotation_in_progress = False
-        for url in URLTag.objects.values('url').filter(tag=obj['tag']):
-            if url in urls_in_progress:
-                url_annotation_in_progress = True
-                utilities.append((obj['tag'], 'in-progress'))
-                break
-        if not url_annotation_in_progress:
+        if obj['tag'] in utilities_in_progress:
+            utilities.append((obj['tag'], 'in-progress'))
+        else:
             utilities.append((obj['tag'], ''))
 
     utility_groups = []
