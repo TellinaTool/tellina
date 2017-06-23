@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from website import functions
+from website.config import *
 from website.models import NL, Command, URL, User, URLTag, \
     Annotation, AnnotationJudgement, AnnotationProgress
 from website.utils import get_nl, get_command, get_url, get_tag
@@ -52,7 +53,11 @@ def collect_page(request, access_code):
 
     # search for existing annotations
     annotation_dict = {}
-    for annotation in Annotation.objects.filter(url=url, annotator=user):
+    if access_code == admin_access_code:
+        annotation_list = Annotation.objects.filter(url=url)
+    else:
+        annotation_list = Annotation.objects.filter(url=url, annotator=user)
+    for annotation in annotation_list:
         key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
         if not key in annotation_dict:
             annotation_dict[key] = (annotation.cmd.str, annotation.nl.str)
@@ -245,6 +250,8 @@ def utility_panel(request, access_code):
     utilities = []
     for obj in URLTag.objects.values('tag').annotate(the_count=Count('tag'))\
             .order_by('-the_count'):
+        if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
+            continue
         if obj['tag'] in utilities_in_progress:
             utilities.append((obj['tag'], 'in-progress'))
         else:
