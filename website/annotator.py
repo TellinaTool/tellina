@@ -4,9 +4,9 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from website import functions
-from website.models import NL, Command, URL, User, CommandTag, URLTag, \
+from website.models import NL, Command, URL, User, URLTag, \
     Annotation, AnnotationJudgement, AnnotationProgress
-from website.utils import get_nl, get_command, get_url
+from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
 BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby',
@@ -25,7 +25,6 @@ def access_code_required(f):
         try:
             access_code = request.COOKIES['access_code']
         except KeyError:
-            # raise Exception("No access code set!")
             return login(request)
         return f(request, *args, access_code=access_code, **kwargs)
     return g
@@ -88,6 +87,8 @@ def submit_annotation(request, access_code):
 
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)
+    url.annotators.add(user)
+
     if not AnnotationProgress.objects.filter(annotator=user, url=url):
         AnnotationProgress.objects.create(annotator=user, url=url, status='in-progress')
 
@@ -235,11 +236,18 @@ def utility_panel(request, access_code):
     template = loader.get_template('annotator/utility_panel.html')
     user = safe_get_user(access_code)
 
+    urls_in_progress = AnnotationProgress.objects.values('url')
     utilities = []
     for obj in URLTag.objects.values('tag').annotate(the_count=Count('tag'))\
             .order_by('-the_count'):
-        if not obj['tag'] in WHITE_LIST and not obj['tag'] in BLACK_LIST:
-            utilities.append(obj['tag'])
+        url_annotation_in_progress = False
+        for url in URLTag.objects.values('url').filter(tag=obj['tag']):
+            if url in urls_in_progress:
+                url_annotation_in_progress = True
+                utilities.append((obj['tag'], 'in-progress'))
+                break
+        if not url_annotation_in_progress:
+            utilities.append((obj['tag'], ''))
 
     utility_groups = []
     for i in range(0, len(utilities), 20):

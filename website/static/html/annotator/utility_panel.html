@@ -29,13 +29,25 @@
             <div class="col-md-8 col-md-offset-0 col-xs-12 col-xs-offset-0" style="text-align:left">
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
-                        {% for utility in utility_group1 %}
-                            <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
+                        {% for utility, status in utility_group1 %}
+                            {% if status == 'in-progress' %}
+                                <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
+                            {% elif status == 'completed' %}
+                                <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
+                            {% else %}
+                                <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
+                            {% endif %}
                         {% endfor %}
                         <br>
                         <br>
-                        {% for utility in utility_group2 %}
-                            <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
+                        {% for utility, status in utility_group2 %}
+                            {% if status == 'in-progress' %}
+                                <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
+                            {% elif status == 'completed' %}
+                                <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
+                            {% else %}
+                                <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
+                            {% endif %}
                         {% endfor %}
                         <hr>
                     {% endfor %}

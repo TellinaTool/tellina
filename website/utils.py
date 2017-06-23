@@ -4,23 +4,19 @@ import sys
 import urllib
 
 from django.core.exceptions import ObjectDoesNotExist
-from website.models import NL, Command, URL
+from website.models import NL, Command, Tag, URL
 
 
 def get_nl(nl_str):
-    try:
-        nl = NL.objects.get(str=nl_str)
-    except ObjectDoesNotExist:
-        nl = NL.objects.create(str=nl_str)
-    return nl
+    return NL.objects.get_or_create(str=nl_str)
 
 
 def get_command(command_str):
-    try:
-        cmd = Command.objects.get(str=command_str)
-    except ObjectDoesNotExist:
-        cmd = Command.objects.create(str=command_str)
-    return cmd
+    return Command.objects.get_or_create(str=command_str)
+
+
+def get_tag(tag_str):
+    return Tag.objects.get_or_create(str=tag_str)
 
 
 def get_url(url_str):
