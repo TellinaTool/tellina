@@ -74,7 +74,8 @@ def collect_page(request, access_code):
     }
 
     try:
-        record = AnnotationProgress.objects.get(annotator=user, url=url)
+        record = AnnotationProgress.objects.get(
+            annotator=user, tag__str=utility, url=url)
         if record.status == 'completed':
             context['completed'] = True
     except ObjectDoesNotExist:
@@ -95,8 +96,9 @@ def submit_annotation(request, access_code):
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)
 
-    if not AnnotationProgress.objects.filter(annotator=user, url=url):
-        AnnotationProgress.objects.create(annotator=user, url=url, status='in-progress')
+    if not AnnotationProgress.objects.filter(annotator=user, url=url, tag=tag):
+        AnnotationProgress.objects.create(
+            annotator=user, url=url, tag=tag, status='in-progress')
 
     resp = json_response({'nl': annotation.nl.str, 'command': annotation.cmd.str},
                          status='ANNOTATION_SAVED')
@@ -137,15 +139,18 @@ def delete_annotation(request, access_code):
 @access_code_required
 def update_progress(request, access_code):
     user = User.objects.get(access_code=access_code)
+    tag = get_tag(request.GET.get('utility'))
     url = get_url(request.GET.get('url'))
     status = request.GET.get('status')
 
     try:
-        record = AnnotationProgress.objects.get(annotator=user, url=url)
+        record = AnnotationProgress.objects.get(
+            annotator=user, tag=tag, url=url)
         record.status = status
         record.save()
     except ObjectDoesNotExist:
-        AnnotationProgress.objects.create(annotator=user, url=url, status=status)
+        AnnotationProgress.objects.create(
+            annotator=user, tag=tag, url=url, status=status)
 
     return json_response(status='PROGRESS_UPDATED')
 
@@ -213,9 +218,10 @@ def url_panel(request, access_code):
     utility = request.GET.get('utility')
 
     url_list = []
-    for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
+    for url_tag in URLTag.objects.filter(tag__str=utility).order_by('url__str'):
         try:
-            record = AnnotationProgress.objects.get(annotator=user, url=url_tag.url)
+            record = AnnotationProgress.objects.get(
+                annotator=user, tag__str=utility, url=url_tag.url)
             url_list.append((url_tag.url, record.status))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
