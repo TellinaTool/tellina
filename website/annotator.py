@@ -212,7 +212,10 @@ def url_panel(request, access_code):
             record = AnnotationProgress.objects.get(annotator=user, url=url_tag.url)
             url_list.append((url_tag.url, record.status))
         except ObjectDoesNotExist:
-            url_list.append((url_tag.url, ''))
+            if Annotation.objects.filter(url=url_tag.url):
+                url_list.append((url_tag.url, 'in-progress'))
+            else:
+                url_list.append((url_tag.url, ''))
 
     context = {
         'utility': utility,
