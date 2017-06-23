@@ -4,8 +4,8 @@ import ssl
 import sys
 import urllib
 
+from django.core.exceptions import MultipleObjectsReturned
 from website.models import URL, URLTag
-
 
 def extract_html(url):
     hypothes_header = "https://via.hypothes.is/"
@@ -40,7 +40,11 @@ def load_urls(input_file_path):
                 else:
                     url_obj = URL.objects.create(str=url, html_content=html)
             else:
-                url_obj = URL.objects.get(str=url)
+                try:
+                    url_obj = URL.objects.get(str=url)
+                except MultipleObjectsReturned:
+                    for url_obj in URL.objects.filter(str=url):
+                        break
 
             if not URLTag.objects.filter(url=url_obj, tag=utility):
                 URLTag.objects.create(url=url_obj, tag=utility)
