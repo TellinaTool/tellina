@@ -170,9 +170,9 @@
                 /* --- collection complete check --- */
                 $('#collection-completed').change(function() {
                     if ($(this).is(":checked")) {
-                        $.get(`update_progress`, {url: url, status: 'completed'});
+                        $.get(`update_progress`, {url: url, utility: utility, status: 'completed'});
                     } else {
-                        $.get(`update_progress`, {url: url, status: 'in-progress'});
+                        $.get(`update_progress`, {url: url, utility: utility, status: 'in-progress'});
                     }
                 });
 
