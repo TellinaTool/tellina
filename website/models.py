@@ -1,6 +1,12 @@
 from django.db import models
 from django.utils import timezone
 
+class Tag(models.Model):
+    """
+    Tag.
+    """
+    str = models.TextField(primary_key=True)
+
 class NL(models.Model):
     """
     Natural language command.
@@ -13,17 +19,7 @@ class Command(models.Model):
     """
     str = models.TextField(primary_key=True)
     language = models.TextField(default='bash')
-
-class URL(models.Model):
-    """
-    URL.
-
-    :member str: url address.
-    :member html_content: snapshot of the URL content at the time of annotation.
-    """
-    str = models.TextField(primary_key=True)
-    html_content = models.TextField(default='')
-
+    tags = models.ManyToManyField(Tag)
 
 class User(models.Model):
     """
@@ -39,13 +35,16 @@ class User(models.Model):
     country = models.TextField(default='--')
     is_annotator = models.BooleanField(default=False)
 
+class URL(models.Model):
+    """
+    URL.
 
-class CommandTag(models.Model):
+    :member str: url address.
+    :member html_content: snapshot of the URL content at the time of annotation.
     """
-    Each record stores a (command, tag) pair.
-    """
-    cmd = models.ForeignKey(Command, on_delete=models.CASCADE)
-    tag = models.TextField()
+    str = models.TextField(primary_key=True)
+    html_content = models.TextField(default='')
+    # tags = models.ManyToManyField(Tag)
 
 
 class URLTag(models.Model):
@@ -68,6 +67,15 @@ class Annotation(models.Model):
     submission_time = models.DateTimeField(default=timezone.now)
 
 
+class AnnotationJudgement(models.Model):
+    """
+    Each record is a judgement of whether an annotation is correct or not.
+    """
+    annotation = models.ForeignKey(Annotation, on_delete=models.CASCADE)
+    judger = models.ForeignKey(User, on_delete=models.CASCADE)
+    score = models.FloatField()
+
+
 class AnnotationProgress(models.Model):
     """
     Each record stores a user's annotation progress on a particular URL.
@@ -75,15 +83,6 @@ class AnnotationProgress(models.Model):
     url = models.ForeignKey(URL, on_delete=models.CASCADE)
     annotator = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.TextField()
-
-
-class AnnotationJudgement(models.Model):
-    """
-    Each record is a judgement of whether an annotation is correct or not.
-    """
-    annotation = models.ForeignKey(Annotation, on_delete=models.CASCADE)
-    annotator = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.FloatField()
 
 
 class Translation(models.Model):

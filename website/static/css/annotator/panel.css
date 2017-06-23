@@ -34,3 +34,11 @@
 .command-submission {
     background: #F0F0F0;
 }
+
+.annotate-utility-in-progress {
+    background-color: #FAEBD7;
+}
+
+.annotate-utility-completed {
+    background-color: rgba(76, 175, 80, 0.1);
+}
