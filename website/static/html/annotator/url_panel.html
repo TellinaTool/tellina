@@ -43,6 +43,9 @@
                                 {% elif status == 'completed' %}
                                     <button type="button" class="btn btn-success btn-xs">Completed</button>
                                 {% endif %}
+                                {% if status == 'others-in-progress' %}
+                                    <button type="button" class="btn btn-info btn-xs">Others-in-progress</button>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

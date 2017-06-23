@@ -52,7 +52,7 @@ def collect_page(request, access_code):
 
     # search for existing annotations
     annotation_dict = {}
-    for annotation in Annotation.objects.filter(url=url, user=user):
+    for annotation in Annotation.objects.filter(url=url, annotator=user):
         key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
         if not key in annotation_dict:
             annotation_dict[key] = (annotation.cmd.str, annotation.nl.str)
@@ -120,7 +120,6 @@ def submit_edit(request, access_code):
 
 @access_code_required
 def delete_annotation(request, access_code):
-    user = User.objects.get(access_code=access_code)
     url = get_url(request.GET.get('url'))
     nl = get_nl(request.GET.get('nl'))
     command = get_command(request.GET.get('command'))
@@ -215,7 +214,7 @@ def url_panel(request, access_code):
             url_list.append((url_tag.url, record.status))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
-                url_list.append((url_tag.url, 'in-progress'))
+                url_list.append((url_tag.url, 'others-in-progress'))
             else:
                 url_list.append((url_tag.url, ''))
 
