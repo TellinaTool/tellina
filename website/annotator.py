@@ -120,7 +120,6 @@ def submit_edit(request, access_code):
 
 @access_code_required
 def delete_annotation(request, access_code):
-    user = User.objects.get(access_code=access_code)
     url = get_url(request.GET.get('url'))
     nl = get_nl(request.GET.get('nl'))
     command = get_command(request.GET.get('command'))
@@ -215,7 +214,7 @@ def url_panel(request, access_code):
             url_list.append((url_tag.url, record.status))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
-                url_list.append((url_tag.url, 'in-progress'))
+                url_list.append((url_tag.url, 'others-in-progress'))
             else:
                 url_list.append((url_tag.url, ''))
 
