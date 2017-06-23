@@ -82,6 +82,7 @@
         <script src="/static/js/annotator/main.js"></script>
 
         <script>
+            var utility = '{{utility}}';
             var nl_submission_cache = [];
             var command_submission_cache = [];
 
@@ -93,9 +94,6 @@
             $(document).ready(function () {
                 $('.url-content-data').height($(window).height() * .9);
                 // $('.url-content-data').width($(window).width() * .5);
-
-                var utility = '{{utility}}';
-                var access_code = '{{access_code}}';
 
                 annotation_id = num_annotations + 1;
 
@@ -110,7 +108,7 @@
                 add_collect_panel(annotation_id);
 
                 $('.previous-url').click(function() {
-                    $.get(`previous_url`, {url: url, utility: utility, access_code: access_code}, function(data){
+                    $.get(`previous_url`, {url: url, utility: utility}, function(data){
                         if (data.status == 'IS_FIRST_URL') {
                             BootstrapDialog.show({
 								message: "Already reached the first URL.",
@@ -140,7 +138,7 @@
                 })
 
                 $('.next-url').click(function() {
-                    $.get(`next_url`, {url: url, utility: utility, access_code: access_code}, function(data){
+                    $.get(`next_url`, {url: url, utility: utility}, function(data){
                         if (data.status == 'IS_LAST_URL') {
                             BootstrapDialog.show({
 								message: "Already reached the last URL.",
@@ -256,7 +254,7 @@
                     var cmd = collect_box.find('.command-input').val();
 
                     if (nl != '' && cmd != '') {
-                        $.get(`submit_annotation`, {url: url, nl: nl, command: cmd}, function(data) {
+                        $.get(`submit_annotation`, {url: url, nl: nl, command: cmd, utility: utility}, function(data) {
                             if (data.status == 'ANNOTATION_SAVED') {
                                 // change the current collection box to submitted mode
                                 collect_box.hide();
