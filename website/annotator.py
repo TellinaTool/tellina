@@ -52,7 +52,7 @@ def collect_page(request, access_code):
 
     # search for existing annotations
     annotation_dict = {}
-    for annotation in Annotation.objects.filter(url=url):
+    for annotation in Annotation.objects.filter(url=url, user=user):
         key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
         if not key in annotation_dict:
             annotation_dict[key] = (annotation.cmd.str, annotation.nl.str)
