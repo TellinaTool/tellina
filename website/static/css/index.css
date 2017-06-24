@@ -87,3 +87,7 @@ html, body {
     margin-left: 70px;
     color: rgb(108, 108, 108);
 }
+
+.fadeInUp {
+    -webkit-animation-duration: 1s;
+}
