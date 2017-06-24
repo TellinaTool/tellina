@@ -63,7 +63,7 @@
                         <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
                     </footer>
                 </div>
-                <div class="example-panel col-sm-6 col-xs-12" style="display: None">
+                <div class="example-panel col-sm-6 col-xs-12 animated fadeInUp" style="display: None">
                     {% for nl, top_ranked_cmd in example_request_list %}
                         <div class="row">
                             <div class="[ panel panel-default ] panel-google-plus">
@@ -120,7 +120,7 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="recent-post-panel col-sm-6 col-xs-12 animated fadeInUp">
+                <div class="recent-post-panel col-sm-6 col-xs-12">
                     {% if latest_request_list %}
                         {% for request, top_ranked_cmd in latest_request_list %}
                             <div class="row">
