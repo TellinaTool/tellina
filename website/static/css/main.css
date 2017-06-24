@@ -53,7 +53,10 @@ body.loading .modal {
 }
 
 /* Change the height of the nav bar */
-.navbar-nav > li > a {padding-top:10px !important; padding-bottom:10px !important;}
+.navbar-nav > li > a {
+    padding-top:10px !important; padding-bottom:10px !important;
+}
+
 .navbar {min-height:32px !important}
 
 /*.command {
