@@ -75,7 +75,7 @@ def collect_page(request, access_code):
 
     try:
         record = AnnotationProgress.objects.get(
-            annotator=user, tag__str=utility, url=url)
+            annotator=user, tag=get_tag(utility), url=url)
         if record.status == 'completed':
             context['completed'] = True
     except ObjectDoesNotExist:
@@ -164,7 +164,6 @@ def previous_url(request, access_code):
     prev_url = None
 
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
-        print(url_tag.url.str, current_url)
         if url_tag.url.str == current_url:
             is_current_url = True
             break
@@ -218,10 +217,10 @@ def url_panel(request, access_code):
     utility = request.GET.get('utility')
 
     url_list = []
-    for url_tag in URLTag.objects.filter(tag__str=utility).order_by('url__str'):
+    for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
         try:
             record = AnnotationProgress.objects.get(
-                annotator=user, tag__str=utility, url=url_tag.url)
+                annotator=user, tag=get_tag(utility), url=url_tag.url)
             url_list.append((url_tag.url, record.status))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
