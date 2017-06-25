@@ -81,7 +81,7 @@ class AnnotationProgress(models.Model):
     Each record stores a user's annotation progress on a particular URL.
     """
     url = models.ForeignKey(URL, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, null=True, on_delete=models.CASCADE)
     annotator = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.TextField()
 
