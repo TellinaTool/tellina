@@ -17,7 +17,7 @@ from bashlex import data_tools
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
 from website.utils import get_nl, get_command
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = False
 
 from website import functions
@@ -214,6 +214,7 @@ def example_requests_with_translations():
     ]
 
     for request_str in example_request_list:
+        nl = get_nl(request_str)
         if Translation.objects.filter(nl__str=request_str).exists():
             translations = Translation.objects.filter(nl__str=request_str)
             max_score = translations.aggregate(Max('score'))['score__max']
@@ -223,7 +224,6 @@ def example_requests_with_translations():
             top_translation = top_translation.pred_cmd.str
         else:
             # Compute the translations on the fly
-            nl = get_nl(request_str)
             if not WEBSITE_DEVELOP:
                 # call learning model and store the translations
                 batch_outputs, output_logits = translate_fun(request_str)
