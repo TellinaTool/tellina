@@ -24,6 +24,11 @@ class Command(models.Model):
 class User(models.Model):
     """
     Each record stores the information of a user.
+
+    :member is_annotator: the annotator is responsible for collecting new data
+        pairs
+    :member is_judger: the judger is responsible for judging if a command pair
+        is correct and add modifications and comments.
     """
     access_code = models.TextField(default='')
     ip_address = models.TextField(default='')
@@ -34,6 +39,7 @@ class User(models.Model):
     region = models.TextField(default='--')
     country = models.TextField(default='--')
     is_annotator = models.BooleanField(default=False)
+    is_judger = models.BooleanField(default=False)
 
 class URL(models.Model):
     """
@@ -67,15 +73,6 @@ class Annotation(models.Model):
     submission_time = models.DateTimeField(default=timezone.now)
 
 
-class AnnotationJudgement(models.Model):
-    """
-    Each record is a judgement of whether an annotation is correct or not.
-    """
-    annotation = models.ForeignKey(Annotation, on_delete=models.CASCADE)
-    judger = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.FloatField()
-
-
 class AnnotationProgress(models.Model):
     """
     Each record stores a user's annotation progress on a particular URL.
@@ -84,6 +81,29 @@ class AnnotationProgress(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     annotator = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.TextField()
+
+
+class AnnotationComment(models.Model):
+    """
+    Each record is a commend submitted by a user (either an annotator or a
+    judger) to an annotation.
+    """
+    annotation = models.ForeignKey(Annotation, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField()
+    submission_time = models.DateTimeField(default=timezone.now)
+
+
+class Update(models.Model):
+    """
+    Each record is an update of an annotation submitted by a judger.
+    """
+    annotation = models.ForeignKey(Annotation, on_delete=models.CASCADE)
+    judger = models.ForeignKey(User, on_delete=models.CASCADE)
+    update = models.TextField()
+    update_type = models.TextField(default='nl')
+    comment = models.TextField()
+    submission_time = models.DateTimeField(default=timezone.now)
 
 
 class Translation(models.Model):

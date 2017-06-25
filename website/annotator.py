@@ -4,14 +4,13 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from website import functions
-from website.config import *
 from website.models import NL, Command, URL, User, URLTag, \
-    Annotation, AnnotationJudgement, AnnotationProgress
+    Annotation, AnnotationComment, AnnotationProgress
 from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
-BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby',
-              'nano', 'emacs', 'vim'}
+BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
+              'vim'}
 
 
 def json_response(d={}, status='SUCCESS'):
@@ -53,9 +52,12 @@ def collect_page(request, access_code):
 
     # search for existing annotations
     annotation_dict = {}
-    if access_code == admin_access_code:
+    if user.is_judger:
+        # judger sees the annotations of a web page by all other users
         annotation_list = Annotation.objects.filter(url=url)
     else:
+        # annotator only sees the annotations of a web page submitted by
+        # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
     for annotation in annotation_list:
         key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
