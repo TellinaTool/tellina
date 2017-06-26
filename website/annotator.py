@@ -4,8 +4,8 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from website import functions
-from website.models import NL, Command, URL, User, URLTag, \
-    Annotation, AnnotationComment, AnnotationProgress
+from website.models import NL, Command, Comment, URL, User, URLTag, \
+    Annotation, AnnotationUpdate, AnnotationProgress
 from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
@@ -60,9 +60,9 @@ def collect_page(request, access_code):
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
     for annotation in annotation_list:
-        key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
+        key = '__NL__{}__Command__{}'.format(annotation.id, annotation.nl.str, annotation.cmd.str)
         if not key in annotation_dict:
-            annotation_dict[key] = (annotation.cmd.str, annotation.nl.str)
+            annotation_dict[key] = (annotation.id, annotation.cmd.str, annotation.nl.str)
 
     annotation_list = sorted(annotation_dict.values(), key=lambda x: x[0])
 
@@ -72,7 +72,8 @@ def collect_page(request, access_code):
         'url': hypothes_prefix + url.str,
         'annotation_list': annotation_list,
         'completed': False,
-        'access_code': access_code
+        'access_code': access_code,
+        'is_judger': user.is_judger == True
     }
 
     try:
@@ -155,6 +156,61 @@ def update_progress(request, access_code):
             annotator=user, tag=tag, url=url, status=status)
 
     return json_response(status='PROGRESS_UPDATED')
+
+
+@access_code_required
+def get_updates(request, access_code):
+    annotation_id = request.GET.get('annotation_id')
+    annotation = Annotation.objects.get(id=annotation_id)
+    update_list = []
+    for update in AnnotationUpdate.objects.filter(annotation=annotation):
+        if annotation.annotator.access_code == access_code or \
+                update.judger.access_code == access_code:
+            # Only the original annotator or the update submitter can view
+            # the updates and their replies
+            update_list.append({
+                'update_id': update.id,
+                'access_code': update.judger.access_code,
+                'submission_time': update.submission_time,
+                'update_str': update.update_str,
+                'comment_str': update.comment.str
+            })
+
+    return json_response({'update_list': update_list})
+
+
+@access_code_required
+def get_update_replies(request, access_code):
+    update_id = request.GET.get('update_id')
+    update = AnnotationUpdate.objects.get(id=update_id)
+
+    reply_list = []
+    cur = update.comment
+    while cur.reply is not None:
+        reply_list.append(cur.reply)
+        cur = cur.reply
+
+    return json_response({'reply_list': reply_list})
+
+
+# --- Judger Controls --- #
+@access_code_required
+def submit_update(request, access_code):
+    user = User.objects.get(access_code=access_code)
+    annotation_id = request.GET.get('annotation_id')
+    update_str = request.GET.get('update')
+    comment_str = request.GET.get('comment')
+    annotation = Annotation.objects.get(id=annotation_id)
+
+    comment = Comment.objects.create(user=user, str=comment_str)
+    update = AnnotationUpdate.objects.create(annotation=annotation,
+        judger=user, update_str=update_str, comment=comment)
+
+    return json_response({
+        'update_id': update.id,
+        'access_code': access_code,
+        'submission_time': update.submission_time,
+    }, status='UPDATE_SAVE_SUCCESS')
 
 
 @access_code_required
