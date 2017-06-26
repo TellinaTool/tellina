@@ -83,26 +83,26 @@ class AnnotationProgress(models.Model):
     status = models.TextField()
 
 
-class AnnotationComment(models.Model):
+class Comment(models.Model):
     """
     Each record is a commend submitted by a user (either an annotator or a
     judger) to an annotation.
     """
-    annotation = models.ForeignKey(Annotation, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.TextField()
+    reply = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+    str = models.TextField()
     submission_time = models.DateTimeField(default=timezone.now)
 
 
-class Update(models.Model):
+class AnnotationUpdate(models.Model):
     """
     Each record is an update of an annotation submitted by a judger.
     """
     annotation = models.ForeignKey(Annotation, on_delete=models.CASCADE)
     judger = models.ForeignKey(User, on_delete=models.CASCADE)
-    update = models.TextField()
+    update_str = models.TextField()
     update_type = models.TextField(default='nl')
-    comment = models.TextField()
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     submission_time = models.DateTimeField(default=timezone.now)
 
 
