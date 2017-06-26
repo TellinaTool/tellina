@@ -50,7 +50,7 @@ class URL(models.Model):
     """
     str = models.TextField(primary_key=True)
     html_content = models.TextField(default='')
-    # tags = models.ManyToManyField(Tag)
+    commands = models.ManyToManyField(Command)
 
 
 class URLTag(models.Model):
