@@ -19,6 +19,7 @@ from django.contrib import admin
 from website import annotator, cmd2html, views
 
 urlpatterns = [
+    url(r'^$', views.index),
     url(r'^index$', views.index),
     url(r'^translate$', views.translate),
     url(r'^info$', views.info),
@@ -26,7 +27,6 @@ urlpatterns = [
     url(r'^remember_ip_address$', views.remember_ip_address),
     url(r'^vote$', views.vote),
 
-    url(r'^$', annotator.login),
     url(r'^login$', annotator.login),
     url(r'^register_user', annotator.register_user),
     url(r'^user_login$', annotator.user_login),
