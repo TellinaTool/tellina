@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.utils import timezone
 
@@ -20,6 +21,13 @@ class Command(models.Model):
     str = models.TextField(primary_key=True)
     language = models.TextField(default='bash')
     tags = models.ManyToManyField(Tag)
+
+class CommandAdmin(admin.ModelAdmin):
+    fields = ['str', 'language']
+    list_display = ['get_tags']
+
+    def get_tags(self, obj):
+        return '\n'.join([tag.str for tag in obj.tags.all()])
 
 class User(models.Model):
     """

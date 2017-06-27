@@ -23,7 +23,7 @@ CACHE_TRANSLATIONS = False
 from website import functions
 from website.cmd2html import tokens2html
 
-# from website.scripts.import_data import load_urls
+from website.scripts.import_data import load_urls, scrape_commands_from_url
 # load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
 
 
