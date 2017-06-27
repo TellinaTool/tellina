@@ -33,30 +33,25 @@ def load_urls(input_file_path):
                 print("Add {}, {}".format(url, utility))
 
 
-def import_commands_in_url(stackoverflow_dump_path):
+def load_commands_in_url(stackoverflow_dump_path):
     url_prefix = 'https://stackoverflow.com/questions/'
 
     with sqlite3.connect(stackoverflow_dump_path, detect_types=sqlite3.PARSE_DECLTYPES) as db:
         for url in URL.objects.all():
             print(url.str)
-            if not url.html_content:
-                for question_id, answer_body in db.cursor().execute("""
-                        SELECT questions.Id, answers.Body FROM questions, answers
-                        WHERE questions.Id = answers.ParentId AND questions.Id = {}
-                        """, url.str[len(url_prefix):]):
-                    url.html_content = answer_body
-                    url.save()
+            for question_id, answer_body in db.cursor().execute("""
+                    SELECT questions.Id, answers.Body FROM questions, answers 
+                    WHERE questions.Id = answers.ParentId AND questions.Id = ?
+                    """, (url.str[len(url_prefix):], )):
+                url.html_content = answer_body
+                url.save()
 
+            url.commands.clear()
             for cmd in extract_code(url.html_content):
                 print(cmd)
-                cmd = cmd.strip()
                 command = get_command(cmd)
-                url.commands.append(command)
-                ast = data_tools.bash_parser(cmd)
-                for utility in data_tools.get_utilities(ast):
-                    command.tags.append(get_tag(utility))
-                    command.save()
-
+                url.commands.add(command)
+                    
             url.save()
 
 
