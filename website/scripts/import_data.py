@@ -56,7 +56,7 @@ def import_commands_in_url(stackoverflow_dump_path):
                 for utility in data_tools.get_utilities(ast):
                     command.tags.append(get_tag(utility))
                     command.save()
-                    
+
             url.save()
 
 
