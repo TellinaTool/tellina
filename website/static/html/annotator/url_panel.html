@@ -36,13 +36,16 @@
                 <div class="tiny-push"></div>
                 {% if url_list %}
                     <ul class="list-group">
-                        {% for url, status in url_list %}
+                        {% for url, status, num_cmd_missed in url_list %}
                             <li class="list-group-item">
                                 <span><a class="url-link">{{url.str}}</a></span>
                                 {% if status == 'in-progress' %}
                                     <button type="button" class="btn btn-warning btn-xs">In-progress</button>
                                 {% elif status == 'completed' %}
                                     <button type="button" class="btn btn-success btn-xs">Completed</button>
+                                    {% if num_cmd_missed > 0 %}
+                                        <button type="button" class="btn btn-default btn-xs"><code>{{num_cmd_missed}} commands missed</code></button>
+                                    {% endif %}
                                 {% endif %}
                                 {% if status == 'others-in-progress' %}
                                     <button type="button" class="btn btn-info btn-xs">Others-in-progress</button>

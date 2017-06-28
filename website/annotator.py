@@ -273,13 +273,23 @@ def url_panel(request, access_code):
     user = safe_get_user(access_code)
 
     utility = request.GET.get('utility')
+    tag = get_tag(utility)
+    num_commands_missed = 0
 
     url_list = []
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
         try:
             record = AnnotationProgress.objects.get(
-                annotator=user, tag=get_tag(utility), url=url_tag.url)
-            url_list.append((url_tag.url, record.status))
+                annotator=user, tag=tag, url=url_tag.url)
+            if record.status == 'completed':
+                # check if any commands were missed
+                for cmd in url_tag.url.commands:
+                    if tag in cmd.tags.all():
+                        if not Annotation.objects.filter(url=url_tag.url,
+                                cmd=cmd, annotator=user).exists():
+                            num_commands_missed += 1
+            else:
+                url_list.append((url_tag.url, record.status, num_commands_missed))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
                 url_list.append((url_tag.url, 'others-in-progress'))

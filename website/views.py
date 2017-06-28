@@ -24,7 +24,8 @@ from website.cmd2html import tokens2html
 
 from website.scripts.import_data import load_urls, load_commands_in_url
 # load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
-# load_commands_in_url('/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
+# load_commands_in_url(
+#   '/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
 
 
 def ip_address_required(f):
@@ -89,7 +90,6 @@ def translate(request, ip_address):
             city = '--' if r.json()['city'] is None else r.json()['city']
             region = '--' if r.json()['region'] is None else r.json()['region']
             country = '--' if r.json()['country'] is None else r.json()['country']
-<<<<<<< HEAD
             user = User.objects.create(
                 ip_address=ip_address,
                 organization=organization,
@@ -97,15 +97,6 @@ def translate(request, ip_address):
                 region=region,
                 country=country
             )
-=======
-        user = User.objects.create(
-            ip_address=ip_address,
-            organization=organization,
-            city=city,
-            region=region,
-            country=country
-        )
->>>>>>> b0330a51cc03cb8fbddb45b949fb8744f6b586ad
 
     # save the natural language request issued by this IP Address
     nl_request = NLRequest.objects.create(nl=nl, user=user)
