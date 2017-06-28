@@ -13,7 +13,6 @@ sys.path.append(learning_module_dir)
 
 from bashlex import data_tools
 
-
 CODE_REGEX = re.compile(r"<pre><code>([^<]+\n[^<]*)<\/code><\/pre>")
 
 def extract_code(text):
@@ -46,7 +45,6 @@ def load_urls(input_file_path):
                 URLTag.objects.create(url__str=url, tag=utility)
                 print("Add {}, {}".format(url, utility))
 
-
 def load_commands_in_url(stackoverflow_dump_path):
     url_prefix = 'https://stackoverflow.com/questions/'
 
@@ -66,7 +64,7 @@ def load_commands_in_url(stackoverflow_dump_path):
                         print(cmd)
                         command = get_command(cmd)
                         url.commands.add(command)
-                        url.save()
+            url.save()
 
 
 if __name__ == '__main__':
