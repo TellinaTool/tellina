@@ -14,17 +14,17 @@ sys.path.append(os.path.join(
 
 from bashlex import data_tools
 
-from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
-from website.utils import get_nl, get_command
-
 WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
+from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
+from website.utils import get_nl, get_command
 from website import functions
 from website.cmd2html import tokens2html
 
-from website.scripts.import_data import load_urls, scrape_commands_from_url
+from website.scripts.import_data import load_urls, load_commands_in_url
 # load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
+# load_commands_in_url('/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
 
 
 def ip_address_required(f):
