@@ -1,10 +1,15 @@
 import socket
 import ssl
-import sys
+import os, sys
 import urllib
 
 from django.core.exceptions import ObjectDoesNotExist
 from website.models import NL, Command, Tag, URL
+
+sys.path.append(os.path.join(
+    os.path.dirname(__file__), "..", "tellina_learning_module"))
+
+from bashlex import data_tools
 
 
 def get_nl(nl_str):
@@ -13,6 +18,9 @@ def get_nl(nl_str):
 
 def get_command(command_str):
     cmd, _ = Command.objects.get_or_create(str=command_str.strip())
+    ast = data_tools.bash_parser(command_str)
+    for utility in data_tools.get_utilities(ast):
+        cmd.tags.add(get_tag(utility))    
     return cmd
 
 def get_tag(tag_str):
