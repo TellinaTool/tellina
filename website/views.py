@@ -24,7 +24,8 @@ from website.cmd2html import tokens2html
 
 from website.scripts.import_data import load_urls, load_commands_in_url
 # load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
-# load_commands_in_url('/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
+# load_commands_in_url(
+#   '/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
 
 
 def ip_address_required(f):
