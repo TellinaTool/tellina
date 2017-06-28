@@ -14,7 +14,7 @@ sys.path.append(os.path.join(
 
 from bashlex import data_tools
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = False
 
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
@@ -89,13 +89,13 @@ def translate(request, ip_address):
             city = '--' if r.json()['city'] is None else r.json()['city']
             region = '--' if r.json()['region'] is None else r.json()['region']
             country = '--' if r.json()['country'] is None else r.json()['country']
-        user = User.objects.create(
-            ip_address=ip_address,
-            organization=organization,
-            city=city,
-            region=region,
-            country=country
-        )
+            user = User.objects.create(
+                ip_address=ip_address,
+                organization=organization,
+                city=city,
+                region=region,
+                country=country
+            )
 
     # save the natural language request issued by this IP Address
     nl_request = NLRequest.objects.create(nl=nl, user=user)

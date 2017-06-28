@@ -8,18 +8,19 @@ from website.models import NL, Command, Tag, URL
 
 
 def get_nl(nl_str):
-    nl, _ = NL.objects.get_or_create(str=nl_str)
+    nl, _ = NL.objects.get_or_create(str=nl_str.strip())
     return nl
 
 def get_command(command_str):
-    cmd, _ = Command.objects.get_or_create(str=command_str)
+    cmd, _ = Command.objects.get_or_create(str=command_str.strip())
     return cmd
 
 def get_tag(tag_str):
-    tag, _ = Tag.objects.get_or_create(str=tag_str)
+    tag, _ = Tag.objects.get_or_create(str=tag_str.strip())
     return tag
 
 def get_url(url_str):
+    url_str = url_str.strip()
     try:
         url = URL.objects.get(str=url_str)
     except ObjectDoesNotExist:
