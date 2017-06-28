@@ -33,8 +33,8 @@ def ip_address_required(f):
         try:
             ip_address = request.COOKIES['ip_address']
         except KeyError:
-            # use an (invalid) dummy IP address if cookie reading failed
-            ip_address = '123.456.789.012'
+            # redirect to home page if no ip address is captured
+            return index(request)
         return f(request, *args, ip_address=ip_address, **kwargs)
     return g
 
