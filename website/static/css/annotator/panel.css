@@ -20,6 +20,7 @@
     text-align: left;
     font-size: 16px;
     font-weight: 300;
+    overflow: hidden;
 }
 
 .collect-box {
@@ -36,4 +37,8 @@
 
 .annotate-utility-completed {
     background-color: rgba(76, 175, 80, 0.1);
+}
+
+.command-submission {
+    background: #F0F0F0;
 }
