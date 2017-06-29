@@ -48,6 +48,7 @@ def collect_page(request, access_code):
     user = safe_get_user(access_code)
 
     utility = request.GET.get('utility')
+    tag = get_tag(utility)
     url = get_url(request.GET.get('url'))
 
     # search for existing annotations
@@ -62,8 +63,11 @@ def collect_page(request, access_code):
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
-            if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exists():
-                command_list.append(command.str)
+            print(command.tags.values('str'))
+            if command.tags.filter(str=tag.str).exists():
+                print(tag.str)
+                if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exists():
+                    command_list.append(command.str)
 
     for annotation in annotation_list:
         key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
