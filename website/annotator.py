@@ -62,7 +62,7 @@ def collect_page(request, access_code):
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
-            if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exist():
+            if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exists():
                 command_list.append(command.str)
 
     for annotation in annotation_list:
