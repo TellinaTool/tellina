@@ -42,6 +42,7 @@
                     <h1>You may submit other bash commands in the page to earn bonus, but this is not required.</h1>
                     <hr>
                     <div class="collect-box-group">
+                        <!-- Add existing annotations -->
                         {% for annotation_id, command, nl in annotation_list %}
                             <div class="collect-box" id="collect-box-{{forloop.counter}}" style="display: None">
                                 <textarea class="form-control command-input vresize" placeholder="Copy a bash command..."></textarea>
@@ -110,8 +111,6 @@
                 $('.collect-panel').css({"min-width": "400px"});
                 // $('.url-content-data').width($(window).width() * .5);
 
-                annotation_id = num_annotations + 1;
-
                 /* add collect boxes when the page is first loaded */
                 if (num_annotations > 0) {
                     for (i = 1; i < (num_annotations+1); i ++) {
@@ -120,8 +119,19 @@
                         set_up_collect_panel(i);
                     }
                 }
+
                 if ('{{is_judger}}' != 'True') {
-                    add_collect_panel(annotation_id);
+                    var num_commands = {{command_list|length}};
+                    if (num_commands == 0) {
+                        var annotation_id = num_annotations + 1;
+                        add_collect_panel(annotation_id, '', '');
+                    } else {
+                        var command_list = {{command_list|safe}};
+                        for (i = 1; i < (num_commands+1); i ++) {
+                            var annotation_id = num_annotations + i;
+                            add_collect_panel(annotation_id, command_list[i-1], '');
+                        }
+                    }
                 }
 
                 $('.previous-url').click(function() {
@@ -237,7 +247,7 @@
                 }
             })
 
-            function add_collect_panel(annotation_id) {
+            function add_collect_panel(annotation_id, cmd_submission, nl_submission) {
                 // add a new collect box
                 $(".collect-box-group").append(
                     `<div class="collect-box" id="collect-box-${annotation_id}">
@@ -253,8 +263,8 @@
                     </div>
                     <div class="annotation-box" id="annotation-box-${annotation_id}" style="display: None">
                         <p class="submission-index"><strong>#${annotation_id}</strong></p>
-                        <p class="command-submission"></p>
-                        <p class="nl-submission"></p>
+                        <p class="command-submission">${cmd_submission}</p>
+                        <p class="nl-submission">${nl_submission}</p>
                         <button type="button" class="btn btn-success btn-sm edit-pair" id="edit-pair-${annotation_id}" style="float: right">Edit</button>
                         <br>
                     </div>
@@ -313,7 +323,7 @@
 
                                 // and open a new collection box
                                 num_annotations ++;
-                                add_collect_panel(num_annotations+1);
+                                add_collect_panel(num_annotations+1, '', '');
                             }
                         });
                     }

@@ -52,6 +52,8 @@ def collect_page(request, access_code):
 
     # search for existing annotations
     annotation_dict = {}
+    command_list = []
+
     if user.is_judger:
         # judger sees the annotations of a web page by all other users
         annotation_list = Annotation.objects.filter(url=url)
@@ -59,6 +61,10 @@ def collect_page(request, access_code):
         # annotator only sees the annotations of a web page submitted by
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
+        for command in url.commands.all():
+            if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exist():
+                command_list.append(command.str)
+
     for annotation in annotation_list:
         key = '__NL__{}__Command__{}'.format(annotation.id, annotation.nl.str, annotation.cmd.str)
         if not key in annotation_dict:
@@ -71,6 +77,7 @@ def collect_page(request, access_code):
         'utility': utility,
         'url': hypothes_prefix + url.str,
         'annotation_list': annotation_list,
+        'command_list': command_list,
         'completed': False,
         'access_code': access_code,
         'is_judger': user.is_judger == True
