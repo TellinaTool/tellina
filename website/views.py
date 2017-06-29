@@ -26,6 +26,8 @@ from website.scripts.db_changes import *
 # load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
 # load_commands_in_url(
 #     '/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
+# populate_url_tags()
+
 
 if not WEBSITE_DEVELOP:
     from website.helper_interface import translate_fun
