@@ -27,6 +27,11 @@ def extract_oneliner_from_code(code_block):
     if cmd.startswith('# '):
         cmd = cmd[2:]
 
+    comment = re.search(r'\s+#\s+', cmd)
+    if comment:
+        old_cmd = cmd
+        cmd = cmd[:comment.start()]
+        print('Remove comment: {} -> {}'.format(old_cmd, cmd))
     cmd = cmd.strip()
 
     # discard code block opening line
@@ -50,6 +55,7 @@ def load_commands_in_url(stackoverflow_dump_path):
 
     with sqlite3.connect(stackoverflow_dump_path, detect_types=sqlite3.PARSE_DECLTYPES) as db:
         for url in URL.objects.all():
+            url.commands.clear()
             print(url.str)
             for answer_body, in db.cursor().execute("""
                     SELECT answers.Body FROM answers 
@@ -57,7 +63,6 @@ def load_commands_in_url(stackoverflow_dump_path):
                 url.html_content = answer_body
                 url.save()
 
-                url.commands.clear()
                 for code_block in extract_code(url.html_content):
                     cmd = extract_oneliner_from_code(code_block)
                     if cmd:
