@@ -29,11 +29,11 @@
             <div class="col-md-8 col-md-offset-0 col-xs-12 col-xs-offset-0" style="text-align:left">
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
-                        {% for utility, status in utility_group1 %}
-                            {% if status == 'in-progress' %}
-                                <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
-                            {% elif status == 'completed' %}
+                        {% for utility, completion_raio in utility_group1 %}
+                            {% if completion_ratio > 0.5 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
+                            {% elif completion_ratio > 0 %}
+                                <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
                             {% else %}
                                 <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
                             {% endif %}

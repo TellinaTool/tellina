@@ -329,15 +329,17 @@ def utility_panel(request, access_code):
             .order_by('-the_count'):
         if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
             continue
-        in_progress = False
+        tag = get_tag(obj['tag'])
+        num_urls = 0.0
+        num_urls_annotated = 0.0
+
         for url_tag in URLTag.objects.filter(tag=obj['tag']):
-            if Annotation.objects.filter(url=url_tag.url).exists():
-                in_progress = True
-                break
-        if in_progress:
-            utilities.append((obj['tag'], 'in-progress'))
-        else:
-            utilities.append((obj['tag'], ''))
+            if tag in url_tag.url.tags.all():
+                num_urls_annotated += 1
+            num_urls += 1
+
+        utilities.append((obj['tag'], num_urls_annotated/num_urls))
+
 
     utility_groups = []
     for i in range(0, len(utilities), 20):
