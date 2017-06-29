@@ -333,6 +333,7 @@ def utility_panel(request, access_code):
         for url_tag in URLTag.objects.filter(tag=obj['tag']):
             if Annotation.objects.filter(url=url_tag.url).exists():
                 in_progress = True
+                break
         if in_progress:
             utilities.append((obj['tag'], 'in-progress'))
         else:

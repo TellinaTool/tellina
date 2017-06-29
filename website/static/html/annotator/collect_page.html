@@ -247,13 +247,13 @@
                 }
             })
 
-            function add_collect_panel(annotation_id, cmd_submission, nl_submission) {
+            function add_collect_panel(annotation_id, cmd_extraction, nl_extraction) {
                 // add a new collect box
                 $(".collect-box-group").append(
                     `<div class="collect-box" id="collect-box-${annotation_id}">
-                        <textarea class="form-control command-input vresize" placeholder="Copy a bash command..."></textarea>
+                        <textarea class="form-control command-input vresize" placeholder="Copy a bash command...">${cmd_extraction}</textarea>
                         <br>
-                        <textarea class="form-control nl-input vresize" placeholder="Type a natural language description..."></textarea>
+                        <textarea class="form-control nl-input vresize" placeholder="Type a natural language description...">${nl_extraction}</textarea>
                         <br>
                         <button type="button" class="btn btn-primary btn-sm submit-pair" id="submit-pair-${annotation_id}" style="float: right">Submit</button>
                         <button type="button" class="btn btn-primary btn-sm save-edit" id="save-edit-${annotation_id}" style="float: right; display: None">Save</button>
@@ -263,8 +263,8 @@
                     </div>
                     <div class="annotation-box" id="annotation-box-${annotation_id}" style="display: None">
                         <p class="submission-index"><strong>#${annotation_id}</strong></p>
-                        <p class="command-submission">${cmd_submission}</p>
-                        <p class="nl-submission">${nl_submission}</p>
+                        <p class="command-submission"></p>
+                        <p class="nl-submission"></p>
                         <button type="button" class="btn btn-success btn-sm edit-pair" id="edit-pair-${annotation_id}" style="float: right">Edit</button>
                         <br>
                     </div>
