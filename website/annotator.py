@@ -348,7 +348,6 @@ def utility_panel(request, access_code):
             utility_groups.append([utility_group[:10], utility_group[10:]])
         else:
             utility_groups.append([utility_group[:10], []])
-    print(utility_groups)
     context = {
         'utility_groups': utility_groups
     }
