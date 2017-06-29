@@ -18,7 +18,7 @@ WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
-from website.utils import get_nl, get_command
+from website.utils import get_tag, get_nl, get_command
 from website import functions
 from website.cmd2html import tokens2html
 
@@ -27,6 +27,11 @@ from website.scripts.import_data import load_urls, load_commands_in_url
 # load_commands_in_url(
 #     '/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
 
+# for cmd in Command.objects.all():
+#     cmd.tags.clear()
+#     ast = data_tools.bash_parser(cmd.str)
+#     for utility in data_tools.get_utilities(ast):
+#         cmd.tags.add(get_tag(utility))
 
 def ip_address_required(f):
     @functions.wraps(f)

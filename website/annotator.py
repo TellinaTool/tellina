@@ -63,12 +63,14 @@ def collect_page(request, access_code):
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
-            if tag in command.tags.all():
-                if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exist():
+            print(command.tags.values('str'))
+            if command.tags.filter(str=tag.str).exists():
+                print(tag.str)
+                if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exists():
                     command_list.append(command.str)
 
     for annotation in annotation_list:
-        key = '__NL__{}__Command__{}'.format(annotation.id, annotation.nl.str, annotation.cmd.str)
+        key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
         if not key in annotation_dict:
             annotation_dict[key] = (annotation.id, annotation.cmd.str, annotation.nl.str)
 
@@ -283,27 +285,26 @@ def url_panel(request, access_code):
 
     utility = request.GET.get('utility')
     tag = get_tag(utility)
-    num_commands_missed = 0
 
     url_list = []
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
+        num_commands_missed = 0
         try:
             record = AnnotationProgress.objects.get(
                 annotator=user, tag=tag, url=url_tag.url)
             if record.status == 'completed':
                 # check if any commands were missed
-                for cmd in url_tag.url.commands:
+                for cmd in url_tag.url.commands.all():
                     if tag in cmd.tags.all():
                         if not Annotation.objects.filter(url=url_tag.url,
                                 cmd=cmd, annotator=user).exists():
                             num_commands_missed += 1
-            else:
-                url_list.append((url_tag.url, record.status, num_commands_missed))
+            url_list.append((url_tag.url, record.status, num_commands_missed))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
-                url_list.append((url_tag.url, 'others-in-progress'))
+                url_list.append((url_tag.url, 'others-in-progress', 0))
             else:
-                url_list.append((url_tag.url, ''))
+                url_list.append((url_tag.url, '', 0))
 
     context = {
         'utility': utility,
