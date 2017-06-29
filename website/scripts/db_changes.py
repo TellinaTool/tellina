@@ -85,6 +85,10 @@ def populate_url_tags():
             for tag in annotation.cmd.tags.all():
                 url.tags.add(tag)
 
+def populate_tag_annotations():
+    for annotation in Annotation.objects.all():
+        for tag in annotation.cmd.tags.all():
+            tag.annotations.add(annotation)
 
 if __name__ == '__main__':
     load_urls()
