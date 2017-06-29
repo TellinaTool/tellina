@@ -65,10 +65,9 @@ def collect_page(request, access_code):
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
-            print(command.tags.values('str'))
             if command.tags.filter(str=tag.str).exists():
-                print(tag.str)
-                if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exists():
+                if not Annotation.objects.filter(url=url, cmd__str=command.str.strip(),
+                        annotator=user).exists():
                     command_list.append(command.str)
 
     for annotation in annotation_list:
@@ -155,6 +154,17 @@ def delete_annotation(request, access_code):
         annotation.delete()
 
     return json_response(status='DELETION_SUCCESS')
+
+
+@access_code_required
+def mark_duplicate_or_wrong(request, access_code):
+    user = User.objects.get(access_code=access_code)
+    url = get_url(request.GET.get('url'))
+    cmd = get_command(request.GET.get('command'))
+    url.commands.remove(cmd);
+    annotation = Annotation.objects.create(url=url, nl=get_nl('NA'), cmd=cmd,
+                                           annotator=user)
+    return json_response(status='MARK_DUPLICATE_OR_WRONG_SUCCESS')
 
 
 @access_code_required
@@ -340,7 +350,6 @@ def utility_panel(request, access_code):
             status='completed').count()
         utilities.append((obj['tag'], num_urls_annotated/obj['num_urls']))
 
-
     utility_groups = []
     for i in range(0, len(utilities), 20):
         utility_group = utilities[i:i+20]
@@ -348,6 +357,7 @@ def utility_panel(request, access_code):
             utility_groups.append([utility_group[:10], utility_group[10:]])
         else:
             utility_groups.append([utility_group[:10], []])
+
     context = {
         'utility_groups': utility_groups
     }

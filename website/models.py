@@ -2,13 +2,6 @@ from django.contrib import admin
 from django.db import models
 from django.utils import timezone
 
-class Tag(models.Model):
-    """
-    Tag.
-    """
-    str = models.TextField(primary_key=True)
-    annotations = models.ManyToManyField('Annotation')
-
 class NL(models.Model):
     """
     Natural language command.
@@ -21,7 +14,7 @@ class Command(models.Model):
     """
     str = models.TextField(primary_key=True)
     language = models.TextField(default='bash')
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField('Tag')
 
 class CommandAdmin(admin.ModelAdmin):
     fields = ['str', 'language']
@@ -29,6 +22,34 @@ class CommandAdmin(admin.ModelAdmin):
 
     def get_tags(self, obj):
         return '\n'.join([tag.str for tag in obj.tags.all()])
+
+class Tag(models.Model):
+    """
+    Tag.
+    """
+    str = models.TextField(primary_key=True)
+    annotations = models.ManyToManyField('Annotation')
+
+class URL(models.Model):
+    """
+    URL.
+
+    :member str: url address.
+    :member html_content: snapshot of the URL content at the time of annotation.
+    :member commands: commands in the URL (automatically extracted)
+    :member tags: tags of the URL (assigned based on user annotations)
+    """
+    str = models.TextField(primary_key=True)
+    html_content = models.TextField(default='')
+    commands = models.ManyToManyField('Command')
+    tags = models.ManyToManyField('Tag')
+
+class URLTag(models.Model):
+    """
+    Each record stores a (url, tag) pair.
+    """
+    url = models.ForeignKey(URL, on_delete=models.CASCADE)
+    tag = models.TextField()
 
 class User(models.Model):
     """
@@ -49,28 +70,6 @@ class User(models.Model):
     country = models.TextField(default='--')
     is_annotator = models.BooleanField(default=False)
     is_judger = models.BooleanField(default=False)
-
-class URL(models.Model):
-    """
-    URL.
-
-    :member str: url address.
-    :member html_content: snapshot of the URL content at the time of annotation.
-    :member commands: commands in the URL (automatically extracted)
-    :member tags: tags of the URL (assigned based on user annotations)
-    """
-    str = models.TextField(primary_key=True)
-    html_content = models.TextField(default='')
-    commands = models.ManyToManyField(Command)
-    tags = models.ManyToManyField(Tag)
-
-
-class URLTag(models.Model):
-    """
-    Each record stores a (url, tag) pair.
-    """
-    url = models.ForeignKey(URL, on_delete=models.CASCADE)
-    tag = models.TextField()
 
 
 class Annotation(models.Model):

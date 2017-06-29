@@ -260,6 +260,9 @@
                         <button type="button" class="btn btn-primary btn-sm save-edit" id="save-edit-${annotation_id}" style="float: right; display: None">Save</button>
                         <button type="button" class="btn btn-warning btn-sm cancel-edit" id="cancel-edit-${annotation_id}" style="float: right; margin-right: 20px; display: None">Cancel</button>
                         <button type="button" class="btn btn-danger btn-sm delete-pair" id="delete-pair-${annotation_id}" style="float: right; margin-right: 20px; display: None">Delete</button>
+                        <input type="radio" id="mark-as-duplicate-or-wrong-${annotation_id}" value="Duplicate or wrong" style="display:None">
+                            <span id="mark-as-duplicate-or-wrong-flag-${annotation_id}" style="display: None">&nbsp;duplicate or wrong</span>
+                        </input>
                         <br>
                     </div>
                     <div class="annotation-box" id="annotation-box-${annotation_id}" style="display: None">
@@ -271,6 +274,29 @@
                     </div>
                     <hr>`
                 );
+                if (cmd_extraction.length > 0) {
+                    $(`#mark-as-duplicate-or-wrong-${annotation_id}`).show();
+                    $(`#mark-as-duplicate-or-wrong-flag-${annotation_id}`).show();
+                }
+
+                $(`#mark-as-duplicate-or-wrong-${annotation_id}`).change(function() {
+                    $.get(`mark_duplicate_or_wrong`, {url: url, command: cmd_extraction}, function(data) {
+                        if (data.status == 'MARK_DUPLICATE_OR_WRONG_SUCCESS') {
+                            var index = parseInt(annotation_id);
+                            var annotation_box = $('#annotation-box-' + index);
+                            var collect_box = $('#collect-box-' + index);
+                            collect_box.hide();
+                            annotation_box.find('.command-submission').text(cmd_extraction);
+                            annotation_box.find('.nl-submission').text('NA');
+                            annotation_box.show();
+                        }
+                    });
+                    num_commands --;
+                    if (num_commands == 0) {
+                        add_collect_panel(num_annotations+1, '', '');
+                    }
+                });
+
                 set_up_collect_panel(annotation_id);
             }
 
@@ -324,7 +350,8 @@
 
                                 // and open a new collection box
                                 num_annotations ++;
-                                if (parseInt(annotation_id) == (num_annotation+num_commands-1)) {
+                                num_commands --;
+                                if (num_commands == 0) {
                                     add_collect_panel(num_annotations+1, '', '');
                                 }
                             }
