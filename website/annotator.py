@@ -109,6 +109,7 @@ def submit_annotation(request, access_code):
 
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)
+    tag.annotations.add(annotation)
 
     if not AnnotationProgress.objects.filter(annotator=user, url=url, tag=tag):
         AnnotationProgress.objects.create(
@@ -145,7 +146,11 @@ def delete_annotation(request, access_code):
     nl = get_nl(request.GET.get('nl'))
     command = get_command(request.GET.get('command'))
 
-    Annotation.objects.filter(url=url, nl=nl, cmd=command).delete()
+    for annotation in Annotation.objects.filter(url=url, nl=nl, cmd=command):
+        for tag in command.tags.all():
+            tag.annotations.filter(id=annotation.id)
+            tag.save()
+        annotation.delete()
 
     return json_response(status='DELETION_SUCCESS')
 
@@ -356,6 +361,20 @@ def utility_panel(request, access_code):
         context['access_code'] = access_code
 
     return HttpResponse(template.render(context=context, request=request))
+
+# --- Statistics --- #
+
+@access_code_required
+def get_utility_stats(request, access_code):
+    utility = request.GET.get('utility')
+    tag = get_tag(utility)
+    num_urls = AnnotationProgress.objects.filter(tag=tag).count()
+    num_pairs = tag.annotations.all().count()
+
+    return json_response({
+        'num_urls': num_urls,
+        'num_pairs': num_pairs
+    }, status='UTILITY_STATS_SUCCESS')
 
 # --- Registration & Login --- #
 

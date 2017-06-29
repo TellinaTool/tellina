@@ -53,6 +53,10 @@
                     {% endfor %}
                 {% endif %}
             </div>
+            <div class="col-md-4 col-md-offset-8 col-xs-12 col-xs-offset-0 utility-statistics">
+                <p># urls annotated: <span class="num-urls-annotated"></span></p>
+                <p># pairs annotated: <span class="num-pairs-annotated"></span></p>
+            </div>
         </div>
     {% endblock %}
 
@@ -60,9 +64,24 @@
     <script src="/static/js/annotator/main.js"></script>
 
     <script>
-        $(".annotate-utility").click(function() {
-            var utility = $(this).text();
-            window.location.replace(`url_panel?utility=${utility}`);
-        });
+        $(document).ready(function () {
+            $('.annotate-utility').hover(
+                function() {
+                    $.get(`get_num_utiltiy_stats`, {utility: $(this).text()}, function(data) {
+                        if (data.status == 'UTILITY_STATS_SUCCESS') {
+                            $('.num-urls-annotated').text(data.num_urls);
+                            $('.num-pairs-annotated').text(data.num_pairs);
+                        }
+                    })
+                },
+                function () {
+
+                }
+            );
+            $(".annotate-utility").click(function() {
+                var utility = $(this).text();
+                window.location.replace(`url_panel?utility=${utility}`);
+            });
+        }
     </script>
     {% endblock %}
