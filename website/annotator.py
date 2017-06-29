@@ -324,18 +324,16 @@ def utility_panel(request, access_code):
     template = loader.get_template('annotator/utility_panel.html')
     user = safe_get_user(access_code)
 
-    utilities_in_progress = set([])
-    for obj in Annotation.objects.values('cmd'):
-        cmd = get_command(obj['cmd'])
-        for tag in cmd.tags.all():
-            utilities_in_progress.add(tag.str)
-
     utilities = []
     for obj in URLTag.objects.values('tag').annotate(the_count=Count('tag'))\
             .order_by('-the_count'):
         if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
             continue
-        if obj['tag'] in utilities_in_progress:
+        in_progress = False
+        for url_tag in URLTag.objects.filter(tag=obj['tag']):
+            if Annotation.objects.filter(url=url_tag.url).exists():
+                in_progress = True
+        if in_progress:
             utilities.append((obj['tag'], 'in-progress'))
         else:
             utilities.append((obj['tag'], ''))
