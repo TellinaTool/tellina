@@ -22,16 +22,14 @@ from website.utils import get_tag, get_nl, get_command
 from website import functions
 from website.cmd2html import tokens2html
 
-from website.scripts.import_data import load_urls, load_commands_in_url
+from website.scripts.db_changes import *
 # load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
 # load_commands_in_url(
 #     '/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
 
-# for cmd in Command.objects.all():
-#     cmd.tags.clear()
-#     ast = data_tools.bash_parser(cmd.str)
-#     for utility in data_tools.get_utilities(ast):
-#         cmd.tags.add(get_tag(utility))
+if not WEBSITE_DEVELOP:
+    from website.helper_interface import translate_fun
+
 
 def ip_address_required(f):
     @functions.wraps(f)
@@ -43,9 +41,6 @@ def ip_address_required(f):
             return index(request)
         return f(request, *args, ip_address=ip_address, **kwargs)
     return g
-
-if not WEBSITE_DEVELOP:
-    from website.helper_interface import translate_fun
 
 
 @csrf_protect

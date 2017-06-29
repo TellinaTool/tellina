@@ -105,7 +105,7 @@ def submit_annotation(request, access_code):
     nl = get_nl(request.GET.get('nl'))
     tag = get_tag(request.GET.get('utility'))
     command = get_command(request.GET.get('command'))
-    command.tags.add(tag)
+    url.tags.add(tag)
 
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)

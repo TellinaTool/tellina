@@ -4,7 +4,7 @@ import pickle
 import re
 import sqlite3
 
-from website.models import URL, URLTag
+from website.models import Annotation, Command, URL, URLTag
 from website.utils import get_tag, get_command, get_url
 
 learning_module_dir = os.path.join(os.path.dirname(__file__), '..', '..',
@@ -14,6 +14,7 @@ sys.path.append(learning_module_dir)
 from bashlex import data_tools
 
 CODE_REGEX = re.compile(r"<pre><code>([^<]+\n[^<]*)<\/code><\/pre>")
+
 
 def extract_code(text):
     for match in CODE_REGEX.findall(text):
@@ -70,6 +71,19 @@ def load_commands_in_url(stackoverflow_dump_path):
                         command = get_command(cmd)
                         url.commands.add(command)
             url.save()
+
+def populate_command_tags():
+    for cmd in Command.objects.all():
+        cmd.tags.clear()
+        ast = data_tools.bash_parser(cmd.str)
+        for utility in data_tools.get_utilities(ast):
+            cmd.tags.add(get_tag(utility))
+
+def populate_url_tags():
+    for url in URL.objects.all():
+        for annotation in Annotation.objects.filter(url=url):
+            for tag in annotation.cmd.tags.all():
+                url.tags.add(tag)
 
 
 if __name__ == '__main__':
