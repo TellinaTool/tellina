@@ -17,10 +17,14 @@ def get_nl(nl_str):
     return nl
 
 def get_command(command_str):
-    cmd, _ = Command.objects.get_or_create(str=command_str.strip())
-    ast = data_tools.bash_parser(command_str)
-    for utility in data_tools.get_utilities(ast):
-        cmd.tags.add(get_tag(utility))    
+    command_str=command_str.strip()
+    if Command.objects.filter(str=command_str).exists():
+        cmd = Command.objects.get(str=command_str)
+    else:
+        cmd = Command.objects.create(str=command_str)
+        ast = data_tools.bash_parser(command_str)
+        for utility in data_tools.get_utilities(ast):
+            cmd.tags.add(get_tag(utility))    
     return cmd
 
 def get_tag(tag_str):
