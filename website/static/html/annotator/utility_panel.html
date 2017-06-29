@@ -26,7 +26,8 @@
             </nav>
         {% endblock %}
         <div class="container" style="padding-top: 60px">
-            <div class="col-md-8 col-md-offset-0 col-xs-12 col-xs-offset-0" style="text-align:left">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-0 col-xs-12 col-xs-offset-0 utility-button-group" style="text-align:left">
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
                         {% for utility, completion_ratio in utility_group1 %}
@@ -52,10 +53,11 @@
                         <hr>
                     {% endfor %}
                 {% endif %}
-            </div>
-            <div class="col-md-4 col-md-offset-8 col-xs-12 col-xs-offset-0 utility-statistics">
-                <p># urls annotated: <span class="num-urls-annotated"></span></p>
-                <p># pairs annotated: <span class="num-pairs-annotated"></span></p>
+                </div>
+                <div class="col-md-4 col-xs-12 utility-stats" style="display:None">
+                    <p># urls annotated: <span class="num-urls-annotated"></span></p>
+                    <p># pairs annotated: <span class="num-pairs-annotated"></span></p>
+                </div>
             </div>
         </div>
     {% endblock %}
@@ -65,23 +67,29 @@
 
     <script>
         $(document).ready(function () {
+            $('.utility-button-group').hover(
+                function() { $('.utility-stats').show(); },
+                function() { $('.utility-stats').hide(); }
+            );
+
             $('.annotate-utility').hover(
                 function() {
-                    $.get(`get_num_utiltiy_stats`, {utility: $(this).text()}, function(data) {
+                    $.get(`get_utility_stats`, {utility: $(this).text()}, function(data) {
                         if (data.status == 'UTILITY_STATS_SUCCESS') {
+                            $('.utility-stats').show();
                             $('.num-urls-annotated').text(data.num_urls);
                             $('.num-pairs-annotated').text(data.num_pairs);
                         }
-                    })
+                    });
                 },
-                function () {
-
+                function() {
                 }
             );
+
             $(".annotate-utility").click(function() {
                 var utility = $(this).text();
                 window.location.replace(`url_panel?utility=${utility}`);
             });
-        }
+        });
     </script>
     {% endblock %}
