@@ -48,10 +48,13 @@ def collect_page(request, access_code):
     user = safe_get_user(access_code)
 
     utility = request.GET.get('utility')
+    tag = get_tag(utility)
     url = get_url(request.GET.get('url'))
 
     # search for existing annotations
     annotation_dict = {}
+    command_list = []
+
     if user.is_judger:
         # judger sees the annotations of a web page by all other users
         annotation_list = Annotation.objects.filter(url=url)
@@ -59,8 +62,15 @@ def collect_page(request, access_code):
         # annotator only sees the annotations of a web page submitted by
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
+        for command in url.commands.all():
+            print(command.tags.values('str'))
+            if command.tags.filter(str=tag.str).exists():
+                print(tag.str)
+                if not Annotation.objects.filter(url=url, cmd=command, annotator=user).exists():
+                    command_list.append(command.str)
+
     for annotation in annotation_list:
-        key = '__NL__{}__Command__{}'.format(annotation.id, annotation.nl.str, annotation.cmd.str)
+        key = '__NL__{}__Command__{}'.format(annotation.nl.str, annotation.cmd.str)
         if not key in annotation_dict:
             annotation_dict[key] = (annotation.id, annotation.cmd.str, annotation.nl.str)
 
@@ -71,6 +81,7 @@ def collect_page(request, access_code):
         'utility': utility,
         'url': hypothes_prefix + url.str,
         'annotation_list': annotation_list,
+        'command_list': command_list,
         'completed': False,
         'access_code': access_code,
         'is_judger': user.is_judger == True
@@ -94,10 +105,11 @@ def submit_annotation(request, access_code):
     nl = get_nl(request.GET.get('nl'))
     tag = get_tag(request.GET.get('utility'))
     command = get_command(request.GET.get('command'))
-    command.tags.add(tag)
+    url.tags.add(tag)
 
     annotation = Annotation.objects.create(
         url=url, nl=nl, cmd=command, annotator=user)
+    tag.annotations.add(annotation)
 
     if not AnnotationProgress.objects.filter(annotator=user, url=url, tag=tag):
         AnnotationProgress.objects.create(
@@ -134,7 +146,11 @@ def delete_annotation(request, access_code):
     nl = get_nl(request.GET.get('nl'))
     command = get_command(request.GET.get('command'))
 
-    Annotation.objects.filter(url=url, nl=nl, cmd=command).delete()
+    for annotation in Annotation.objects.filter(url=url, nl=nl, cmd=command):
+        for tag in command.tags.all():
+            tag.annotations.filter(id=annotation.id)
+            tag.save()
+        annotation.delete()
 
     return json_response(status='DELETION_SUCCESS')
 
@@ -273,18 +289,27 @@ def url_panel(request, access_code):
     user = safe_get_user(access_code)
 
     utility = request.GET.get('utility')
+    tag = get_tag(utility)
 
     url_list = []
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
+        num_commands_missed = 0
         try:
             record = AnnotationProgress.objects.get(
-                annotator=user, tag=get_tag(utility), url=url_tag.url)
-            url_list.append((url_tag.url, record.status))
+                annotator=user, tag=tag, url=url_tag.url)
+            if record.status == 'completed':
+                # check if any commands were missed
+                for cmd in url_tag.url.commands.all():
+                    if tag in cmd.tags.all():
+                        if not Annotation.objects.filter(url=url_tag.url,
+                                cmd=cmd, annotator=user).exists():
+                            num_commands_missed += 1
+            url_list.append((url_tag.url, record.status, num_commands_missed))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
-                url_list.append((url_tag.url, 'others-in-progress'))
+                url_list.append((url_tag.url, 'others-in-progress', 0))
             else:
-                url_list.append((url_tag.url, ''))
+                url_list.append((url_tag.url, '', 0))
 
     context = {
         'utility': utility,
@@ -304,21 +329,22 @@ def utility_panel(request, access_code):
     template = loader.get_template('annotator/utility_panel.html')
     user = safe_get_user(access_code)
 
-    utilities_in_progress = set([])
-    for obj in Annotation.objects.values('cmd'):
-        cmd = get_command(obj['cmd'])
-        for tag in cmd.tags.all():
-            utilities_in_progress.add(tag.str)
-
     utilities = []
     for obj in URLTag.objects.values('tag').annotate(the_count=Count('tag'))\
             .order_by('-the_count'):
         if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
             continue
-        if obj['tag'] in utilities_in_progress:
-            utilities.append((obj['tag'], 'in-progress'))
-        else:
-            utilities.append((obj['tag'], ''))
+        tag = get_tag(obj['tag'])
+        num_urls = 0.0
+        num_urls_annotated = 0.0
+
+        for url_tag in URLTag.objects.filter(tag=obj['tag']):
+            if tag in url_tag.url.tags.all():
+                num_urls_annotated += 1
+            num_urls += 1
+
+        utilities.append((obj['tag'], num_urls_annotated/num_urls))
+
 
     utility_groups = []
     for i in range(0, len(utilities), 20):
@@ -335,6 +361,20 @@ def utility_panel(request, access_code):
         context['access_code'] = access_code
 
     return HttpResponse(template.render(context=context, request=request))
+
+# --- Statistics --- #
+
+@access_code_required
+def get_utility_stats(request, access_code):
+    utility = request.GET.get('utility')
+    tag = get_tag(utility)
+    num_urls = AnnotationProgress.objects.filter(tag=tag).count()
+    num_pairs = tag.annotations.all().count()
+
+    return json_response({
+        'num_urls': num_urls,
+        'num_pairs': num_pairs
+    }, status='UTILITY_STATS_SUCCESS')
 
 # --- Registration & Login --- #
 

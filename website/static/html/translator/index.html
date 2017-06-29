@@ -38,6 +38,7 @@
         <div class="body-panel">
             <div class="row">
                 <div class="col-sm-5 col-xs-12">
+                    <div style="max-width: 540px; float: right">
                     <div class="well instruction-panel ">
                         <h1>Commanding your terminal with natural language</h1>
 
@@ -63,7 +64,9 @@
                         <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
                     </footer>
                 </div>
+                </div>
                 <div class="example-panel col-sm-6 col-xs-12 animated fadeInUp" style="display: None">
+                    <div style="max-width: 800px;">
                     {% for nl, top_ranked_cmd in example_request_list %}
                         <div class="row">
                             <div class="[ panel panel-default ] panel-google-plus">
@@ -119,8 +122,10 @@
                             </div>
                         </div>
                     {% endfor %}
+                    </div>
                 </div>
                 <div class="recent-post-panel col-sm-6 col-xs-12">
+                    <div style="max-width: 800px;">
                     {% if latest_request_list %}
                         {% for request, top_ranked_cmd in latest_request_list %}
                             <div class="row">
@@ -181,6 +186,7 @@
                             </div>
                         {% endfor %}
                     {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

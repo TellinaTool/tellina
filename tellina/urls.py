@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.http import HttpResponse
 
 from website import annotator, cmd2html, views
 
@@ -47,7 +48,11 @@ urlpatterns = [
     url(r'^get_updates', annotator.get_updates),
     url(r'^get_update_replies', annotator.get_update_replies),
 
+    url(r'^get_utility_stats', annotator.get_utility_stats),
+
     url(r'^explain_cmd$', cmd2html.explain_cmd),
+
+    url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
 
     url(r'^admin', admin.site.urls)
 ]

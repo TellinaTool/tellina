@@ -29,11 +29,11 @@
             <div class="col-md-8 col-md-offset-0 col-xs-12 col-xs-offset-0" style="text-align:left">
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
-                        {% for utility, status in utility_group1 %}
-                            {% if status == 'in-progress' %}
-                                <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
-                            {% elif status == 'completed' %}
+                        {% for utility, completion_raio in utility_group1 %}
+                            {% if completion_ratio > 0.5 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
+                            {% elif completion_ratio > 0 %}
+                                <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
                             {% else %}
                                 <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
                             {% endif %}
@@ -53,6 +53,10 @@
                     {% endfor %}
                 {% endif %}
             </div>
+            <div class="col-md-4 col-md-offset-8 col-xs-12 col-xs-offset-0 utility-statistics">
+                <p># urls annotated: <span class="num-urls-annotated"></span></p>
+                <p># pairs annotated: <span class="num-pairs-annotated"></span></p>
+            </div>
         </div>
     {% endblock %}
 
@@ -60,9 +64,24 @@
     <script src="/static/js/annotator/main.js"></script>
 
     <script>
-        $(".annotate-utility").click(function() {
-            var utility = $(this).text();
-            window.location.replace(`url_panel?utility=${utility}`);
-        });
+        $(document).ready(function () {
+            $('.annotate-utility').hover(
+                function() {
+                    $.get(`get_num_utiltiy_stats`, {utility: $(this).text()}, function(data) {
+                        if (data.status == 'UTILITY_STATS_SUCCESS') {
+                            $('.num-urls-annotated').text(data.num_urls);
+                            $('.num-pairs-annotated').text(data.num_pairs);
+                        }
+                    })
+                },
+                function () {
+
+                }
+            );
+            $(".annotate-utility").click(function() {
+                var utility = $(this).text();
+                window.location.replace(`url_panel?utility=${utility}`);
+            });
+        }
     </script>
     {% endblock %}

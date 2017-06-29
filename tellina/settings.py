@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '*zca^nlaejb32n)5@cevdlsb@g3ea4in=x_k1x9we788v&6k5r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['kirin.cs.washington.edu', '127.0.0.1', '205.175.118.26', 
                  '69.91.132.97']

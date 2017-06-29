@@ -1,25 +1,38 @@
 import socket
 import ssl
-import sys
+import os, sys
 import urllib
 
 from django.core.exceptions import ObjectDoesNotExist
 from website.models import NL, Command, Tag, URL
 
+sys.path.append(os.path.join(
+    os.path.dirname(__file__), "..", "tellina_learning_module"))
+
+from bashlex import data_tools
+
 
 def get_nl(nl_str):
-    nl, _ = NL.objects.get_or_create(str=nl_str)
+    nl, _ = NL.objects.get_or_create(str=nl_str.strip())
     return nl
 
 def get_command(command_str):
-    cmd, _ = Command.objects.get_or_create(str=command_str)
+    command_str=command_str.strip()
+    if Command.objects.filter(str=command_str).exists():
+        cmd = Command.objects.get(str=command_str)
+    else:
+        cmd = Command.objects.create(str=command_str)
+        ast = data_tools.bash_parser(command_str)
+        for utility in data_tools.get_utilities(ast):
+            cmd.tags.add(get_tag(utility))    
     return cmd
 
 def get_tag(tag_str):
-    tag, _ = Tag.objects.get_or_create(str=tag_str)
+    tag, _ = Tag.objects.get_or_create(str=tag_str.strip())
     return tag
 
 def get_url(url_str):
+    url_str = url_str.strip()
     try:
         url = URL.objects.get(str=url_str)
     except ObjectDoesNotExist:

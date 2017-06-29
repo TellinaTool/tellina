@@ -7,6 +7,7 @@ class Tag(models.Model):
     Tag.
     """
     str = models.TextField(primary_key=True)
+    annotations = models.ManyToManyField(Annotation)
 
 class NL(models.Model):
     """
@@ -55,10 +56,13 @@ class URL(models.Model):
 
     :member str: url address.
     :member html_content: snapshot of the URL content at the time of annotation.
+    :member commands: commands in the URL (automatically extracted)
+    :member tags: tags of the URL (assigned based on user annotations)
     """
     str = models.TextField(primary_key=True)
     html_content = models.TextField(default='')
     commands = models.ManyToManyField(Command)
+    tags = models.ManyToManyField(Tag)
 
 
 class URLTag(models.Model):

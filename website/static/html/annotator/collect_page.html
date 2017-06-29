@@ -42,6 +42,7 @@
                     <h1>You may submit other bash commands in the page to earn bonus, but this is not required.</h1>
                     <hr>
                     <div class="collect-box-group">
+                        <!-- Add existing annotations -->
                         {% for annotation_id, command, nl in annotation_list %}
                             <div class="collect-box" id="collect-box-{{forloop.counter}}" style="display: None">
                                 <textarea class="form-control command-input vresize" placeholder="Copy a bash command..."></textarea>
@@ -56,8 +57,8 @@
                             </div>
                             <div class="annotation-box" id="annotation-box-{{forloop.counter}}">
                                 <p class="submission-index">#<strong>{{forloop.counter}}</strong></p>
+                                <span class="annotation-id" style="display: None">{{annotation_id}}</span>
                                 {% if is_judger %}
-                                    <span id="annotation-id-{{forloop.counter}}" style="display: None">{{annotation_id}}</span>
                                     <p class="command-submission">{{command}}<i class="glyphicon glyphicon-pencil" id="command-submission-edit-{{forloop.counter}}" style="float: right"></i></p>
                                     <p class="nl-submission">{{nl}}<i class="glyphicon glyphicon-pencil" id="nl-submission-edit-{{forloop.counter}}" style="float: right"></i></p>
                                     <input id="command-submission-edit-input-{{forloop.counter}}" value="{{command}}" style="display: None"></p>
@@ -110,8 +111,6 @@
                 $('.collect-panel').css({"min-width": "400px"});
                 // $('.url-content-data').width($(window).width() * .5);
 
-                annotation_id = num_annotations + 1;
-
                 /* add collect boxes when the page is first loaded */
                 if (num_annotations > 0) {
                     for (i = 1; i < (num_annotations+1); i ++) {
@@ -120,8 +119,19 @@
                         set_up_collect_panel(i);
                     }
                 }
+
                 if ('{{is_judger}}' != 'True') {
-                    add_collect_panel(annotation_id);
+                    var num_commands = {{command_list|length}};
+                    if (num_commands == 0) {
+                        var annotation_id = num_annotations + 1;
+                        add_collect_panel(annotation_id, '', '');
+                    } else {
+                        var command_list = {{command_list|safe}};
+                        for (i = 1; i < (num_commands+1); i ++) {
+                            var annotation_id = num_annotations + i;
+                            add_collect_panel(annotation_id, command_list[i-1], '');
+                        }
+                    }
                 }
 
                 $('.previous-url').click(function() {
@@ -237,13 +247,13 @@
                 }
             })
 
-            function add_collect_panel(annotation_id) {
+            function add_collect_panel(annotation_id, cmd_extraction, nl_extraction) {
                 // add a new collect box
                 $(".collect-box-group").append(
                     `<div class="collect-box" id="collect-box-${annotation_id}">
-                        <textarea class="form-control command-input vresize" placeholder="Copy a bash command..."></textarea>
+                        <textarea class="form-control command-input vresize" placeholder="Copy a bash command...">${cmd_extraction}</textarea>
                         <br>
-                        <textarea class="form-control nl-input vresize" placeholder="Type a natural language description..."></textarea>
+                        <textarea class="form-control nl-input vresize" placeholder="Type a natural language description...">${nl_extraction}</textarea>
                         <br>
                         <button type="button" class="btn btn-primary btn-sm submit-pair" id="submit-pair-${annotation_id}" style="float: right">Submit</button>
                         <button type="button" class="btn btn-primary btn-sm save-edit" id="save-edit-${annotation_id}" style="float: right; display: None">Save</button>
@@ -265,9 +275,9 @@
 
             function set_up_collect_panel(annotation_id) {
                 var index = parseInt(annotation_id);
-                var id = parseInt($('#annotation-id-' + index).text());
                 var is_judger = ("{{is_judger}}" == 'True');
                 var annotation_box = $('#annotation-box-' + index);
+                var id = parseInt(annotation_box.find('.annotation-id').text());
                 var collect_box = $('#collect-box-' + index);
 
                 /* --- judger control --- */
@@ -287,14 +297,16 @@
                 }
 
                 // Display update requests of each annotation if there is any, including their replies.
-                $.get(`get_updates`, {annotation_id: id}, function(data) {
-                    for (i = 0; i < data.update_list.length; i ++) {
-                        update = data.update_list[i];
-                        add_main_level_comment(annotation_id, update.update_id, update.access_code,
-                            update.submission_time, update.update_str, update.comment_str);
-                        set_up_main_level_comment(update.update_id);
-                    }
-                });
+                if (!isNaN(id)) {
+                    $.get(`get_updates`, {annotation_id: id}, function(data) {
+                        for (i = 0; i < data.update_list.length; i ++) {
+                            update = data.update_list[i];
+                            add_main_level_comment(annotation_id, update.update_id, update.access_code,
+                                update.submission_time, update.update_str, update.comment_str);
+                            set_up_main_level_comment(update.update_id);
+                        }
+                    });
+                }
 
                 /* --- annotator control --- */
                 $(`#submit-pair-${annotation_id}`).click(function(event) {
@@ -311,7 +323,7 @@
 
                                 // and open a new collection box
                                 num_annotations ++;
-                                add_collect_panel(num_annotations+1);
+                                add_collect_panel(num_annotations+1, '', '');
                             }
                         });
                     }

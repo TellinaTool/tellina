@@ -18,13 +18,18 @@ WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
-from website.utils import get_nl, get_command
+from website.utils import get_tag, get_nl, get_command
 from website import functions
 from website.cmd2html import tokens2html
 
-from website.scripts.import_data import load_urls, load_commands_in_url
+from website.scripts.db_changes import *
 # load_urls(os.path.join(os.path.dirname(__file__), 'data', 'stackoverflow.urls'))
-# load_commands_in_url('/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
+# load_commands_in_url(
+#     '/home/xilin/Projects/tellina/learning_module/data/stackoverflow/stackoverflow.sqlite3')
+populate_tag_annotations()
+
+if not WEBSITE_DEVELOP:
+    from website.helper_interface import translate_fun
 
 
 def ip_address_required(f):
@@ -33,13 +38,10 @@ def ip_address_required(f):
         try:
             ip_address = request.COOKIES['ip_address']
         except KeyError:
-            # use an (invalid) dummy IP address if cookie reading failed
-            ip_address = '123.456.789.012'
+            # redirect to home page if no ip address is captured
+            return index(request)
         return f(request, *args, ip_address=ip_address, **kwargs)
     return g
-
-if not WEBSITE_DEVELOP:
-    from website.helper_interface import translate_fun
 
 
 @csrf_protect
@@ -89,13 +91,13 @@ def translate(request, ip_address):
             city = '--' if r.json()['city'] is None else r.json()['city']
             region = '--' if r.json()['region'] is None else r.json()['region']
             country = '--' if r.json()['country'] is None else r.json()['country']
-        user = User.objects.create(
-            ip_address=ip_address,
-            organization=organization,
-            city=city,
-            region=region,
-            country=country
-        )
+            user = User.objects.create(
+                ip_address=ip_address,
+                organization=organization,
+                city=city,
+                region=region,
+                country=country
+            )
 
     # save the natural language request issued by this IP Address
     nl_request = NLRequest.objects.create(nl=nl, user=user)
