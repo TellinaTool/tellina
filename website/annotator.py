@@ -1,3 +1,5 @@
+import collections 
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.http import HttpResponse, JsonResponse
@@ -329,21 +331,14 @@ def utility_panel(request, access_code):
     template = loader.get_template('annotator/utility_panel.html')
     user = safe_get_user(access_code)
 
-    utilities = []
-    for obj in URLTag.objects.values('tag').annotate(the_count=Count('tag'))\
-            .order_by('-the_count'):
+    utilities = [] 
+    for obj in URLTag.objects.values('tag').annotate(num_urls=Count('tag'))\
+            .order_by('-num_urls'):
         if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
             continue
-        tag = get_tag(obj['tag'])
-        num_urls = 0.0
-        num_urls_annotated = 0.0
-
-        for url_tag in URLTag.objects.filter(tag=obj['tag']):
-            if tag in url_tag.url.tags.all():
-                num_urls_annotated += 1
-            num_urls += 1
-
-        utilities.append((obj['tag'], num_urls_annotated/num_urls))
+        num_urls_annotated = AnnotationProgress.objects.filter(tag__str=obj['tag'], 
+            status='completed').count()
+        utilities.append((obj['tag'], num_urls_annotated/obj['num_urls']))
 
 
     utility_groups = []
@@ -353,7 +348,7 @@ def utility_panel(request, access_code):
             utility_groups.append([utility_group[:10], utility_group[10:]])
         else:
             utility_groups.append([utility_group[:10], []])
-
+    print(utility_groups)
     context = {
         'utility_groups': utility_groups
     }

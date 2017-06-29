@@ -7,7 +7,7 @@ class Tag(models.Model):
     Tag.
     """
     str = models.TextField(primary_key=True)
-    annotations = models.ManyToManyField(Annotation)
+    annotations = models.ManyToManyField('Annotation')
 
 class NL(models.Model):
     """
