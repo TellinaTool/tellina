@@ -14,6 +14,8 @@ WHITE_LIST = {'find', 'xargs'}
 BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
               'vim'}
 
+GREY_LIST = {'apt-get', 'brew', 'yum'}
+
 
 def json_response(d={}, status='SUCCESS'):
     d.update({'status': status})
@@ -348,7 +350,10 @@ def utility_panel(request, access_code):
             continue
         num_urls_annotated = AnnotationProgress.objects.filter(tag__str=obj['tag'], 
             status='completed').count()
-        utilities.append((obj['tag'], num_urls_annotated/obj['num_urls']))
+        if obj['tag'] in GREY_LIST:
+            utilities.append((obj['tag'], -1))
+        else:
+            utilities.append((obj['tag'], num_urls_annotated/obj['num_urls']))
 
     utility_groups = []
     for i in range(0, len(utilities), 20):

@@ -46,6 +46,8 @@
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
                             {% elif completion_ratio > 0 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
+                            {% elif completion_ratio < 0 %}
+                                <button type="button" class="btn btn-default annotate-utility disabled" style="text-decoration: line-through">{{utility}}</button>
                             {% else %}
                                 <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
                             {% endif %}
