@@ -18,10 +18,10 @@ class Command(models.Model):
 
 class CommandAdmin(admin.ModelAdmin):
     fields = ['str', 'language']
-    list_display = ['get_tags']
+    list_display = ['get_str']
 
-    def get_tags(self, obj):
-        return '\n'.join([tag.str for tag in obj.tags.all()])
+    def get_str(self, obj):
+        return '\n'.join(obj.str)
 
 class Tag(models.Model):
     """
@@ -70,6 +70,13 @@ class User(models.Model):
     country = models.TextField(default='--')
     is_annotator = models.BooleanField(default=False)
     is_judger = models.BooleanField(default=False)
+
+class UserAdmin(admin.ModelAdmin):
+    fields = ['first_name', 'last_name', 'is_annotator', 'is_judger']
+    list_display = ['get_full_name']
+
+    def get_full_name(self, obj):
+        return '\n'.join(obj.first_name + obj.last_name)
 
 
 class Annotation(models.Model):

@@ -372,6 +372,47 @@ def utility_panel(request, access_code):
 
     return HttpResponse(template.render(context=context, request=request))
 
+
+@access_code_required
+def user_panel(request, access_code):
+    """
+    Display profile summary of all annotators.
+    """
+    template = loader.get_template('annotator/user_panel.html')
+    annotator_list = []
+    total_num_annotations = 0
+    for user in User.objects.filter(is_annotator=True):
+        u_obj = {}
+        first_name_disp = user.first_name[0].upper()
+        if len(user.first_name) > 1:
+            first_name_disp += user.first_name[1:]
+        last_name_disp = user.last_name[0].upper()
+        if len(user.last_name) > 1:
+            last_name_disp += user.last_name[1:]
+        u_obj['name'] = first_name_disp + ' ' + last_name_disp
+        u_obj['access_code'] = user.access_code
+        u_obj['num_annotations'] = Annotation.objects.filter(annotator=user).count()
+        total_num_annotations += u_obj['num_annotations']
+        annotator_list.append(u_obj)
+
+    annotator_list = sorted(annotator_list, key=lambda x: x['num_annotations'],
+                            reverse=True)
+
+    context = {
+        'access_code': access_code,
+        'annotator_list': annotator_list,
+        'total_num_annotations': total_num_annotations
+    }
+    return HttpResponse(template.render(context=context, request=request))
+
+
+@access_code_required
+def user_profile(request, access_code):
+    """
+    Display annotation progress and other info of a user.
+    """
+
+
 # --- Statistics --- #
 
 @access_code_required
@@ -408,12 +449,20 @@ def user_login(request):
 def register_user(request):
     first_name = request.GET.get('firstname')
     last_name = request.GET.get('lastname')
+    ip_address = request.GET.get('ip_address')
+    roles = request.GET.get('roles').split()
     if User.objects.filter(first_name=first_name, last_name=last_name):
         resp = json_response({'firstname': first_name, 'lastname': last_name},
                              status='USER_EXISTS')
     else:
         access_code = first_name.lower() + '-' + last_name.lower()
-        User.objects.create(access_code=access_code, first_name=first_name, last_name=last_name)
+        user = User.objects.create(access_code=access_code, first_name=first_name,
+                                   last_name=last_name, ip_address=ip_address)
+        for role in roles:
+            if role == 'annotator':
+                user.is_annotator = True
+            elif role == 'judger':
+                user.is_judger = True
         resp = json_response({'firstname': first_name, 'lastname': last_name,
                               'access_code': access_code},
                              status='REGISTRATION_SUCCESS')

@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^remember_ip_address$', views.remember_ip_address),
     url(r'^vote$', views.vote),
 
+    url(r'^explain_cmd$', cmd2html.explain_cmd),
+
     url(r'^login$', annotator.login),
     url(r'^register_user', annotator.register_user),
     url(r'^user_login$', annotator.user_login),
@@ -51,7 +53,8 @@ urlpatterns = [
 
     url(r'^get_utility_stats', annotator.get_utility_stats),
 
-    url(r'^explain_cmd$', cmd2html.explain_cmd),
+    url(r'user_panel', annotator.user_panel),
+    url(r'user_profile', annotator.user_profile),
 
     url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
 
