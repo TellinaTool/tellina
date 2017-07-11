@@ -14,8 +14,7 @@ WHITE_LIST = {'find', 'xargs'}
 BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
               'vim'}
 
-GREY_LIST = {'apt-get', 'brew', 'yum'}
-
+GREY_LIST = {'apt-get', 'brew', 'yum', 'export'}
 
 def json_response(d={}, status='SUCCESS'):
     d.update({'status': status})
@@ -67,6 +66,7 @@ def collect_page(request, access_code):
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
+            print(command.str)
             if command.tags.filter(str=tag.str).exists():
                 if not Annotation.objects.filter(url=url, cmd__str=command.str.strip(),
                         annotator=user).exists():
@@ -351,6 +351,7 @@ def utility_panel(request, access_code):
         num_urls_annotated = AnnotationProgress.objects.filter(tag__str=obj['tag'], 
             status='completed').count()
         if obj['tag'] in GREY_LIST:
+            print(obj['tag'])
             utilities.append((obj['tag'], -1))
         else:
             utilities.append((obj['tag'], num_urls_annotated/obj['num_urls']))
