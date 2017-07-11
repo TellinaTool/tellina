@@ -78,7 +78,6 @@
 
         <script>
             $(document).ready(function() {
-
                 $('#login-form-link').click(function(e) {
                     $("#login-form").delay(100).fadeIn(100);
                     $("#register-form").fadeOut(100);
@@ -117,9 +116,19 @@
                 });
 
                 $('#register-submit').click(function() {
+                	// get user's ip address as a global variable
+					var ip_address = '';
+					$.get("http://ipinfo.io", function(response) {
+						ip_address = response.ip;
+						$.get(`/remember_ip_address`, {ip_address: ip_address});
+						console.log('IP Address for study session logged: ' + ip_address);
+					}, "jsonp");
+
                 	var firstname = $('#firstname').val();
                 	var lastname = $('#lastname').val();
-                	$.get(`register_user`, {firstname: firstname, lastname: lastname}, function(data) {
+                	$.get(`register_user`, {firstname: firstname, lastname: lastname,
+                							ip_address: ip_address, roles: 'annotator'},
+             			  function(data) {
                 		if (data.status == 'REGISTRATION_SUCCESS') {
 							BootstrapDialog.show({
 								message: "Your access code is <strong>" + data.access_code + "</strong>.",
