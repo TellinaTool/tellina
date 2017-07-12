@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.db import models
 from django.utils import timezone
 
+import datetime
+
 class NL(models.Model):
     """
     Natural language command.
@@ -70,6 +72,7 @@ class User(models.Model):
     country = models.TextField(default='--')
     is_annotator = models.BooleanField(default=False)
     is_judger = models.BooleanField(default=False)
+    time_logged = models.FloatField(null=True, blank=True)
 
 class UserAdmin(admin.ModelAdmin):
     fields = ['first_name', 'last_name', 'is_annotator', 'is_judger']
