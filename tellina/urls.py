@@ -55,6 +55,7 @@ urlpatterns = [
 
     url(r'user_panel', annotator.user_panel),
     url(r'user_profile', annotator.user_profile),
+    url(r'update_user_time_logged', annotator.update_user_time_logged),
 
     url(r'^robots.txt$', lambda r: HttpResponse("User-agent: *\nDisallow: /", mimetype="text/plain")),
 

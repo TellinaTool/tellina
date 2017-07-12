@@ -392,6 +392,13 @@ def user_panel(request, access_code):
         u_obj['name'] = first_name_disp + ' ' + last_name_disp
         u_obj['access_code'] = user.access_code
         u_obj['num_annotations'] = Annotation.objects.filter(annotator=user).count()
+        if user.time_logged is None:
+            user.time_logged = 0
+            user.save()
+        u_obj['num_hours_logged'] = round(user.time_logged / 3600)
+        u_obj['num_minutes_logged'] = round((user.time_logged % 3600) / 60)
+        u_obj['num_annotations_per_hour'] = 0 if user.time_logged <= 0 \
+            else round(u_obj['num_annotations'] / user.time_logged * 3600, 1)
         total_num_annotations += u_obj['num_annotations']
         annotator_list.append(u_obj)
 
@@ -407,10 +414,26 @@ def user_panel(request, access_code):
 
 
 @access_code_required
+def update_user_time_logged(request, access_code):
+    ac_code = request.GET.get('ac_code')
+    time_logged = request.GET.get('time_logged')
+    user = User.objects.get(access_code=ac_code)
+    user.time_logged = float(time_logged)
+    user.save()
+    context = {}
+    num_annotations = Annotation.objects.filter(annotator=user).count()
+    context['num_annotations_per_hour'] = 0 if user.time_logged <= 0 \
+            else round(num_annotations / user.time_logged * 3600, 1)
+    print(num_annotations)
+    return json_response(context, status='UPDATE_USER_TIME_LOGGED_SUCCESS')
+
+
+@access_code_required
 def user_profile(request, access_code):
     """
     Display annotation progress and other info of a user.
     """
+    pass
 
 
 # --- Statistics --- #
