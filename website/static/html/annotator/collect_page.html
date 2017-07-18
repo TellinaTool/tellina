@@ -487,8 +487,8 @@
 
             function set_up_update_panel(annotation_id) {
                 var index = parseInt(annotation_id);
-                var id = parseInt($('#annotation-id-' + index).text());
-                var annotation_box = $('annotation-box-' + index);
+                var annotation_box = $('#annotation-box-' + index);
+                var id = parseInt(annotation_box.find('.annotation-id').text());
                 var update_panel = $('#update-panel-' + index);
                 var update_box = $('#update-box-' + index);
 
