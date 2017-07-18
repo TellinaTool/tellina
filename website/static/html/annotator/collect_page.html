@@ -466,7 +466,7 @@
                     if (data.reply_list.length == 0) {
                         // append retract or reply button if there is no replies on the updates yet
                         var update_user = comment_box.find('.comment-name').text();
-                        if (update_user == '{{access_code}}') {
+                        if (update_user != '{{access_code}}') {
                             // append reply button
                             comment_box.append(
                                 `<button type="button" class="btn btn-default btn-sm reply-update" id="reply-update-${update_id}" style="float: right">Reply
