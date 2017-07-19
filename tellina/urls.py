@@ -48,9 +48,9 @@ urlpatterns = [
     url(r'^update_progress', annotator.update_progress),
 
     url(r'^submit_update', annotator.submit_update),
-    url(r'^get_updates', annotator.get_updates),
+    url(r'^get_relevant_updates', annotator.get_relevant_updates),
     url(r'^get_update_replies', annotator.get_update_replies),
-
+    url(r'^retract_update', annotator.retract_update),
     url(r'^get_utility_stats', annotator.get_utility_stats),
 
     url(r'user_panel', annotator.user_panel),
