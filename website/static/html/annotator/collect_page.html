@@ -325,7 +325,7 @@
 
                 // Display update requests of each annotation if there is any, including their replies.
                 if (!isNaN(id)) {
-                    $.get(`get_updates`, {annotation_id: id}, function(data) {
+                    $.get(`get_relevant_updates`, {annotation_id: id}, function(data) {
                         for (i = 0; i < data.update_list.length; i ++) {
                             update = data.update_list[i];
                             add_main_level_comment(annotation_id, update.update_id, update.access_code,
@@ -473,11 +473,19 @@
                                  </button>
                                  <button type="button" class="btn btn-warning btn-sm accept-update" id="accept-update-${update_id}" style="float: right; margin-right: 20px">Accept
                                  </button>
-                                `)
+                                `);
                         } else {
                             // append retract button
                             comment_box.append(
-                                `<button type="button" class="btn btn-default btn-sm retract-update" id="retract-update-${update_id}" style="float: right">Retract</button>`)
+                                `<button type="button" class="btn btn-default btn-sm retract-update" id="retract-update-${update_id}" style="float: right">Retract</button>
+                                `);
+                            $('#retract-update-${update_id}').click(function() {
+                                $.get(`retract_update`, {update_id: update_id}, function(data) {
+                                    if (data.status == 'RETRACT_UPDATE_SUCCESS') {
+                                        comment_box.hide();
+                                    }
+                                });
+                            });
                         }
                     } else {
 

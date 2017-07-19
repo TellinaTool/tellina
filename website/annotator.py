@@ -189,7 +189,7 @@ def update_progress(request, access_code):
 
 
 @access_code_required
-def get_updates(request, access_code):
+def get_relevant_updates(request, access_code):
     annotation_id = request.GET.get('annotation_id')
     annotation = Annotation.objects.get(id=annotation_id)
     update_list = []
@@ -223,7 +223,15 @@ def get_update_replies(request, access_code):
     return json_response({'reply_list': reply_list})
 
 
+@access_code_required
+def retract_update(request, access_code):
+    update_id = request.GET.get('update_id')
+    Annotation.objects.filter(id=update_id).delete()
+
+    return json_response(status='RETRACT_UPDATE_SUCCESS')
+
 # --- Judger Controls --- #
+
 @access_code_required
 def submit_update(request, access_code):
     user = User.objects.get(access_code=access_code)
