@@ -228,6 +228,7 @@ def get_update_replies(request, access_code):
 def submit_update(request, access_code):
     user = User.objects.get(access_code=access_code)
     annotation_id = request.GET.get('annotation_id')
+    print(annotation_id)
     update_str = request.GET.get('update')
     comment_str = request.GET.get('comment')
     annotation = Annotation.objects.get(id=annotation_id)
@@ -391,7 +392,7 @@ def user_panel(request, access_code):
             last_name_disp += user.last_name[1:]
         u_obj['name'] = first_name_disp + ' ' + last_name_disp
         u_obj['access_code'] = user.access_code
-        u_obj['num_annotations'] = Annotation.objects.filter(annotator=user).count()
+        u_obj['num_annotations'] = Annotation.objects.filter(annotator=user).exclude(nl__str="NA").count()
         if user.time_logged is None:
             user.time_logged = 0
             user.save()
