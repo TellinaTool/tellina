@@ -35,10 +35,22 @@
     background: #F0F0F0;
 }
 
-.annotate-utility-in-progress {
-    background-color: #A9DFBF;
+.annotate-utility-self-completed {
+    background-color: #7DCEA0;
+    border: 1px;
+    border-style: dotted;
 }
 
 .annotate-utility-completed {
-    background-color: #52BE80;
+    background-color: #7DCEA0;
+    border: 1px;
+    border-style: dotted;
+}
+
+.annotate-utility-self-in-progress {
+    background-color: #A9DFBF;
+}
+
+.annotate-utility-in-progress {
+    background-color: #A9DFBF;
 }
