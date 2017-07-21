@@ -31,18 +31,11 @@
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
                         {% for utility, completion_ratio, completion_ratio_by_user in utility_group1 %}
-                            {% if completion_ratio > 0.5 %}
-                                {% if completion_ratio_by_user > 0 %}
-                                    <button type="button" class="btn btn-default annotate-utility annotate-utility-completed" style="border: 1px; border-style: dotted">{{utility}}</button>
-                                {% else %}
-                                    <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
-                                {% endif %}
+                            {% if completion_ratio_by_user > 0.5 %}
+                            {% elif completion_ratio_by_user > 0 %}
                             {% elif completion_ratio > 0 %}
-                                {% if completion_ratio_by_user > 0 %}
-                                    <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress" style="border: 1px; border-style: dotted">{{utility}}</button>
-                                {% else %}
-                                    <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
-                                {% endif %}
+                            {% elif completion_ratio > 0 %}
+
                             {% elif completion_ratio == -1 %}
                                 <button type="button" class="btn btn-default annotate-utility disabled" style="text-decoration: line-through">{{utility}}</button>
                             {% else %}
