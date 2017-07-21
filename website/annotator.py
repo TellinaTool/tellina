@@ -11,8 +11,7 @@ from website.models import NL, Command, Comment, URL, User, URLTag, \
 from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
-BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
-              'vim'}
+BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs', 'vim'}
 
 GREY_LIST = {'apt-get', 'brew', 'yum', 'export'}
 
@@ -357,13 +356,16 @@ def utility_panel(request, access_code):
             .order_by('-num_urls'):
         if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
             continue
-        num_urls_annotated = AnnotationProgress.objects.filter(tag__str=obj['tag'], 
-            status='completed').count()
+        completed_url_set = AnnotationProgress.objects.filter(
+            tag__str=obj['tag'], status='completed')
+        num_urls_completed = completed_url_set.count()
+        num_urls_completed_by_user = completed_url_set.filter(
+            annotator__access_code=access_code)
         if obj['tag'] in GREY_LIST:
-            print(obj['tag'])
-            utilities.append((obj['tag'], -1))
+            utilities.append((obj['tag'], -1, num_urls_completed_by_user))
         else:
-            utilities.append((obj['tag'], num_urls_annotated/obj['num_urls']))
+            utilities.append((obj['tag'], num_urls_completed/obj['num_urls'],
+                              num_urls_completed_by_user))
 
     utility_groups = []
     for i in range(0, len(utilities), 20):
