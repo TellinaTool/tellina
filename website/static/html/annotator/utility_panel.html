@@ -30,15 +30,15 @@
                 <div class="col-md-8 col-md-offset-0 col-xs-12 col-xs-offset-0 utility-button-group" style="text-align:left">
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
-                        {% for utility, completion_ratio, num_completed_by_user in utility_group1 %}
+                        {% for utility, completion_ratio, completion_ratio_by_user in utility_group1 %}
                             {% if completion_ratio > 0.5 %}
-                                {% if num_completed_by_user > 0 %}
+                                {% if completion_ratio_by_user > 0 %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-completed" style="border: 1px; border-style: dotted">{{utility}}</button>
                                 {% else %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
                                 {% endif %}
                             {% elif completion_ratio > 0 %}
-                                {% if num_completed_by_user > 0 %}
+                                {% if completion_ratio_by_user > 0 %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress" style="border: 1px; border-style: dotted">{{utility}}</button>
                                 {% else %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
@@ -51,15 +51,15 @@
                         {% endfor %}
                         <br>
                         <br>
-                        {% for utility, completion_ratio, num_completed_by_user in utility_group2 %}
+                        {% for utility, completion_ratio, completion_ratio_by_user in utility_group2 %}
                             {% if completion_ratio > 0.5 %}
-                                {% if num_completed_by_user > 0 %}
+                                {% if completion_ratio_by_user > 0 %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-completed" style="border: 1px; border-style: dotted">{{utility}}</button>
                                 {% else %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
                                 {% endif %}
                             {% elif completion_ratio > 0 %}
-                                {% if num_completed_by_user > 0 %}
+                                {% if completion_ratio_by_user > 0 %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress" style="border: 1px; border-style: dotted">{{utility}}</button>
                                 {% else %}
                                     <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>

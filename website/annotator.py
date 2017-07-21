@@ -358,14 +358,15 @@ def utility_panel(request, access_code):
             continue
         completed_url_set = AnnotationProgress.objects.filter(
             tag__str=obj['tag'], status='completed')
-        num_urls_completed = completed_url_set.count()
+        num_urls_completed = completed_url_set.count() + 0.0
         num_urls_completed_by_user = completed_url_set.filter(
-            annotator__access_code=access_code)
+            annotator__access_code=access_code).count() + 0.0
         if obj['tag'] in GREY_LIST:
-            utilities.append((obj['tag'], -1, num_urls_completed_by_user))
+            utilities.append((obj['tag'], -1, 
+                              num_urls_completed_by_user/obj['num_urls']))
         else:
             utilities.append((obj['tag'], num_urls_completed/obj['num_urls'],
-                              num_urls_completed_by_user))
+                              num_urls_completed_by_user/obj['num_urls']))
 
     utility_groups = []
     for i in range(0, len(utilities), 20):
