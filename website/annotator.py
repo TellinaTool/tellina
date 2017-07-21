@@ -226,7 +226,7 @@ def get_update_replies(request, access_code):
 @access_code_required
 def retract_update(request, access_code):
     update_id = request.GET.get('update_id')
-    Annotation.objects.filter(id=update_id).delete()
+    AnnotationUpdate.objects.get(id=update_id).delete()
 
     return json_response(status='RETRACT_UPDATE_SUCCESS')
 
