@@ -4,7 +4,7 @@ import json
 
 from django.http import HttpResponse
 sys.path.append(os.path.join(os.path.dirname(__file__),"..", "tellina_learning_module"))
-from bashlex import data_tools
+from bashlint import data_tools
 
 ## load the manpage expl file, note that the root should be before tellina 
 with open(os.path.join('website', 'manpage_expl.json'), encoding='UTF-8') as data_file:
@@ -73,7 +73,7 @@ def tokens2html(cmd_str):
 
 def ast2html(node):
 
-  """ Translate a bash AST from tellina_learning_module/bashlex/nast.py into html code,
+  """ Translate a bash AST from tellina_learning_module/bashlint/nast.py into html code,
     with proper syntax highlighting.
     Argument:
       node: an ast returned from tellina_learning_module.data_tools.bash_parser(cmd_str)

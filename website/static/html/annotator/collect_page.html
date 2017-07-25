@@ -451,7 +451,7 @@
                                     ${update}
                                 </div>
                                 <div class="comment-content">
-                                    ${comment}
+                                    <i class="glyphicon glyphicon-option-horizontal"></i> ${comment}
                                 </div>
                             </div>
                         </div>
@@ -477,9 +477,10 @@
                         } else {
                             // append retract button
                             comment_box.append(
-                                `<button type="button" class="btn btn-default btn-sm retract-update" id="retract-update-${update_id}" style="float: right">Retract</button>
+                                `<button type="button" class="btn btn-warning btn-sm retract-update" id="retract-update-${update_id}" style="float: right">Retract</button>
                                 `);
-                            $('#retract-update-${update_id}').click(function() {
+                            console.log(update_id);
+                            $(`#retract-update-${update_id}`).click(function() {
                                 $.get(`retract_update`, {update_id: update_id}, function(data) {
                                     if (data.status == 'RETRACT_UPDATE_SUCCESS') {
                                         comment_box.hide();
