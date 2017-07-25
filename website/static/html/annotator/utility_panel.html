@@ -30,7 +30,7 @@
                 <div class="col-md-8 col-md-offset-0 col-xs-12 col-xs-offset-0 utility-button-group" style="text-align:left">
                 {% if utility_groups %}
                     {% for utility_group1, utility_group2 in utility_groups %}
-                        {% for utility, completion_ratio, completion_ratio_by_user in utility_group1 %}
+                        {% for utility, completion_ratio, completion_ratio_by_user, num_missing_commands, num_modification_requests in utility_group1 %}
                             {% if completion_ratio_by_user > 0.5 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-self-completed">{{utility}}</button>
                             {% elif completion_ratio_by_user > 0 %}
@@ -47,7 +47,7 @@
                         {% endfor %}
                         <br>
                         <br>
-                        {% for utility, completion_ratio, completion_ratio_by_user in utility_group2 %}
+                        {% for utility, completion_ratio, completion_ratio_by_user, num_missing_commands, num_modification_requests in utility_group2 %}
                             {% if completion_ratio_by_user > 0.5 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-self-completed" style="border: 1px; border-style: dotted">{{utility}}</button>
                             {% elif completion_ratio_by_user > 0 %}

@@ -158,14 +158,25 @@ def delete_annotation(request, access_code):
 
 
 @access_code_required
-def mark_duplicate_or_wrong(request, access_code):
+def mark_duplicate(request, access_code):
     user = User.objects.get(access_code=access_code)
     url = get_url(request.GET.get('url'))
     cmd = get_command(request.GET.get('command'))
     url.commands.remove(cmd);
-    annotation = Annotation.objects.create(url=url, nl=get_nl('NA'), cmd=cmd,
-                                           annotator=user)
-    return json_response(status='MARK_DUPLICATE_OR_WRONG_SUCCESS')
+    Annotation.objects.create(
+        url=url, nl=get_nl('DUPLICATE'), cmd=cmd, annotator=user)
+    return json_response(status='MARK_DUPLICATE_SUCCESS')
+
+
+@access_code_required
+def mark_wrong(request, access_code):
+    user = User.objects.get(access_code=access_code)
+    url = get_url(request.GET.get('url'))
+    cmd = get_command(request.GET.get('command'))
+    url.commands.remove(cmd);
+    Annotation.objects.create(
+        url=url, nl=get_nl('ERROR'), cmd=cmd, annotator=user)
+    return json_response(status='MARK_WRONG_SUCCESS')
 
 
 @access_code_required
