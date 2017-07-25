@@ -21,25 +21,22 @@ def extract_code(text):
         if match.strip():
             yield html.unescape(match.replace("<br>", "\n"))
 
-def extract_oneliner_from_code(code_block):
-    cmd = code_block.splitlines()[0]
-    if cmd.startswith('$ '):
-        cmd = cmd[2:]
-    if cmd.startswith('# '):
-        cmd = cmd[2:]
+def extract_oneliners_from_code(code_block):
+    for cmd in code_block.splitlines():
+        if cmd.startswith('$ '):
+            cmd = cmd[2:]
+        if cmd.startswith('# '):
+            cmd = cmd[2:]
+        comment = re.search(r'\s+#\s+', cmd)
+        if comment:
+            old_cmd = cmd
+            cmd = cmd[:comment.start()]
+            print('Remove comment: {} -> {}'.format(old_cmd, cmd))
+        cmd = cmd.strip()
 
-    comment = re.search(r'\s+#\s+', cmd)
-    if comment:
-        old_cmd = cmd
-        cmd = cmd[:comment.start()]
-        print('Remove comment: {} -> {}'.format(old_cmd, cmd))
-    cmd = cmd.strip()
-
-    # discard code block opening line
-    if cmd.endswith('{') or cmd.endswith('[') or cmd.endswith('('):
-        return None
-
-    return cmd 
+        # discard code block opening line
+        if not cmd[-1] in ['{', '[', '(']:
+            yield cmd
 
 def load_urls(input_file_path):
     with open(input_file_path, 'rb') as f:
@@ -53,23 +50,24 @@ def load_urls(input_file_path):
 
 def load_commands_in_url(stackoverflow_dump_path):
     url_prefix = 'https://stackoverflow.com/questions/'
-
-    with sqlite3.connect(stackoverflow_dump_path, detect_types=sqlite3.PARSE_DECLTYPES) as db:
+    with sqlite3.connect(stackoverflow_dump_path,
+                         detect_types=sqlite3.PARSE_DECLTYPES) as db:
         for url in URL.objects.all():
             # url = URL.objects.get(str='https://stackoverflow.com/questions/12378558')
             url.commands.clear()
             print(url.str)
-            for answer_body, in db.cursor().execute("""SELECT answers.Body FROM answers 
-                                                       WHERE answers.ParentId = ?""", 
-                                                    (url.str[len(url_prefix):],)):
+            for answer_body, in db.cursor().execute("""
+                    SELECT answers.Body FROM answers 
+                    WHERE answers.ParentId = ?""", (url.str[len(url_prefix):],)):
                 url.html_content = answer_body
                 url.save()
 
                 for code_block in extract_code(url.html_content):
-                    cmd_str = extract_oneliner_from_code(code_block)
-                    if cmd_str:
-                        command = get_command(cmd_str)
-                        url.commands.add(command)
+                    for cmd in extract_oneliners_from_code(code_block):
+                        if cmd:
+                            print('extracted: {}'.format(cmd))
+                            command = get_command(cmd)
+                            url.commands.add(command)
             url.save()
 
 def populate_command_tags():
