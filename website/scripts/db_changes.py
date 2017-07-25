@@ -56,28 +56,32 @@ def load_commands_in_url(stackoverflow_dump_path):
 
     with sqlite3.connect(stackoverflow_dump_path, detect_types=sqlite3.PARSE_DECLTYPES) as db:
         for url in URL.objects.all():
+            # url = URL.objects.get(str='https://stackoverflow.com/questions/12378558')
             url.commands.clear()
             print(url.str)
-            for answer_body, in db.cursor().execute("""
-                    SELECT answers.Body FROM answers 
-                    WHERE answers.ParentId = ?""", (url.str[len(url_prefix):], )):
+            for answer_body, in db.cursor().execute("""SELECT answers.Body FROM answers 
+                                                       WHERE answers.ParentId = ?""", 
+                                                    (url.str[len(url_prefix):],)):
                 url.html_content = answer_body
                 url.save()
 
                 for code_block in extract_code(url.html_content):
-                    cmd = extract_oneliner_from_code(code_block)
-                    if cmd:
-                        print(cmd)
-                        command = get_command(cmd)
+                    cmd_str = extract_oneliner_from_code(code_block)
+                    if cmd_str:
+                        command = get_command(cmd_str)
                         url.commands.add(command)
             url.save()
 
 def populate_command_tags():
     for cmd in Command.objects.all():
-        cmd.tags.clear()
-        ast = data_tools.bash_parser(cmd.str)
-        for utility in data_tools.get_utilities(ast):
-            cmd.tags.add(get_tag(utility))
+        if len(cmd.str) > 800:
+            cmd.delete()
+        elif cmd.tags.count() == 0:
+            print(cmd.str)
+            ast = data_tools.bash_parser(cmd.str)
+            for utility in data_tools.get_utilities(ast):
+                cmd.tags.add(get_tag(utility))
+            cmd.save()
 
 def populate_url_tags():
     for url in URL.objects.all():

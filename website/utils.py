@@ -22,6 +22,7 @@ def get_command(command_str):
         cmd = Command.objects.get(str=command_str)
     else:
         cmd = Command.objects.create(str=command_str)
+    if not cmd.tags:
         ast = data_tools.bash_parser(command_str)
         for utility in data_tools.get_utilities(ast):
             cmd.tags.add(get_tag(utility))    
