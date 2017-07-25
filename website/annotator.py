@@ -13,7 +13,8 @@ from website.utils import get_nl, get_command, get_url, get_tag
 WHITE_LIST = {'find', 'xargs'}
 BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs', 'vim'}
 
-GREY_LIST = {'apt-get', 'brew', 'yum', 'export'}
+GREY_LIST = {'alias', 'unalias', 'set', 'unset', 'screen', 'apt-get', 'brew', 'yum', 
+             'export', 'shift', 'exit', 'logout'}
 
 def json_response(d={}, status='SUCCESS'):
     d.update({'status': status})
@@ -66,6 +67,8 @@ def collect_page(request, access_code):
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
             print(command.str)
+            # for tag in command.tags.all():
+            #     print(tag.str)
             if command.tags.filter(str=tag.str).exists():
                 if not Annotation.objects.filter(url=url, cmd__str=command.str.strip(),
                         annotator=user).exists():
