@@ -5,13 +5,13 @@ import re
 import sqlite3
 
 from website.models import Annotation, Command, URL, URLTag
-from website.utils import get_tag, get_command, get_url
+from website.utils import get_tag, get_command
 
 learning_module_dir = os.path.join(os.path.dirname(__file__), '..', '..',
                                    "tellina_learning_module")
 sys.path.append(learning_module_dir)
 
-from bashlex import data_tools
+from bashlint import data_tools
 
 CODE_REGEX = re.compile(r"<pre><code>([^<]+\n[^<]*)<\/code><\/pre>")
 
