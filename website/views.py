@@ -91,13 +91,13 @@ def translate(request, ip_address):
             city = '--' if r.json()['city'] is None else r.json()['city']
             region = '--' if r.json()['region'] is None else r.json()['region']
             country = '--' if r.json()['country'] is None else r.json()['country']
-            user = User.objects.create(
-                ip_address=ip_address,
-                organization=organization,
-                city=city,
-                region=region,
-                country=country
-            )
+        user = User.objects.create(
+            ip_address=ip_address,
+            organization=organization,
+            city=city,
+            region=region,
+            country=country
+        )
 
     # save the natural language request issued by this IP Address
     nl_request = NLRequest.objects.create(nl=nl, user=user)
@@ -154,8 +154,8 @@ def vote(request, ip_address):
     translation = Translation.objects.get(id=id)
 
     # store voting record in the DB
-    if Vote.objects.filter(translation=translation, ip_address=ip_address)\
-        .exists():
+    if Vote.objects.filter(
+            translation=translation, ip_address=ip_address).exists():
         vote = Vote.objects.get(translation=translation, ip_address=ip_address)
         if upvoted == 'true' and not vote.upvoted:
             translation.num_upvotes += 1
