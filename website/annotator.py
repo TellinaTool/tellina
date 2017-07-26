@@ -366,21 +366,11 @@ def utility_panel(request, access_code):
     user = safe_get_user(access_code)
 
     utilities = [] 
-    for obj in URLTag.objects.values('tag').annotate(num_urls=Count('tag'))\
-            .order_by('-num_urls'):
+    for obj in URLTag.objects.values('tag').annotate(
+            num_urls=Count('tag')).order_by('-num_urls'):
         if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
             continue
-        completed_url_set = AnnotationProgress.objects.filter(
-            tag__str=obj['tag'], status='completed')
-        num_urls_completed = completed_url_set.count() + 0.0
-        num_urls_completed_by_user = completed_url_set.filter(
-            annotator__access_code=access_code).count() + 0.0
-        if obj['tag'] in GREY_LIST:
-            utilities.append((obj['tag'], -1, 
-                              num_urls_completed_by_user/obj['num_urls']))
-        else:
-            utilities.append((obj['tag'], num_urls_completed/obj['num_urls'],
-                              num_urls_completed_by_user/obj['num_urls']))
+        utilities.append(obj['tag'])
 
     utility_groups = []
     for i in range(0, len(utilities), 20):
@@ -397,6 +387,42 @@ def utility_panel(request, access_code):
         context['access_code'] = access_code
 
     return HttpResponse(template.render(context=context, request=request))
+
+
+@access_code_required
+def get_utility_stats(request, access_code):
+    utility = request.GET.get('utility')
+    user = safe_get_user(access_code)
+    tag = get_tag(utility)
+    num_urls = URLTag.objects.filter(tag=tag).count()
+    num_pairs_annotated = tag.annotations.all().count()
+    annotated_url_set = AnnotationProgress.objects.filter(tag=tag)
+    num_urls_annotated = annotated_url_set.count()
+    completed_url_set = annotated_url_set.filter(status='completed')
+    num_urls_completed = completed_url_set.count() + 0.0
+    num_urls_completed_by_user = completed_url_set.filter(
+            annotator__access_code=access_code).count() + 0.0
+    if utility in GREY_LIST:
+        completion_ratio = -1
+        self_completion_ratio = -1
+    else:
+        num_commands = 0
+        num_commands_annotated = 0
+        for command in tag.commands.all():
+            num_commands += 1
+            if Annotation.objects.filter(cmd=command, annotator=user).exists():
+                num_commands_annotated += 1
+        completion_ratio = num_urls_completed / num_urls
+        self_completion_ratio = num_urls_completed_by_user / num_urls
+
+    return json_response({
+        'num_urls': num_urls,
+        'num_urls_annotated': num_urls_annotated,
+        'num_pairs_annotated': num_pairs_annotated,
+        'completion_ratio': completion_ratio,
+        'self_completion_ratio': self_completion_ratio,
+        'num_commands_missing': (num_commands - num_commands_annotated)
+    }, status='UTILITY_STATS_SUCCESS')
 
 
 @access_code_required
@@ -460,21 +486,6 @@ def user_profile(request, access_code):
     Display annotation progress and other info of a user.
     """
     pass
-
-
-# --- Statistics --- #
-
-@access_code_required
-def get_utility_stats(request, access_code):
-    utility = request.GET.get('utility')
-    tag = get_tag(utility)
-    num_urls = AnnotationProgress.objects.filter(tag=tag).count()
-    num_pairs = tag.annotations.all().count()
-
-    return json_response({
-        'num_urls': num_urls,
-        'num_pairs': num_pairs
-    }, status='UTILITY_STATS_SUCCESS')
 
 # --- Registration & Login --- #
 
