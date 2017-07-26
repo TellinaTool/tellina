@@ -65,9 +65,8 @@ def collect_page(request, access_code):
         # themselves
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
-            print(command.str)
             if command.tags.filter(str=tag.str).exists():
-                if not Annotation.objects.filter(url=url, cmd__str=command.str.strip(),
+                if not Annotation.objects.filter(url=url, cmd__template=command.template,
                         annotator=user).exists():
                     command_list.append(command.str)
 
@@ -420,8 +419,8 @@ def get_utility_stats(request, access_code):
             for command in url.commands.all():
                 if tag in command.tags:
                     num_commands += 1
-                    if Annotation.objects.filter(
-                            cmd=command, annotator=user).exists():
+                    if Annotation.objects.filter(cmd__template=command.template,
+                            annotator=user).exists():
                         num_commands_annotated += 1
         completion_ratio = num_urls_completed / num_urls
         self_completion_ratio = num_urls_completed_by_user / num_urls
