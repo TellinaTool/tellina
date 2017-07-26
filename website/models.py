@@ -30,6 +30,7 @@ class Tag(models.Model):
     Tag.
     """
     str = models.TextField(primary_key=True)
+    commands = models.ManyToManyField('Command')
     annotations = models.ManyToManyField('Annotation')
 
 class URL(models.Model):
