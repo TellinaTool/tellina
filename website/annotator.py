@@ -67,7 +67,7 @@ def collect_page(request, access_code):
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
             if command.tags.filter(str=tag.str).exists():
-                if not Annotation.objects.filter(url=url, cmd__template=command.template,
+                if not Annotation.objects.filter(cmd__template=command.template,
                         annotator=user).exists():
                     command_list.append(command.str)
 
@@ -335,8 +335,8 @@ def url_panel(request, access_code):
                 # check if any commands were missed
                 for cmd in url_tag.url.commands.all():
                     if tag in cmd.tags.all():
-                        if not Annotation.objects.filter(url=url_tag.url,
-                                cmd=cmd, annotator=user).exists():
+                        if not Annotation.objects.filter(cmd__template=cmd.template, 
+                                annotator=user).exists():
                             num_commands_missed += 1
             url_list.append((url_tag.url, record.status, num_commands_missed))
         except ObjectDoesNotExist:
