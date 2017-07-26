@@ -394,7 +394,8 @@ def get_utility_stats(request, access_code):
     utility = request.GET.get('utility')
     user = safe_get_user(access_code)
     tag = get_tag(utility)
-    num_urls = URLTag.objects.filter(tag=tag).count()
+    url_set = URLTag.objects.filter(tag=tag)
+    num_urls = url_set.count()
     num_pairs_annotated = tag.annotations.all().count()
     annotated_url_set = AnnotationProgress.objects.filter(tag=tag)
     num_urls_annotated = annotated_url_set.count()
@@ -408,10 +409,13 @@ def get_utility_stats(request, access_code):
     else:
         num_commands = 0
         num_commands_annotated = 0
-        for command in tag.commands.all():
-            num_commands += 1
-            if Annotation.objects.filter(cmd=command, annotator=user).exists():
-                num_commands_annotated += 1
+        for url in url_set:
+            for command in url.commands.all():
+                if tag in command.tags:
+                    num_commands += 1
+                    if Annotation.objects.filter(
+                            cmd=command, annotator=user).exists():
+                        num_commands_annotated += 1
         completion_ratio = num_urls_completed / num_urls
         self_completion_ratio = num_urls_completed_by_user / num_urls
 
