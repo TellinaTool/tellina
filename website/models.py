@@ -15,6 +15,7 @@ class Command(models.Model):
     Command line.
     """
     str = models.TextField(primary_key=True)
+    template = models.TextField(default='')
     language = models.TextField(default='bash')
     tags = models.ManyToManyField('Tag')
 

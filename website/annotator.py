@@ -180,6 +180,17 @@ def mark_wrong(request, access_code):
 
 
 @access_code_required
+def mark_i_dont_know(request, access_code):
+    user = User.objects.get(access_code=access_code)
+    url = get_url(request.GET.get('url'))
+    cmd = get_command(request.GET.get('command'))
+    url.commands.remove(cmd);
+    Annotation.objects.create(
+        url=url, nl=get_nl('I DON\'T KNOW'), cmd=cmd, annotator=user)
+    return json_response(status='MARK_I_DONT_KNOW_SUCCESS')
+
+
+@access_code_required
 def update_progress(request, access_code):
     user = User.objects.get(access_code=access_code)
     tag = get_tag(request.GET.get('utility'))
@@ -328,22 +339,21 @@ def url_panel(request, access_code):
    
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
         num_commands_missed = 0
+        # check if any commands were missed
+        for cmd in url_tag.url.commands.all():
+            if tag in cmd.tags.all():
+                if not Annotation.objects.filter(cmd__template=cmd.template, 
+                        annotator=user).exists():
+                    num_commands_missed += 1
         try:
             record = AnnotationProgress.objects.get(
                 annotator=user, tag__str=utility, url=url_tag.url)
-            if record.status == 'completed':
-                # check if any commands were missed
-                for cmd in url_tag.url.commands.all():
-                    if tag in cmd.tags.all():
-                        if not Annotation.objects.filter(cmd__template=cmd.template, 
-                                annotator=user).exists():
-                            num_commands_missed += 1
             url_list.append((url_tag.url, record.status, num_commands_missed))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
-                url_list.append((url_tag.url, 'others-in-progress', 0))
+                url_list.append((url_tag.url, 'others-in-progress', num_commands_missed))
             else:
-                url_list.append((url_tag.url, '', 0))
+                url_list.append((url_tag.url, '', num_commands_missed))
 
     context = {
         'utility': utility,

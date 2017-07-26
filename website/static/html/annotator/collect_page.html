@@ -16,7 +16,6 @@
                         <span class="icon-bar"></span>
                         </button>
                     </div>
-
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
@@ -29,7 +28,6 @@
                 </div><!-- /.container-fluid -->
             </nav>
         {% endblock %} -->
-
         <div class="container-fluid" style="">
             <div class="row" style="padding-left: 20px; margin-right: 20px;">
                 <div class="url-content-panel col-md-8 col-xs-12" style="text-align:left">
@@ -267,6 +265,10 @@
                         <input type="radio" id="mark-as-wrong-${annotation_id}" value="wrong" style="display:None">
                             <span id="mark-as-wrong-radio-text-${annotation_id}" style="display: None">&nbsp;Wrong</span>
                         </input>
+                        &nbsp;&nbsp;
+                        <input type="radio" id="mark-as-i-dont-know-${annotation_id}" value="i-dont-know" style="display:None">
+                            <span id="mark-as-i-dont-know-radio-text-${annotation_id}" style="display: None">&nbsp;I don't know</span>
+                        </input>
                         <br>
                     </div>
                     <div class="annotation-box" id="annotation-box-${annotation_id}" style="display: None">
@@ -283,6 +285,8 @@
                     $(`#mark-as-duplicate-radio-text-${annotation_id}`).show();
                     $(`#mark-as-wrong-${annotation_id}`).show();
                     $(`#mark-as-wrong-radio-text-${annotation_id}`).show();
+                    $(`#mark-as-i-dont-know-${annotation_id}`).show();
+                    $(`#mark-as-i-dont-know-radio-text-${annotation_id}`).show();
                 }
 
                 $(`#mark-as-duplicate-${annotation_id}`).change(function() {
@@ -312,6 +316,24 @@
                             collect_box.hide();
                             annotation_box.find('.command-submission').text(cmd_extraction);
                             annotation_box.find('.nl-submission').text('WRONG');
+                            annotation_box.show();
+                        }
+                    });
+                    num_commands --;
+                    if (num_commands == 0) {
+                        add_collect_panel(num_annotations+1, '', '');
+                    }
+                });
+
+                $(`#mark-as-i-dont-know-${annotation_id}`).change(function() {
+                    $.get(`mark_i_dont_know`, {url: url, command: cmd_extraction}, function(data) {
+                        if (data.status == 'MARK_I_DONT_KNOW_SUCCESS') {
+                            var index = parseInt(annotation_id);
+                            var annotation_box = $('#annotation-box-' + index);
+                            var collect_box = $('#collect-box-' + index);
+                            collect_box.hide();
+                            annotation_box.find('.command-submission').text(cmd_extraction);
+                            annotation_box.find('.nl-submission').text('I DON\'T KNOW');
                             annotation_box.show();
                         }
                     });

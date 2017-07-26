@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^delete_annotation$', annotator.delete_annotation),
     url(r'^mark_duplicate$', annotator.mark_duplicate),
     url(r'^mark_wrong$', annotator.mark_wrong),
+    url(r'^mark_i_dont_know', annotator.mark_i_dont_know),
     url(r'^update_progress$', annotator.update_progress),
 
     url(r'^submit_update', annotator.submit_update),
