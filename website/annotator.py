@@ -326,11 +326,12 @@ def url_panel(request, access_code):
     tag = get_tag(utility)
 
     url_list = []
+   
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
         num_commands_missed = 0
         try:
             record = AnnotationProgress.objects.get(
-                annotator=user, tag=tag, url=url_tag.url)
+                annotator=user, tag__str=utility, url=url_tag.url)
             if record.status == 'completed':
                 # check if any commands were missed
                 for cmd in url_tag.url.commands.all():
@@ -417,20 +418,17 @@ def get_utility_stats(request, access_code):
         completion_ratio = -1
         self_completion_ratio = -1
     else:
-        num_commands = 0
-        num_commands_annotated = 0
-        """for url_tag in url_set:
-            for command in url_tag.url.commands.all():
-                if tag in command.tags.all():
-                    num_commands += 1
-                    if Annotation.objects.filter(
-                            cmd=command, annotator=user).exists():
-                        num_commands_annotated += 1
-        """
         completion_ratio = num_urls_completed / num_urls if num_urls > 0 else 0
         self_completion_ratio = num_urls_completed_by_user / num_urls \
             if num_urls > 0 else 0
-    print(num_urls_annotated)
+        num_commands = 0
+        num_commands_annotated = 0
+        if self_completion_ratio > 0:
+            for command in tag.commands.all():
+                num_commands += 1
+                if Annotation.objects.filter(
+                        cmd=command, annotator=user).exists():
+                    num_commands_annotated += 1
     return json_response({
         'num_urls': num_urls,
         'num_urls_annotated': num_urls_annotated,
