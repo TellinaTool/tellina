@@ -77,25 +77,30 @@
     {% block other-js %}
     <script src="/static/js/annotator/main.js"></script>
     <script>
-        $(document).ready(function () {
-            $('.annotate-utility').ready(function() {
-                $.get(`get_utility_stats`, {utility: $(this).text()}, function(data) {
+        $(function() {
+            $('.annotate-utility').each(function() {
+                var button = $(this);
+                var utility = $(this).text();
+                $.get(`get_utility_stats`, {utility: utility}, function(data) {
                     if (data.status == 'UTILITY_STATS_SUCCESS') {
                         if (data.self_completion_ratio > 0.5) {
-                            $(this).addClass('annotate-utility-self-completed');
+                            button.addClass('annotate-utility-self-completed');
                         } else if (data.self_completion_ratio > 0) {
-                            $(this).addClass('annotate-utility-self-in-progress');
-                        } else if (completion_ratio > 0.5) {
-                            $(this).addClass('annotate-utility-completed');
-                        } else if (completion_ratio > 0) {
-                            $(this).addClass('annotate-utility-in-progress');
-                        } else if (completion_ratio == -1) {
-                            $(this).addClass('disabled');
+                            button.addClass('annotate-utility-self-in-progress');
+                        } else if (data.completion_ratio > 0.5) {
+                            button.addClass('annotate-utility-completed');
+                        } else if (data.completion_ratio > 0) {
+                            button.addClass('annotate-utility-in-progress');
+                        } else if (data.completion_ratio == -1) {
+                            button.addClass('disabled');
+                            button.css('text-decoration', 'line-through');
                         }
                     }
                 });
             });
+        });
 
+        $(document).ready(function () {
             $('.annotate-utility').click(function() {
                 var utility = $(this).text();
                 window.location.replace(`url_panel?utility=${utility}`);
@@ -108,11 +113,12 @@
 
             $('.annotate-utility').hover(
                 function() {
-                    $.get(`get_utility_stats`, {utility: $(this).text()}, function(data) {
+                    var utility = $(this).text();
+                    $.get(`get_utility_stats`, {utility: utility}, function(data) {
                         if (data.status == 'UTILITY_STATS_SUCCESS') {
                             $('.utility-stats').show();
-                            $('.num-urls-annotated').text(data.num_urls);
-                            $('.num-pairs-annotated').text(data.num_pairs);
+                            $('.num-urls-annotated').text(data.num_urls_annotated);
+                            $('.num-pairs-annotated').text(data.num_pairs_annotated);
                         }
                     });
                 }

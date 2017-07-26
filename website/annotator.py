@@ -13,7 +13,8 @@ from website.utils import get_nl, get_command, get_url, get_tag
 WHITE_LIST = {'find', 'xargs'}
 BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs', 'vim'}
 
-GREY_LIST = {'apt-get', 'brew', 'yum', 'export'}
+GREY_LIST = {'alias', 'unalias', 'set', 'unset', 'screen', 'apt-get', 'brew', 'yum', 
+             'export', 'shift', 'exit', 'logout'}
 
 def json_response(d={}, status='SUCCESS'):
     d.update({'status': status})
@@ -324,11 +325,12 @@ def url_panel(request, access_code):
     tag = get_tag(utility)
 
     url_list = []
+   
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
         num_commands_missed = 0
         try:
             record = AnnotationProgress.objects.get(
-                annotator=user, tag=tag, url=url_tag.url)
+                annotator=user, tag__str=utility, url=url_tag.url)
             if record.status == 'completed':
                 # check if any commands were missed
                 for cmd in url_tag.url.commands.all():
@@ -400,7 +402,7 @@ def get_utility_stats(request, access_code):
     utility = request.GET.get('utility')
     user = safe_get_user(access_code)
     tag = get_tag(utility)
-    url_set = URLTag.objects.filter(tag=tag)
+    url_set = URLTag.objects.filter(tag=utility)
     num_urls = url_set.count()
     num_pairs_annotated = tag.annotations.all().count()
     annotated_url_set = AnnotationProgress.objects.filter(tag=tag)
@@ -410,18 +412,22 @@ def get_utility_stats(request, access_code):
     num_urls_completed_by_user = completed_url_set.filter(
             annotator__access_code=access_code).count() + 0.0
     if utility in GREY_LIST:
+        num_commands = 0
+        num_commands_annotated = 0
         completion_ratio = -1
         self_completion_ratio = -1
     else:
+        completion_ratio = num_urls_completed / num_urls if num_urls > 0 else 0
+        self_completion_ratio = num_urls_completed_by_user / num_urls \
+            if num_urls > 0 else 0
         num_commands = 0
         num_commands_annotated = 0
-        for url in url_set:
-            for command in url.commands.all():
-                if tag in command.tags:
-                    num_commands += 1
-                    if Annotation.objects.filter(cmd__template=command.template,
-                            annotator=user).exists():
-                        num_commands_annotated += 1
+        if self_completion_ratio > 0:
+            for command in tag.commands.all():
+                num_commands += 1
+                if Annotation.objects.filter(cmd__template=command.template, 
+                        annotator=user).exists():
+                    num_commands_annotated += 1
         completion_ratio = num_urls_completed / num_urls
         self_completion_ratio = num_urls_completed_by_user / num_urls
 
