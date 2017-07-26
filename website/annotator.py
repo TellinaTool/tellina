@@ -67,8 +67,6 @@ def collect_page(request, access_code):
         annotation_list = Annotation.objects.filter(url=url, annotator=user)
         for command in url.commands.all():
             print(command.str)
-            # for tag in command.tags.all():
-            #     print(tag.str)
             if command.tags.filter(str=tag.str).exists():
                 if not Annotation.objects.filter(url=url, cmd__str=command.str.strip(),
                         annotator=user).exists():
@@ -394,7 +392,7 @@ def get_utility_stats(request, access_code):
     utility = request.GET.get('utility')
     user = safe_get_user(access_code)
     tag = get_tag(utility)
-    url_set = URLTag.objects.filter(tag=tag)
+    url_set = URLTag.objects.filter(tag=utility)
     num_urls = url_set.count()
     num_pairs_annotated = tag.annotations.all().count()
     annotated_url_set = AnnotationProgress.objects.filter(tag=tag)
@@ -404,21 +402,25 @@ def get_utility_stats(request, access_code):
     num_urls_completed_by_user = completed_url_set.filter(
             annotator__access_code=access_code).count() + 0.0
     if utility in GREY_LIST:
+        num_commands = 0
+        num_commands_annotated = 0
         completion_ratio = -1
         self_completion_ratio = -1
     else:
         num_commands = 0
         num_commands_annotated = 0
-        for url in url_set:
-            for command in url.commands.all():
-                if tag in command.tags:
+        """for url_tag in url_set:
+            for command in url_tag.url.commands.all():
+                if tag in command.tags.all():
                     num_commands += 1
                     if Annotation.objects.filter(
                             cmd=command, annotator=user).exists():
                         num_commands_annotated += 1
-        completion_ratio = num_urls_completed / num_urls
-        self_completion_ratio = num_urls_completed_by_user / num_urls
-
+        """
+        completion_ratio = num_urls_completed / num_urls if num_urls > 0 else 0
+        self_completion_ratio = num_urls_completed_by_user / num_urls \
+            if num_urls > 0 else 0
+    print(num_urls_annotated)
     return json_response({
         'num_urls': num_urls,
         'num_urls_annotated': num_urls_annotated,
