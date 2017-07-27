@@ -4,7 +4,8 @@ import pickle
 import re
 import sqlite3
 
-from website.models import Annotation, Command, Tag, URL, URLTag
+from website.models import Annotation, AnnotationUpdate, Command, \
+    Notification, URL, URLTag
 from website.utils import get_tag, get_command, get_url
 
 learning_module_dir = os.path.join(os.path.dirname(__file__), '..', '..',
@@ -113,6 +114,13 @@ def populate_tag_annotations():
     for annotation in Annotation.objects.all():
         for tag in annotation.cmd.tags.all():
             tag.annotations.add(annotation)
+
+def create_notifications():
+    for annotation_update in AnnotationUpdate.objects.all():
+        annotation = annotation_update.annotation
+        Notification.objects.create(sender=annotation_update.judger,
+            receiver=annotation.annotator, type='annotation_update',
+            annotation_update=annotation_update, url=annotation.url)
 
 if __name__ == '__main__':
     load_urls()
