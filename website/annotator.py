@@ -370,6 +370,17 @@ def get_url_stats(request, access_code):
 
 
 @access_code_required
+def get_url_num_notifications(request, access_code):
+    url_str = request.GET.get('url')
+    num_notifications = Notification.objects.filter(url__str=url_str,
+        receiver__access_code=access_code, status='issued').count()
+
+    return json_response({
+            'num_notifications': num_notifications
+        }, status='GET_URL_NUM_NOTIFICATIONS_SUCCESS')
+
+
+@access_code_required
 def utility_panel(request, access_code):
     """
     Display all the utilities to annotate.
@@ -453,6 +464,20 @@ def get_utility_stats(request, access_code):
         'self_completion_ratio': self_completion_ratio,
         'num_commands_missing': (num_commands - num_commands_annotated)
     }, status='UTILITY_STATS_SUCCESS')
+
+@access_code_required
+def get_utility_num_notifications(request, access_code):
+    utility = request.GET.get('utility')
+    num_notifications = 0
+    if not utility in GREY_LIST:
+        for url_tag in URLTag.objects.filter(tag=utility):
+            url = url_tag.url
+            num_notifications += Notification.objects.filter(url=url,
+                receiver__access_code=access_code, status='issued').count()
+
+    return json_response({
+            'num_notifications': num_notifications
+        }, status='GET_UTILITY_NUM_NOTIFICATIONS_SUCCESS')
 
 # --- Annotator Interaction Controls --- #
 

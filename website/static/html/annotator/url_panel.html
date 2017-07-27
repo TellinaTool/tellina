@@ -61,22 +61,34 @@
 
         <script>
             $(function() {
+                var utility = "{{utility}}";
                 $('.url-list-group').each(function() {
                     var url_list_group = $(this);
                     var url = url_list_group.find('.url-link').text();
-                    $.get(`get_url_stats`, {url: url}, function(data) {
+                    var utility = "{{utility}}";
+                    $.get(`get_url_stats`, {url: url, utility: utility}, function(data) {
                         if (data.status == 'URL_STATS_SUCCESS') {
                             if (data.record_status == 'completed') {
                                 if (data.num_commands_missed > 0) {
                                     url_list_group.append(
-                                        '<button type="button" class="btn btn-default btn-xs"><code>{{num_cmd_missed}} commands missed</code></button>');
+                                        `<button type="button" class="btn btn-default btn-xs" onclick="location.replace('collect_page?url=${url}&utility=${utility}')"><code>${data.num_commands_missed} commands missed</code></button>`
+                                    );
                                 }
                             } else {
                                 if (data.num_commands_missed > 0) {
                                     url_list_group.append(
-                                        '<button type="button" class="btn btn-default btn-xs"><code>{{num_cmd_missed}} commands to do</code></button>');
-
+                                        `<button type="button" class="btn btn-default btn-xs" onclick="location.replace('collect_page?url=${url}&utility=${utility}')"><code>${data.num_commands_missed} commands to do</code></button>`
+                                    );
                                 }
+                            }
+                        }
+                    });
+                    $.get(`get_url_num_notifications`, {url: url}, function(data) {
+                        if (data.status == 'GET_URL_NUM_NOTIFICATIONS_SUCCESS') {
+                            if (data.num_notifications > 0) {
+                                url_list_group.append(
+                                    `<button type="button" class="btn btn-default btn-xs" onclick="location.replace('collect_page?url=${url}&utility=${utility}')"><span class="url-num-notifications">${data.num_notifications} comments</span></button>`
+                                );
                             }
                         }
                     });
