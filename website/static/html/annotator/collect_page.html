@@ -267,7 +267,7 @@
                         </input>
                         &nbsp;&nbsp;
                         <input type="radio" id="mark-as-i-dont-know-${annotation_id}" value="i-dont-know" style="display:None">
-                            <span id="mark-as-i-dont-know-radio-text-${annotation_id}" style="display: None">&nbsp;I don't know</span>
+                            <span id="mark-as-i-dont-know-radio-text-${annotation_id}" style="display: None">&nbsp;Not Sure</span>
                         </input>
                         <br>
                     </div>
@@ -333,7 +333,7 @@
                             var collect_box = $('#collect-box-' + index);
                             collect_box.hide();
                             annotation_box.find('.command-submission').text(cmd_extraction);
-                            annotation_box.find('.nl-submission').text('I DON\'T KNOW');
+                            annotation_box.find('.nl-submission').text('I\'M NOT SURE');
                             annotation_box.show();
                         }
                     });
