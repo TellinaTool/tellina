@@ -32,7 +32,9 @@
                     {% for utility_group1, utility_group2 in utility_groups %}
                         {% for utility, completion_ratio, completion_ratio_by_user in utility_group1 %}
                             <div style="display: inline-block; position: relative">
-                            {% if completion_ratio_by_user > 0.5 %}
+                            {% if completion_ratio == -1 %}
+                                <button type="button" class="btn btn-default annotate-utility disabled" style="text-decoration: line-through">{{utility}}</button>
+                            {% elif completion_ratio_by_user > 0.5 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-self-completed">{{utility}}</button>
                             {% elif completion_ratio_by_user > 0 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-self-in-progress">{{utility}}</button>
@@ -40,8 +42,6 @@
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
                             {% elif completion_ratio > 0 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
-                            {% elif completion_ratio == -1 %}
-                                <button type="button" class="btn btn-default annotate-utility disabled" style="text-decoration: line-through">{{utility}}</button>
                             {% else %}
                                 <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
                             {% endif %}
@@ -51,7 +51,9 @@
                         <br>
                         {% for utility, completion_ratio, completion_ratio_by_user in utility_group2 %}
                             <div style="display: inline-block; position: relative">
-                            {% if completion_ratio_by_user > 0.5 %}
+                            {% if completion_ratio == -1 %}
+                                <button type="button" class="btn btn-default annotate-utility disabled" style="text-decoration: line-through">{{utility}}</button>
+                            {% elif completion_ratio_by_user > 0.5 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-self-completed" style="border: 1px; border-style: dotted">{{utility}}</button>
                             {% elif completion_ratio_by_user > 0 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-self-in-progress" style="border: 1px; border-style: dotted">{{utility}}</button>
@@ -59,8 +61,6 @@
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-completed">{{utility}}</button>
                             {% elif completion_ratio > 0 %}
                                 <button type="button" class="btn btn-default annotate-utility annotate-utility-in-progress">{{utility}}</button>
-                            {% elif completion_ratio == -1 %}
-                                <button type="button" class="btn btn-default annotate-utility disabled" style="text-decoration: line-through">{{utility}}</button>
                             {% else %}
                                 <button type="button" class="btn btn-default annotate-utility">{{utility}}</button>
                             {% endif %}
@@ -88,15 +88,24 @@
                 var utility = $(this).text();
                 $.get(`get_utility_stats`, {utility: utility}, function(data) {
                     if (data.status == 'UTILITY_STATS_SUCCESS') {
+                        var parent = button.parent('div');
+                        var original_height = parent.height(); 
+                        var original_width = parent.width();
                         if (data.num_commands_missing > 0) {
-                             var parent = button.parent('div');
-                             var original_height = parent.height(); 
-                             console.log(original_height);
-                             var original_width = parent.width();
                              parent.append(`<span class="missing_command_badge">${data.num_commands_missing}</span>`);
-                             parent.height(original_height);
-                             parent.width(original_width);
-                        } 
+                        }
+                        parent.height(original_height);
+                        parent.width(original_width);
+                    }
+                });
+
+                $.get(`get_utility_num_notifications`, {utility: utility}, function(data) {
+                    if (data.status == 'GET_UTILITY_NUM_NOTIFICATIONS_SUCCESS') {
+                        var parent = button.parent('div');
+                        if (data.num_notifications > 0) {
+                             console.log(data.num_notifications);
+                             parent.append(`<span class="notification_badge">${data.num_notifications}</span>`);
+                        }  
                     }
                 });
             });

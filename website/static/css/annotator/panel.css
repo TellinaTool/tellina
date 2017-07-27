@@ -61,11 +61,16 @@
     background-color: #D0ECE7;
 }
 
+.url-num-notifications {
+    color: #4B0082;
+    background-color: #E6E6FA;
+}
+
 /* --- Facebook style notification badge --- */
 
 /* Make the badge float in the top right corner of the button */
 .missing_command_badge {
-  background-color: #8B4513;
+  background-color: #FFA500;
   border-radius: 2px;
   color: white;
 
@@ -74,10 +79,10 @@
 
   position: absolute; /* Position the badge within the relatively positioned button */
   top: 0px;
-  right: 24px;
+  left: 0px;
 }
 
-.modification_request_badge {
+.notification_badge {
   background-color: #fa3e3e;
   border-radius: 2px;
   color: white;
@@ -87,5 +92,5 @@
 
   position: absolute; /* Position the badge within the relatively positioned button */
   top: 0;
-  right: 12px;
+  right: 0px;
 }

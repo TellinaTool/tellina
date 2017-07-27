@@ -7,14 +7,15 @@ from django.template import loader
 
 from website import functions
 from website.models import NL, Command, Comment, URL, User, URLTag, \
-    Annotation, AnnotationUpdate, AnnotationProgress
+    Annotation, AnnotationUpdate, AnnotationProgress, Notification
 from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
-BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs', 'vim'}
+BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
+              'vim'}
 
-GREY_LIST = {'alias', 'unalias', 'set', 'unset', 'screen', 'apt-get', 'brew', 'yum', 
-             'export', 'shift', 'exit', 'logout'}
+GREY_LIST = {'alias', 'unalias', 'set', 'unset', 'screen', 'apt-get', 'brew',
+             'yum', 'export', 'shift', 'exit', 'logout'}
 
 def json_response(d={}, status='SUCCESS'):
     d.update({'status': status})
@@ -251,27 +252,6 @@ def retract_update(request, access_code):
 
     return json_response(status='RETRACT_UPDATE_SUCCESS')
 
-# --- Judger Controls --- #
-
-@access_code_required
-def submit_update(request, access_code):
-    user = User.objects.get(access_code=access_code)
-    annotation_id = request.GET.get('annotation_id')
-    print(annotation_id)
-    update_str = request.GET.get('update')
-    comment_str = request.GET.get('comment')
-    annotation = Annotation.objects.get(id=annotation_id)
-
-    comment = Comment.objects.create(user=user, str=comment_str)
-    update = AnnotationUpdate.objects.create(annotation=annotation,
-        judger=user, update_str=update_str, comment=comment)
-
-    return json_response({
-        'update_id': update.id,
-        'access_code': access_code,
-        'submission_time': update.submission_time,
-    }, status='UPDATE_SAVE_SUCCESS')
-
 
 @access_code_required
 def previous_url(request, access_code):
@@ -359,6 +339,48 @@ def url_panel(request, access_code):
 
 
 @access_code_required
+def get_url_stats(request, access_code):
+    url = get_url(request.GET.get('url'))
+    tag = get_tag(request.GET.get('utility'))
+
+    # check if any commands were missed
+    num_commands_missed = 0
+    for cmd in url.commands.all():
+        if tag in cmd.tags.all():
+            if not Annotation.objects.filter(cmd__template=cmd.template,
+                    annotator__access_code=access_code).exists():
+                num_commands_missed += 1
+
+    # check if there are notifications sent from other annotators
+    num_notifications = Notification.objects.filter(url=url,
+            receiver__access_code=access_code, status='issued').count()
+
+    try:
+        record = AnnotationProgress.objects.get(
+            annotator__access_code=access_code, tag=tag, url=url)
+        record_status = record.status
+    except ObjectDoesNotExist:
+        record_status = ''
+
+    return json_response({
+            'status': record_status,
+            'num_commands_missed': num_commands_missed,
+            'num_notifications': num_notifications
+        }, status='URL_STATS_SUCCESS')
+
+
+@access_code_required
+def get_url_num_notifications(request, access_code):
+    url_str = request.GET.get('url')
+    num_notifications = Notification.objects.filter(url__str=url_str,
+        receiver__access_code=access_code, status='issued').count()
+
+    return json_response({
+            'num_notifications': num_notifications
+        }, status='GET_URL_NUM_NOTIFICATIONS_SUCCESS')
+
+
+@access_code_required
 def utility_panel(request, access_code):
     """
     Display all the utilities to annotate.
@@ -366,7 +388,7 @@ def utility_panel(request, access_code):
     template = loader.get_template('annotator/utility_panel.html')
     user = safe_get_user(access_code)
 
-    utilities = [] 
+    utilities = []
     for obj in URLTag.objects.values('tag').annotate(num_urls=Count('tag'))\
             .order_by('-num_urls'):
         if obj['tag'] in WHITE_LIST or obj['tag'] in BLACK_LIST:
@@ -398,32 +420,6 @@ def utility_panel(request, access_code):
         context['access_code'] = access_code
 
     return HttpResponse(template.render(context=context, request=request))
-
-
-@access_code_required
-def get_url_stats(request, access_code):
-    url = get_url(request.GET.get('url'))
-    tag = get_tag(request.GET.get('utility'))
-
-    num_commands_missed = 0
-    # check if any commands were missed
-    for cmd in url.commands.all():
-        if tag in cmd.tags.all():
-            if not Annotation.objects.filter(cmd__template=cmd.template,
-                    annotator__access_code=access_code).exists():
-                num_commands_missed += 1
-
-    try:
-        record = AnnotationProgress.objects.get(
-            annotator__access_code=access_code, tag=tag, url=url)
-        record_status = record.status
-    except ObjectDoesNotExist:
-        record_status = ''
-
-    return json_response({
-            'status': record_status,
-            'num_commands_missed': num_commands_missed
-        }, status='URL_STATS_SUCCESS')
 
 
 @access_code_required
@@ -469,6 +465,45 @@ def get_utility_stats(request, access_code):
         'num_commands_missing': (num_commands - num_commands_annotated)
     }, status='UTILITY_STATS_SUCCESS')
 
+@access_code_required
+def get_utility_num_notifications(request, access_code):
+    utility = request.GET.get('utility')
+    num_notifications = 0
+    if not utility in GREY_LIST:
+        for url_tag in URLTag.objects.filter(tag=utility):
+            url = url_tag.url
+            num_notifications += Notification.objects.filter(url=url,
+                receiver__access_code=access_code, status='issued').count()
+
+    return json_response({
+            'num_notifications': num_notifications
+        }, status='GET_UTILITY_NUM_NOTIFICATIONS_SUCCESS')
+
+# --- Annotator Interaction Controls --- #
+
+@access_code_required
+def submit_update(request, access_code):
+    user = User.objects.get(access_code=access_code)
+    annotation_id = request.GET.get('annotation_id')
+    update_str = request.GET.get('update')
+    comment_str = request.GET.get('comment')
+    annotation = Annotation.objects.get(id=annotation_id)
+
+    comment = Comment.objects.create(user=user, str=comment_str)
+    update = AnnotationUpdate.objects.create(annotation=annotation,
+        judger=user, update_str=update_str, comment=comment)
+
+    # create notification
+    Notification.objects.create(sender=user, receiver=annotation.annotator,
+        type='annotation_update', annotation_update=update, url=annotation.url)
+
+    return json_response({
+        'update_id': update.id,
+        'access_code': access_code,
+        'submission_time': update.submission_time,
+    }, status='UPDATE_SAVE_SUCCESS')
+
+# --- Monitor User Performance --- #
 
 @access_code_required
 def user_panel(request, access_code):
@@ -488,7 +523,8 @@ def user_panel(request, access_code):
             last_name_disp += user.last_name[1:]
         u_obj['name'] = first_name_disp + ' ' + last_name_disp
         u_obj['access_code'] = user.access_code
-        u_obj['num_annotations'] = Annotation.objects.filter(annotator=user).exclude(nl__str="NA").count()
+        u_obj['num_annotations'] = Annotation.objects.filter(
+            annotator=user).exclude(nl__str="NA").count()
         if user.time_logged is None:
             user.time_logged = 0
             user.save()

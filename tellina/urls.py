@@ -55,7 +55,9 @@ urlpatterns = [
     url(r'^retract_update', annotator.retract_update),
     url(r'^get_url_stats', annotator.get_url_stats),
     url(r'^get_utility_stats', annotator.get_utility_stats),
-
+    url(r'^get_utility_num_notifications', annotator.get_utility_num_notifications),
+    url(r'^get_url_num_notifications', annotator.get_url_num_notifications),
+    
     url(r'user_panel', annotator.user_panel),
     url(r'user_profile', annotator.user_profile),
     url(r'update_user_time_logged', annotator.update_user_time_logged),

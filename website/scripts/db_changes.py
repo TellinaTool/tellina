@@ -4,8 +4,9 @@ import pickle
 import re
 import sqlite3
 
-from website.models import Annotation, Command, URL, URLTag
-from website.utils import get_tag, get_command
+from website.models import Annotation, AnnotationUpdate, Command, \
+    Notification, URL, URLTag
+from website.utils import get_tag, get_command, get_url
 
 learning_module_dir = os.path.join(os.path.dirname(__file__), '..', '..',
                                    "tellina_learning_module")
@@ -35,7 +36,7 @@ def extract_oneliners_from_code(code_block):
         cmd = cmd.strip()
 
         # discard code block opening line
-        if not cmd[-1] in ['{', '[', '(']:
+        if cmd and not cmd[-1] in ['{', '[', '(']:
             yield cmd
 
 def load_urls(input_file_path):
@@ -45,7 +46,7 @@ def load_urls(input_file_path):
     for utility in urls_by_utility:
         for url in urls_by_utility[utility]:
             if not URLTag.objects.filter(url__str=url, tag=utility):
-                URLTag.objects.create(url__str=url, tag=utility)
+                URLTag.objects.create(url=get_url(url), tag=utility)
                 print("Add {}, {}".format(url, utility))
 
 def load_commands_in_url(stackoverflow_dump_path):
@@ -53,33 +54,55 @@ def load_commands_in_url(stackoverflow_dump_path):
     with sqlite3.connect(stackoverflow_dump_path,
                          detect_types=sqlite3.PARSE_DECLTYPES) as db:
         for url in URL.objects.all():
-            # url = URL.objects.get(str='https://stackoverflow.com/questions/12378558')
+            # url = URL.objects.get(str='https://stackoverflow.com/questions/127669')
             url.commands.clear()
             print(url.str)
             for answer_body, in db.cursor().execute("""
                     SELECT answers.Body FROM answers 
                     WHERE answers.ParentId = ?""", (url.str[len(url_prefix):],)):
                 url.html_content = answer_body
-                url.save()
-
                 for code_block in extract_code(url.html_content):
                     for cmd in extract_oneliners_from_code(code_block):
-                        if cmd:
+                        ast = data_tools.bash_parser(cmd)
+                        if ast:
+                            command = get_command(cmd)                        
                             print('extracted: {}'.format(cmd))
-                            command = get_command(cmd)
                             url.commands.add(command)
             url.save()
 
 def populate_command_tags():
     for cmd in Command.objects.all():
-        if len(cmd.str) > 800:
+        if len(cmd.str) > 600:
             cmd.delete()
-        elif cmd.tags.count() == 0:
+        else:
+            cmd.tags.clear()
             print(cmd.str)
             ast = data_tools.bash_parser(cmd.str)
             for utility in data_tools.get_utilities(ast):
+                print(utility)
                 cmd.tags.add(get_tag(utility))
             cmd.save()
+
+def populate_command_template():
+    for cmd in Command.objects.all():
+        if len(cmd.str) > 600:
+            cmd.delete()
+        else:
+            ast = data_tools.bash_parser(cmd.str)
+            template = data_tools.ast2template(ast, loose_constraints=True)
+            cmd.template = template
+            cmd.save()
+
+def populate_tag_commands():
+    for tag in Tag.objects.all():
+        tag.commands.clear()
+    for url_tag in URLTag.objects.all():
+        print(url_tag.url.str)
+        tag = get_tag(url_tag.tag)
+        for cmd in url_tag.url.commands.all():
+            if tag in cmd.tags.all():
+                tag.commands.add(cmd)
+        tag.save()
 
 def populate_url_tags():
     for url in URL.objects.all():
@@ -91,6 +114,13 @@ def populate_tag_annotations():
     for annotation in Annotation.objects.all():
         for tag in annotation.cmd.tags.all():
             tag.annotations.add(annotation)
+
+def create_notifications():
+    for annotation_update in AnnotationUpdate.objects.all():
+        annotation = annotation_update.annotation
+        Notification.objects.create(sender=annotation_update.judger,
+            receiver=annotation.annotator, type='annotation_update',
+            annotation_update=annotation_update, url=annotation.url)
 
 if __name__ == '__main__':
     load_urls()
