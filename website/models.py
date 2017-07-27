@@ -134,8 +134,10 @@ class Notification(models.Model):
     Each record is a certain type of message issued from one annotator to
     another.
     """
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, related_name='notification_sender',
+                               on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='notification_receiver',
+                                 on_delete=models.CASCADE)
     type = models.TextField(default='comment')
     annotation_update = models.ForeignKey('AnnotationUpdate', null=True,
                                           on_delete=models.CASCADE)
