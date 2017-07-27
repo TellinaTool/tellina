@@ -36,18 +36,12 @@
                 <div class="tiny-push"></div>
                 {% if url_list %}
                     <ul class="list-group">
-                        {% for url, status, num_cmd_missed in url_list %}
-                            <li class="list-group-item">
+                        {% for url, status in url_list %}
+                            <li class="list-group-item url-list-group">
                                 <span><a class="url-link">{{url.str}}</a></span>
                                 {% if status == 'completed' %}
                                     <button type="button" class="btn btn-success btn-xs">Completed</button>
-                                    {% if num_cmd_missed > 0 %}
-                                        <button type="button" class="btn btn-default btn-xs"><code>{{num_cmd_missed}} commands missed</code></button>
-                                    {% endif %}
                                 {% else %}
-                                    {% if num_cmd_missed > 0 %}
-                                        <button type="button" class="btn btn-default btn-xs"><code>{{num_cmd_missed}} commands to-do</code></button>
-                                    {% endif %}
                                     {% if status == 'in-progress' %}
                                         <button type="button" class="btn btn-warning btn-xs">In-progress</button>
                                     {% elif status == 'others-in-progress' %}
@@ -66,6 +60,29 @@
         <script src="/static/js/annotator/main.js"></script>
 
         <script>
+            $(function() {
+                $('.url-list-group').each(function() {
+                    var url_list_group = $(this);
+                    var url = url_list_group.find('.url-link').text();
+                    $.get(`get_url_stats`, {url: url}, function(data) {
+                        if (data.status == 'URL_STATS_SUCCESS') {
+                            if (data.record_status == 'completed') {
+                                if (data.num_commands_missed > 0) {
+                                    url_list_group.append(
+                                        '<button type="button" class="btn btn-default btn-xs"><code>{{num_cmd_missed}} commands missed</code></button>');
+                                }
+                            } else {
+                                if (data.num_commands_missed > 0) {
+                                    url_list_group.append(
+                                        '<button type="button" class="btn btn-default btn-xs"><code>{{num_cmd_missed}} commands to do</code></button>');
+
+                                }
+                            }
+                        }
+                    });
+                });
+            });
+
             $(document).ready(function () {
                 $('.btn-utility').click(function() {
                     window.location.replace(`utility_panel`);

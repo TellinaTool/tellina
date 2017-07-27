@@ -338,22 +338,15 @@ def url_panel(request, access_code):
     url_list = []
    
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
-        num_commands_missed = 0
-        # check if any commands were missed
-        for cmd in url_tag.url.commands.all():
-            if tag in cmd.tags.all():
-                if not Annotation.objects.filter(cmd__template=cmd.template, 
-                        annotator=user).exists():
-                    num_commands_missed += 1
         try:
             record = AnnotationProgress.objects.get(
                 annotator=user, tag__str=utility, url=url_tag.url)
-            url_list.append((url_tag.url, record.status, num_commands_missed))
+            url_list.append((url_tag.url, record.status))
         except ObjectDoesNotExist:
             if Annotation.objects.filter(url=url_tag.url):
-                url_list.append((url_tag.url, 'others-in-progress', num_commands_missed))
+                url_list.append((url_tag.url, 'others-in-progress'))
             else:
-                url_list.append((url_tag.url, '', num_commands_missed))
+                url_list.append((url_tag.url, ''))
 
     context = {
         'utility': utility,
@@ -405,6 +398,32 @@ def utility_panel(request, access_code):
         context['access_code'] = access_code
 
     return HttpResponse(template.render(context=context, request=request))
+
+
+@access_code_required
+def get_url_stats(request, access_code):
+    url = get_url(request.GET.get('url'))
+    tag = get_tag(request.GET.get('utility'))
+
+    num_commands_missed = 0
+    # check if any commands were missed
+    for cmd in url.commands.all():
+        if tag in cmd.tags.all():
+            if not Annotation.objects.filter(cmd__template=cmd.template,
+                    annotator__access_code=access_code).exists():
+                num_commands_missed += 1
+
+    try:
+        record = AnnotationProgress.objects.get(
+            annotator__access_code=access_code, tag=tag, url=url)
+        record_status = record.status
+    except ObjectDoesNotExist:
+        record_status = ''
+
+    return json_response({
+            'status': record_status,
+            'num_commands_missed': num_commands_missed
+        }, status='URL_STATS_SUCCESS')
 
 
 @access_code_required
