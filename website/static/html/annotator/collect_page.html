@@ -376,7 +376,7 @@
                             update = data.update_list[i];
                             add_main_level_comment(annotation_id, update.update_id, update.access_code,
                                 update.submission_time, update.update_str, update.comment_str);
-                            set_up_main_level_comment(update.update_id);
+                            set_up_main_level_comment(update.update_id, annotation_id);
                         }
                     });
                 }
@@ -505,7 +505,7 @@
                 )
             }
 
-            function set_up_main_level_comment(update_id) {
+            function set_up_main_level_comment(update_id, annotation_id) {
                 var comment_box = $(`#comment-box-${update_id}`);
 
                 $.get(`get_update_replies`, {update_id: update_id}, function(data) {
@@ -520,6 +520,14 @@
                                  <button type="button" class="btn btn-warning btn-sm accept-update" id="accept-update-${update_id}" style="float: right; margin-right: 20px">Accept
                                  </button>
                                 `);
+
+                            $.get(`accept-update`, {update_id: update_id}, function(data) {
+                                if (data.status == 'ACCEPT_UPDATE_SUCCESS') {
+                                    var annotation_box = $(`#annotation-box-${annotation_id}`);
+                                    annotation_box.nl-submission.text(data.updated_str);
+                                    comment_box.hide();
+                                }
+                            });
                         } else {
                             // append retract button
                             comment_box.append(

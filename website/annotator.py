@@ -503,6 +503,21 @@ def submit_update(request, access_code):
         'submission_time': update.submission_time,
     }, status='UPDATE_SAVE_SUCCESS')
 
+
+@access_code_required
+def accept_update(request, access_code):
+    update_id = request.GET.get('update_id')
+    update = AnnotationUpdate.objects.get(id=update_id)
+    annotation = update.annotation
+    update_str = update.update_str
+    old_annotation_nl = annotation.nl.str
+    annotation.nl = get_nl(update_str)
+    annotation.save()
+    return json_response({
+        'old_annotation_nl': old_annotation_nl,
+        'updated_str': update_str
+    }, status='ACCEPT_UPDATE_SUCCESS')
+
 # --- Monitor User Performance --- #
 
 @access_code_required
