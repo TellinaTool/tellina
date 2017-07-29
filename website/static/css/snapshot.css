@@ -104,9 +104,10 @@
 }
 
 .panel-google-plus > .panel-footer {
+    padding-top: 0px;
     font-size: 14px;
     font-weight: 700;
-    min-height: 54px;
+    min-height: 40px;
 }
 .panel-google-plus > .panel-footer > .btn {
     float: right;

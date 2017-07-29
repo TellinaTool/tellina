@@ -39,4 +39,15 @@ make db
 ```
 make run
 ```
+
+To experiment with the translation model locally, make sure to set following control variables correctly.
+
+### Control variables:
+
+```
+WEBSITE_DEVELOP (website/views.py) 
+
+  - True (default), start the web server without importing the Tensorflow translation module (fast start)
+  - False, start the web server and translate new queries (5-10 secs delay during start)
+```
 Visit http://127.0.0.1:8000 in your browser.

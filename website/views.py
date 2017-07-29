@@ -28,8 +28,8 @@ def ip_address_required(f):
         try:
             ip_address = request.COOKIES['ip_address']
         except KeyError:
-            # use an (invalid) dummy IP address if cookie reading failed
-            ip_address = '123.456.789.012'
+            # redirect to home page if no ip address is captured
+            return index(request)
         return f(request, *args, ip_address=ip_address, **kwargs)
     return g
 
@@ -212,6 +212,7 @@ def index(request):
 
 def latest_requests_with_translations():
     latest_requests_with_translations = []
+    max_num_translation = 0
 
     for request in NLRequest.objects.order_by('-submission_time'):
         translations = Translation.objects.filter(request_str=request.request_str)
@@ -224,6 +225,9 @@ def latest_requests_with_translations():
         else:
             top_translation = 'No translation available.'
         latest_requests_with_translations.append((request, top_translation))
+        max_num_translation += 1
+        if max_num_translation % 20 == 0:
+            break
 
     return latest_requests_with_translations
 
