@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_protect
 sys.path.append(os.path.join(
     os.path.dirname(__file__), "..", "tellina_learning_module"))
 
-from bashlex import data_tools
+from bashlint import data_tools
 
 from website.models import NL, Command, NLRequest, Translation, Vote, User
 
