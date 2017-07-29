@@ -49,15 +49,16 @@ urlpatterns = [
     url(r'^mark_i_dont_know', annotator.mark_i_dont_know),
     url(r'^update_progress$', annotator.update_progress),
 
+    url(r'^accept_update', annotator.accept_update),
+    url(r'^retract_update', annotator.retract_update),
     url(r'^submit_update', annotator.submit_update),
     url(r'^get_relevant_updates', annotator.get_relevant_updates),
     url(r'^get_update_replies', annotator.get_update_replies),
-    url(r'^retract_update', annotator.retract_update),
     url(r'^get_url_stats', annotator.get_url_stats),
     url(r'^get_utility_stats', annotator.get_utility_stats),
     url(r'^get_utility_num_notifications', annotator.get_utility_num_notifications),
     url(r'^get_url_num_notifications', annotator.get_url_num_notifications),
-    
+
     url(r'user_panel', annotator.user_panel),
     url(r'user_profile', annotator.user_profile),
     url(r'update_user_time_logged', annotator.update_user_time_logged),
