@@ -397,6 +397,7 @@
                 });
 
                 $(`#edit-pair-${annotation_id}`).click(function() {
+                    var index = parseInt(annotation_id);
                     var nl = annotation_box.find('.nl-submission').text();
                     var cmd = annotation_box.find('.command-submission').text();
                     nl_submission_cache[index-1] = nl;
@@ -427,6 +428,7 @@
                 });
 
                 $(`#cancel-edit-${annotation_id}`).click(function() {
+                    var index = parseInt(annotation_id);
                     var nl = collect_box.find('.nl-input').val();
                     var cmd = collect_box.find('.command-input').val();
                     collect_box.hide();
@@ -533,10 +535,10 @@
                                 <span class="submission-time">${submission_time}</span>
                             </div>
                             <div class="update-content">
-                                ${update}<i class="glyphicon glyphicon-pencil" id="update-content-edit" style="float: right"></i>
+                                ${update}
                             </div>
                             <div class="comment-content">
-                                <i class="glyphicon glyphicon-list-alt"></i>${comment}
+                                <i class="glyphicon glyphicon-list-alt"></i>&nbsp;${comment}
                                 <div class="tiny-push"></div>
                             </div>
                         </div>
@@ -557,9 +559,9 @@
                             comment_box.append(
                                  `<button type="button" class="btn btn-default btn-sm change-update" id="change-update-${update_id}" style="float: right; margin-right: 20px">Change
                                  </button>
-                                 <button type="button" class="btn btn-primary btn-sm reject-update" id="reject-update-${update_id}" style="float: right; margin-right: 20px">Keep Original
+                                 <button type="button" class="btn btn-warning btn-sm reject-update" id="reject-update-${update_id}" style="float: right; margin-right: 20px">Reject
                                  </button>
-                                 <button type="button" class="btn btn-warning btn-sm accept-update" id="accept-update-${update_id}" style="float: right; margin-right: 20px">Accept
+                                 <button type="button" class="btn btn-primary btn-sm accept-update" id="accept-update-${update_id}" style="float: right; margin-right: 20px">Accept
                                  </button>
                                 `);
 
@@ -600,21 +602,32 @@
                 });
             }
 
-            function add_comment_panel(annotation_id, update_id) {
+            function add_comment_panel(annotation_id, comment_id) {
                 // append an comment box to an annotation
                 comment_list = $(`#comments-list-${annotation_id}`);
                 $(comment_list).append(
-                    `<div class="comment-panel" id="comment-panel-${update_id}">
-                        <div class="comment-box" id="comment-box-${update_id}">
+                    `<div class="comment-panel" id="comment-panel-${annotation_id}-${comment_id}">
+                        <div class="comment-box" id="comment-box-${annotation_id}-${comment_id}">
                             <textarea class="form-control comment-input vresize" placeholder='Leave a comment for your decision...'></textarea>
                             <br>
-                            <button type="button" class="btn btn-primary btn-sm submit-update" id="submit-comment-${update_id}" style="float: right">Submit</button>
-                            <button type="button" class="btn btn-default btn-sm cancel-update" id="cancel-comment-${update_id}" style="float: right; margin-right: 20px;">Cancel</button>
+                            <button type="button" class="btn btn-primary btn-sm submit-update" id="submit-comment-${annotation_id}-${comment_id}" style="float: right">Submit</button>
+                            <button type="button" class="btn btn-default btn-sm cancel-update" id="cancel-comment-${annotation_id}-${comment_id}" style="float: right; margin-right: 20px;">Cancel</button>
+                            <br>
+                            <br>
                         </div>
-                        <br>
                     </div>`
                 );
-                set_up_comment_panel(annotation_id);
+                set_up_comment_panel(annotation_id, comment_id);
+            }
+
+            function set_up_comment_panel(annotation_id, comment_id) {
+                comment_panel = $(`#comment-panel-${annotation_id}-${comment_id}`);
+                $(`#submit-comment-${annotation_id}-${comment_id}`).click(function() {
+                    
+                });
+                $(`#cancel-comment-${annotation_id}-${comment_id}`).click(function() {
+                    comment_panel.remove();
+                });
             }
         </script>
     {% endblock %}

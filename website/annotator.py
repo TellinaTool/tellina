@@ -519,6 +519,8 @@ def accept_update(request, access_code):
     notification.status = 'cleared'
     notification.save()
 
+    update.delete()
+
     return json_response({
         'old_annotation_nl': old_annotation_nl,
         'updated_str': update_str
