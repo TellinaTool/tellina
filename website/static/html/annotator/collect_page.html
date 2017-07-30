@@ -536,7 +536,7 @@
                                 ${update}<i class="glyphicon glyphicon-pencil" id="update-content-edit" style="float: right"></i>
                             </div>
                             <div class="comment-content">
-                                <i class="glyphicon glyphicon-list-alt"></i> ${comment}
+                                <i class="glyphicon glyphicon-list-alt"></i>${comment}
                                 <div class="tiny-push"></div>
                             </div>
                         </div>
@@ -555,7 +555,9 @@
                         if (update_user != '{{access_code}}') {
                             // append reply button
                             comment_box.append(
-                                 `<button type="button" class="btn btn-primary btn-sm reject-update" id="reject-update-${update_id}" style="float: right; margin-right: 20px">Keep Original
+                                 `<button type="button" class="btn btn-default btn-sm change-update" id="change-update-${update_id}" style="float: right; margin-right: 20px">Change
+                                 </button>
+                                 <button type="button" class="btn btn-primary btn-sm reject-update" id="reject-update-${update_id}" style="float: right; margin-right: 20px">Keep Original
                                  </button>
                                  <button type="button" class="btn btn-warning btn-sm accept-update" id="accept-update-${update_id}" style="float: right; margin-right: 20px">Accept
                                  </button>
@@ -572,10 +574,11 @@
                             });
 
                             $(`#reject-update-${update_id}`).click(function() {
+                                add_comment_panel(annotation_id, update_id);
                             });
 
                             $(`#change-update-${update_id}`).click(function() {
-
+                                add_comment_panel(annotation_id, update_id);
                             });
                         } else {
                             // append retract button
