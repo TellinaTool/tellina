@@ -513,6 +513,12 @@ def accept_update(request, access_code):
     old_annotation_nl = annotation.nl.str
     annotation.nl = get_nl(update_str)
     annotation.save()
+
+    # remove annotation update notification flag
+    notification = Notification.objects.filter(annotation_update=update)
+    notification.status = 'cleared'
+    notification.save()
+
     return json_response({
         'old_annotation_nl': old_annotation_nl,
         'updated_str': update_str
