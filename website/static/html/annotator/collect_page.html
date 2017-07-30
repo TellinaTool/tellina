@@ -486,19 +486,17 @@
                 // add a main level comment to an annotation
                 $('#comments-list-' + index).append(
                     `<li>
-                        <div class="comment-main-level">
-                            <!-- Main comment -->
-                            <div class="comment-box" id="comment-box-${update_id}">
-                                <div class="comment-head">
-                                    <div class="comment-name by-judger">${access_code}</div>
-                                    <span class="submission-time">${submission_time}</span>
-                                </div>
-                                <div class="update-content">
-                                    ${update}
-                                </div>
-                                <div class="comment-content">
-                                    <i class="glyphicon glyphicon-option-horizontal"></i> ${comment}
-                                </div>
+                        <!-- Main comment -->
+                        <div class="comment-box" id="comment-box-${update_id}">
+                            <div class="comment-head">
+                                <div class="comment-name by-judger">${access_code}</div>
+                                <span class="submission-time">${submission_time}</span>
+                            </div>
+                            <div class="update-content">
+                                ${update}
+                            </div>
+                            <div class="comment-content">
+                                <i class="glyphicon glyphicon-option-horizontal"></i> ${comment}
                             </div>
                         </div>
                     </li>`
@@ -527,6 +525,15 @@
                                         var annotation_box = $(`#annotation-box-${annotation_id}`);
                                         annotation_box.find('.nl-submission').text(data.updated_str);
                                         comment_box.hide();
+                                    }
+                                });
+                            });
+
+                            $(`#reply-update-${update_id}`).click(function() {
+                                $.get(`reply_update`, {update_id: update_id}, function(data) {
+                                    if (data.status == 'REPLY_UPDATE_SUCCESS') {
+                                        var annotation_box = $(`#annotation-box-${annotation_id}`);
+
                                     }
                                 });
                             });
