@@ -350,7 +350,7 @@
                 var is_judger = ("{{is_judger}}" == 'True');
                 var annotation_box = $(`#annotation-box-${annotation_id}`);
                 var id = parseInt(annotation_box.find('.annotation-id').text());
-                var collect_box = $('#collect-box-${annotation_id}');
+                var collect_box = $(`#collect-box-${annotation_id}`);
 
                 /* --- judger control --- */
                 if (is_judger) {
@@ -371,7 +371,7 @@
                 if (!isNaN(id)) {
                     $.get(`get_relevant_updates`, {annotation_id: id}, function(data) {
                         if (data.update_list.length > 0) {
-                            $(`edit-pair-${annotation_id}`).hide();
+                            $(`#edit-pair-${annotation_id}`).hide();
                         }
                         for (i = 0; i < data.update_list.length; i ++) {
                             update = data.update_list[i];
@@ -483,7 +483,7 @@
 
             function add_main_level_comment(annotation_id, update_id, access_code, submission_time, update, comment) {
                 // add a main level comment to an annotation
-                $('#comments-list-' + index).append(
+                $(`#comments-list-${annotation_id}`).append(
                     `<li>
                         <!-- Main comment -->
                         <div class="comment-box" id="comment-box-${update_id}">
@@ -492,10 +492,11 @@
                                 <span class="submission-time">${submission_time}</span>
                             </div>
                             <div class="update-content">
-                                ${update}
+                                ${update}<i class="glyphicon glyphicon-pencil" id="update-content-edit" style="float: right"></i>
                             </div>
                             <div class="comment-content">
                                 <i class="glyphicon glyphicon-list-alt"></i> ${comment}
+                                <div class="tiny-push"></div>
                             </div>
                         </div>
                     </li>`
@@ -512,7 +513,7 @@
                         if (update_user != '{{access_code}}') {
                             // append reply button
                             comment_box.append(
-                                `<button type="button" class="btn btn-default btn-sm reply-update" id="reply-update-${update_id}" style="float: right">Reply
+                                 `<button type="button" class="btn btn-primary btn-sm reject-update" id="reject-update-${update_id}" style="float: right; margin-right: 20px">Keep Original
                                  </button>
                                  <button type="button" class="btn btn-warning btn-sm accept-update" id="accept-update-${update_id}" style="float: right; margin-right: 20px">Accept
                                  </button>
@@ -528,14 +529,12 @@
                                 });
                             });
 
-                            $(`#reply-update-${update_id}`).click(function() {
+                            $(`#reject-update-${update_id}`).click(function() {
+                                $.get
+                            });
 
-                                $.get(`reply_update`, {update_id: update_id}, function(data) {
-                                    if (data.status == 'REPLY_UPDATE_SUCCESS') {
-                                        var annotation_box = $(`#annotation-box-${annotation_id}`);
+                            $(`#change-update-${update_id}`).click(function() {
 
-                                    }
-                                });
                             });
                         } else {
                             // append retract button
