@@ -347,11 +347,10 @@
             }
 
             function set_up_collect_panel(annotation_id) {
-                var index = parseInt(annotation_id);
                 var is_judger = ("{{is_judger}}" == 'True');
-                var annotation_box = $('#annotation-box-' + index);
+                var annotation_box = $(`#annotation-box-${annotation_id}`);
                 var id = parseInt(annotation_box.find('.annotation-id').text());
-                var collect_box = $('#collect-box-' + index);
+                var collect_box = $('#collect-box-${annotation_id}');
 
                 /* --- judger control --- */
                 if (is_judger) {
@@ -359,7 +358,6 @@
                         // cache the old nl submission
                         var nl = annotation_box.find('.nl-submission').text();
                         nl_submission_cache[index-1] = nl;
-
                         $(this).parent().hide();
                         $(`#nl-submission-edit-input-${annotation_id}`).css("display", "block");
                         $(`#nl-submission-edit-input-${annotation_id}`).css("width", "100%");
@@ -372,6 +370,9 @@
                 // Display update requests of each annotation if there is any, including their replies.
                 if (!isNaN(id)) {
                     $.get(`get_relevant_updates`, {annotation_id: id}, function(data) {
+                        if (data.update_list.length > 0) {
+                            $(`edit-pair-${annotation_id}`).hide();
+                        }
                         for (i = 0; i < data.update_list.length; i ++) {
                             update = data.update_list[i];
                             add_main_level_comment(annotation_id, update.update_id, update.access_code,
@@ -481,8 +482,6 @@
             }
 
             function add_main_level_comment(annotation_id, update_id, access_code, submission_time, update, comment) {
-                var index = parseInt(annotation_id);
-
                 // add a main level comment to an annotation
                 $('#comments-list-' + index).append(
                     `<li>
@@ -530,6 +529,7 @@
                             });
 
                             $(`#reply-update-${update_id}`).click(function() {
+
                                 $.get(`reply_update`, {update_id: update_id}, function(data) {
                                     if (data.status == 'REPLY_UPDATE_SUCCESS') {
                                         var annotation_box = $(`#annotation-box-${annotation_id}`);
