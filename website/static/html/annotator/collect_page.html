@@ -521,12 +521,14 @@
                                  </button>
                                 `);
 
-                            $.get(`accept_update`, {update_id: update_id}, function(data) {
-                                if (data.status == 'ACCEPT_UPDATE_SUCCESS') {
-                                    var annotation_box = $(`#annotation-box-${annotation_id}`);
-                                    annotation_box.find('.nl-submission').text(data.updated_str);
-                                    comment_box.hide();
-                                }
+                            $(`#accept-update-${update_id}`).click(function() {
+                                $.get(`accept_update`, {update_id: update_id}, function(data) {
+                                    if (data.status == 'ACCEPT_UPDATE_SUCCESS') {
+                                        var annotation_box = $(`#annotation-box-${annotation_id}`);
+                                        annotation_box.find('.nl-submission').text(data.updated_str);
+                                        comment_box.hide();
+                                    }
+                                });
                             });
                         } else {
                             // append retract button
