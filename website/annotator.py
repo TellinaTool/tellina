@@ -255,6 +255,7 @@ def retract_update(request, access_code):
 
 @access_code_required
 def previous_url(request, access_code):
+    user = safe_get_user(access_code)
     utility = request.GET.get('utility')
     tag = get_tag(utility)
     current_url = request.GET.get('url')
@@ -266,7 +267,8 @@ def previous_url(request, access_code):
         if url_tag.url.str == current_url:
             is_current_url = True
             break
-        if get_num_commands_missed_url(url_tag.url, tag, access_code) > 0:
+        if user.is_judger or \
+                get_num_commands_missed_url(url_tag.url, tag, access_code) > 0:
             prev_url = url_tag.url
 
     if prev_url is not None:
@@ -282,6 +284,7 @@ def previous_url(request, access_code):
 
 @access_code_required
 def next_url(request, access_code):
+    user = safe_get_user(access_code)
     utility = request.GET.get('utility')
     tag = get_tag(utility)
     current_url = request.GET.get('url')
@@ -290,7 +293,8 @@ def next_url(request, access_code):
     next_url = None
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
         if is_current_url:
-            if get_num_commands_missed_url(url_tag.url, tag, access_code) == 0:
+            if not user.is_judger and \
+                    get_num_commands_missed_url(url_tag.url, tag, access_code) == 0:
                 continue
             else:
                 next_url = url_tag.url
