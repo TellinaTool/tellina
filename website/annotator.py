@@ -515,7 +515,7 @@ def accept_update(request, access_code):
     annotation.save()
 
     # remove annotation update notification flag
-    notification = Notification.objects.filter(annotation_update=update)
+    notification = Notification.objects.get(annotation_update=update)
     notification.status = 'cleared'
     notification.save()
 
