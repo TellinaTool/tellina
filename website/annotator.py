@@ -256,6 +256,7 @@ def retract_update(request, access_code):
 @access_code_required
 def previous_url(request, access_code):
     utility = request.GET.get('utility')
+    tag = get_tag(utility)
     current_url = request.GET.get('url')
 
     is_current_url = False
@@ -265,7 +266,8 @@ def previous_url(request, access_code):
         if url_tag.url.str == current_url:
             is_current_url = True
             break
-        prev_url = url_tag.url
+        if get_num_commands_missed_url(url_tag.url, tag, access_code) > 0:
+            prev_url = url_tag.url
 
     if prev_url is not None:
         resp = json_response({'url': prev_url.str}, status="PREVIOUS_URL_SUCCESS")
@@ -281,14 +283,18 @@ def previous_url(request, access_code):
 @access_code_required
 def next_url(request, access_code):
     utility = request.GET.get('utility')
+    tag = get_tag(utility)
     current_url = request.GET.get('url')
 
     is_current_url = False
     next_url = None
     for url_tag in URLTag.objects.filter(tag=utility).order_by('url__str'):
         if is_current_url:
-            next_url = url_tag.url
-            break
+            if get_num_commands_missed_url(url_tag.url, tag, access_code) == 0:
+                continue
+            else:
+                next_url = url_tag.url
+                break
         else:
             if url_tag.url.str == current_url:
                 is_current_url = True
@@ -313,7 +319,6 @@ def url_panel(request, access_code):
     user = safe_get_user(access_code)
 
     utility = request.GET.get('utility')
-    tag = get_tag(utility)
 
     url_list = []
    
@@ -344,12 +349,7 @@ def get_url_stats(request, access_code):
     tag = get_tag(request.GET.get('utility'))
 
     # check if any commands were missed
-    num_commands_missed = 0
-    for cmd in url.commands.all():
-        if tag in cmd.tags.all():
-            if not Annotation.objects.filter(cmd__template=cmd.template,
-                    annotator__access_code=access_code).exists():
-                num_commands_missed += 1
+    num_commands_missed = get_num_commands_missed_url(url, tag, access_code)
 
     # check if there are notifications sent from other annotators
     num_notifications = Notification.objects.filter(url=url,
@@ -367,6 +367,16 @@ def get_url_stats(request, access_code):
             'num_commands_missed': num_commands_missed,
             'num_notifications': num_notifications
         }, status='URL_STATS_SUCCESS')
+
+
+def get_num_commands_missed_url(url, tag, access_code):
+    num_commands_missed = 0
+    for cmd in url.commands.all():
+        if tag in cmd.tags.all():
+            if not Annotation.objects.filter(cmd__template=cmd.template,
+                    annotator__access_code=access_code).exists():
+                num_commands_missed += 1
+    return num_commands_missed
 
 
 @access_code_required
@@ -453,8 +463,6 @@ def get_utility_stats(request, access_code):
                 if Annotation.objects.filter(cmd__template=command.template, 
                         annotator=user).exists():
                     num_commands_annotated += 1
-        completion_ratio = num_urls_completed / num_urls
-        self_completion_ratio = num_urls_completed_by_user / num_urls
 
     return json_response({
         'num_urls': num_urls,
