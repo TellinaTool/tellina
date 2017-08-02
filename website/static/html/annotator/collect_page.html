@@ -350,6 +350,7 @@
             function set_up_collect_panel(annotation_id) {
                 var is_judger = ("{{is_judger}}" == 'True');
                 var annotation_box = $(`#annotation-box-${annotation_id}`);
+                var index = parseInt(annotation_id);
                 var id = parseInt(annotation_box.find('.annotation-id').text());
                 var collect_box = $(`#collect-box-${annotation_id}`);
 
@@ -397,7 +398,6 @@
                 });
 
                 $(`#edit-pair-${annotation_id}`).click(function() {
-                    var index = parseInt(annotation_id);
                     var nl = annotation_box.find('.nl-submission').text();
                     var cmd = annotation_box.find('.command-submission').text();
                     nl_submission_cache[index-1] = nl;
@@ -428,7 +428,6 @@
                 });
 
                 $(`#cancel-edit-${annotation_id}`).click(function() {
-                    var index = parseInt(annotation_id);
                     var nl = collect_box.find('.nl-input').val();
                     var cmd = collect_box.find('.command-input').val();
                     collect_box.hide();
