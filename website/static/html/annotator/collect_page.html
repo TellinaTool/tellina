@@ -68,7 +68,7 @@
                                     <br>
                                 {% endif %}
                             </div>
-                            <ul class="comments-list" id="comments-list-{{forloop.counter}}" style="padding-left: 0px"></ul>
+                            <ul class="comment-list" id="comment-list-{{forloop.counter}}" style="padding-left: 0px"></ul>
                             <hr>
                         {% endfor %}
                     </div>
@@ -246,7 +246,7 @@
                 }
             })
 
-            /* -- main-level data entry -- */
+            /* -- data entry -- */
             function add_collect_panel(annotation_id, cmd_extraction, nl_extraction) {
                 // add a new collect box
                 $(".collect-box-group").append(
@@ -468,165 +468,8 @@
                 }
             }
 
-            // add annotation update panel for judger's input
-            function add_annotation_update_panel(annotation_id) {
-                // append an update box to an annotation
-                $(`#annotation-box-${annotation_id}`).append(
-                    `<div class="update-panel" id="update-panel-${annotation_id}">
-                        <div class="update-box" id="update-box-${annotation_id}">
-                            <textarea class="form-control update-comment-input vresize" placeholder='Leave a comment for your change...'></textarea>
-                            <br>
-                            <button type="button" class="btn btn-primary btn-sm submit-update" id="submit-update-${annotation_id}" style="float: right">Submit</button>
-                            <button type="button" class="btn btn-default btn-sm cancel-update" id="cancel-update-${annotation_id}" style="float: right; margin-right: 20px;">Cancel</button>
-                        </div>
-                        <br>
-                    </div>`
-                );
-                set_up_annotation_update_panel(annotation_id);
-            }
 
-            // set up annotation update panel for judger's input
-            function set_up_annotation_update_panel(annotation_id) {
-                var index = parseInt(annotation_id);
-                var annotation_box = $('#annotation-box-' + index);
-                var id = parseInt(annotation_box.find('.annotation-id').text());
-                var update_panel = $('#update-panel-' + index);
-                var update_box = $('#update-box-' + index);
 
-                $(`#submit-update-${annotation_id}`).click(function() {
-                    var update = $(`#nl-submission-edit-input-${annotation_id}`).val();
-                    if (update != nl_submission_cache[index-1]) {
-                        var comment = update_box.find('.update-comment-input').val();
-                        if (comment.length < 10) {
-                            alert("Please explain your edits in more detail for the reference of others.");
-                        } else {
-                            $.get(`submit_update`, {annotation_id: id, update: update, comment: comment}, function(data) {
-                                if (data.status == 'UPDATE_SAVE_SUCCESS') {
-                                    $(`#nl-submission-edit-input-${annotation_id}`).hide();
-                                    update_box.hide();
-                                    // update cannot be retract once submitted
-                                    $(`#nl-submission-edit-${annotation_id}`).hide();
-                                    $(`#nl-submission-edit-${annotation_id}`).parent().show();
-                                    add_annotation_update(annotation_id, data.update_id, data.access_code,
-                                        data.submission_time, update, comment);
-                                }
-                            });
-                        }
-                    }
-                });
 
-                $(`#cancel-update-${annotation_id}`).click(function() {
-                    $(`#nl-submission-edit-${annotation_id}`).parent().show();
-                    $(`#nl-submission-edit-input-${annotation_id}`).hide();
-                    update_panel.remove();
-                });
-            }
-
-            // display annotation update to annotator
-            function add_annotation_update(annotation_id, update_id, access_code, submission_time, update, comment) {
-                // add a main level comment to an annotation
-                $(`#comments-list-${annotation_id}`).append(
-                    `<li>
-                        <!-- Main comment -->
-                        <div class="comment-box" id="comment-box-${update_id}">
-                            <div class="comment-head">
-                                <div class="comment-name by-judger">${access_code}</div>
-                                <span class="submission-time">${submission_time}</span>
-                            </div>
-                            <div class="update-content">
-                                ${update}
-                            </div>
-                            <div class="comment-content">
-                                <i class="glyphicon glyphicon-list-alt"></i>&nbsp;${comment}
-                                <div class="tiny-push"></div>
-                            </div>
-                        </div>
-                    </li>`
-                )
-            }
-
-            // set up annotation update display panel
-            function set_up_annotation_update(update_id, annotation_id) {
-                var comment_box = $(`#comment-box-${update_id}`);
-
-                $.get(`get_update_replies`, {update_id: update_id}, function(data) {
-                    if (data.reply_list.length == 0) {
-                        // append retract or reply button if there is no replies on the updates yet
-                        var update_user = comment_box.find('.comment-name').text();
-                        if (update_user != '{{access_code}}') {
-                            // append reply button
-                            comment_box.append(
-                                 `<button type="button" class="btn btn-default btn-sm change-update" id="change-update-${update_id}" style="float: right; margin-right: 20px">Change
-                                 </button>
-                                 <button type="button" class="btn btn-warning btn-sm reject-update" id="reject-update-${update_id}" style="float: right; margin-right: 20px">Reject
-                                 </button>
-                                 <button type="button" class="btn btn-primary btn-sm accept-update" id="accept-update-${update_id}" style="float: right; margin-right: 20px">Accept
-                                 </button>
-                                `);
-
-                            $(`#accept-update-${update_id}`).click(function() {
-                                $.get(`accept_update`, {update_id: update_id}, function(data) {
-                                    if (data.status == 'ACCEPT_UPDATE_SUCCESS') {
-                                        var annotation_box = $(`#annotation-box-${annotation_id}`);
-                                        annotation_box.find('.nl-submission').text(data.updated_str);
-                                        comment_box.hide();
-                                    }
-                                });
-                            });
-
-                            $(`#reject-update-${update_id}`).click(function() {
-                                add_comment_panel(annotation_id, update_id);
-                            });
-
-                            $(`#change-update-${update_id}`).click(function() {
-                                add_comment_panel(annotation_id, update_id);
-                            });
-                        } else {
-                            // append retract button
-                            comment_box.append(
-                                `<button type="button" class="btn btn-warning btn-sm retract-update" id="retract-update-${update_id}" style="float: right">Retract</button>
-                                `);
-                            console.log(update_id);
-                            $(`#retract-update-${update_id}`).click(function() {
-                                $.get(`retract_update`, {update_id: update_id}, function(data) {
-                                    if (data.status == 'RETRACT_UPDATE_SUCCESS') {
-                                        comment_box.hide();
-                                    }
-                                });
-                            });
-                        }
-                    } else {
-
-                    }
-                });
-            }
-
-            function add_comment_panel(annotation_id, comment_id) {
-                // append an comment box to an annotation
-                comment_list = $(`#comments-list-${annotation_id}`);
-                $(comment_list).append(
-                    `<div class="comment-panel" id="comment-panel-${annotation_id}-${comment_id}">
-                        <div class="comment-box" id="comment-box-${annotation_id}-${comment_id}">
-                            <textarea class="form-control comment-input vresize" placeholder='Leave a comment for your decision...'></textarea>
-                            <br>
-                            <button type="button" class="btn btn-primary btn-sm submit-update" id="submit-comment-${annotation_id}-${comment_id}" style="float: right">Submit</button>
-                            <button type="button" class="btn btn-default btn-sm cancel-update" id="cancel-comment-${annotation_id}-${comment_id}" style="float: right; margin-right: 20px;">Cancel</button>
-                            <br>
-                            <br>
-                        </div>
-                    </div>`
-                );
-                set_up_comment_panel(annotation_id, comment_id);
-            }
-
-            function set_up_comment_panel(annotation_id, comment_id) {
-                comment_panel = $(`#comment-panel-${annotation_id}-${comment_id}`);
-                $(`#submit-comment-${annotation_id}-${comment_id}`).click(function() {
-                    
-                });
-                $(`#cancel-comment-${annotation_id}-${comment_id}`).click(function() {
-                    comment_panel.remove();
-                });
-            }
         </script>
     {% endblock %}

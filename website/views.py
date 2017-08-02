@@ -123,12 +123,16 @@ def translate(request, ip_address):
                 for i in range(len(top_k_predictions)):
                     pred_tree, pred_cmd = top_k_predictions[i]
                     score = top_k_scores[i]
-
                     cmd = get_command(pred_cmd)
-
-                    trans = Translation.objects.create(
-                        nl=nl, pred_cmd=cmd, score=score)
-
+                    trans_set = Translation.objects.filter(nl=nl, pred_cmd=cmd)
+                    if not trans_set.exists():
+                        trans = Translation.objects.create(
+                            nl=nl, pred_cmd=cmd, score=score)
+                    else:
+                        for trans in trans_set:
+                            break
+                        trans.score = score
+                        trans.save()
                     trans_list.append(trans)
                     html_str = tokens2html(pred_tree)
                     html_strs.append(html_str)
