@@ -127,6 +127,7 @@ class AnnotationUpdate(models.Model):
     update_type = models.TextField(default='nl')
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     submission_time = models.DateTimeField(default=timezone.now)
+    status = models.TextField(default='open')
 
 
 class Notification(models.Model):

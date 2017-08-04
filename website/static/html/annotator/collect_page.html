@@ -55,21 +55,21 @@
                             </div>
                             <div class="annotation-box" id="annotation-box-{{forloop.counter}}">
                                 <p class="submission-index">#<strong>{{forloop.counter}}</strong></p>
-                                <span class="annotation-id" style="display: None">{{annotation_id}}</span>
+                                <span class="backend-id" style="display: None">{{annotation_id}}</span>
                                 {% if is_judger %}
-                                    <p class="command-submission">{{command}}<i class="glyphicon glyphicon-pencil" id="command-submission-edit-{{forloop.counter}}" style="float: right"></i></p>
-                                    <p class="nl-submission">{{nl}}<i class="glyphicon glyphicon-pencil" id="nl-submission-edit-{{forloop.counter}}" style="float: right"></i></p>
-                                    <input id="command-submission-edit-input-{{forloop.counter}}" value="{{command}}" style="display: None"></p>
-                                    <input id="nl-submission-edit-input-{{forloop.counter}}" value="{{nl}}" style="display: None"></p>
+                                    <p class="command-submission">{{command}}<i class="glyphicon glyphicon-pencil command-submission-edit" style="float: right"></i></p>
+                                    <p class="nl-submission">{{nl}}<i class="glyphicon glyphicon-pencil nl-submission-edit" style="float: right"></i></p>
+                                    <input class="command-submission-edit-input" value="{{command}}" style="display: None"></p>
+                                    <input class="nl-submission-edit-input" value="{{nl}}" style="display: None"></p>
                                 {% else %}
                                     <p class="command-submission">{{command}}</p>
                                     <p class="nl-submission">{{nl}}</p>
                                     <button type="button" class="btn btn-success btn-sm edit-pair" id="edit-pair-{{forloop.counter}}" style="float: right">Edit</button>
                                     <br>
                                 {% endif %}
+                                <ul class="comment-list" id="comment-list-{{forloop.counter}}" style="padding-left: 0px"></ul>
+                                <hr>
                             </div>
-                            <ul class="comment-list" id="comment-list-{{forloop.counter}}" style="padding-left: 0px"></ul>
-                            <hr>
                         {% endfor %}
                     </div>
                     <div class="collection-complete">
@@ -90,6 +90,7 @@
         <script src="/static/lib/bootstrap/js/bootstrap-dialog.js"></script>
 
         <script src="/static/js/annotator/main.js"></script>
+        <script src="/static/js/comment.js"></script>
 
         <script>
             var utility = '{{utility}}';
@@ -108,7 +109,6 @@
             $(document).ready(function () {
                 $('.url-content-data').height($(window).height() * .9);
                 $('.collect-panel').css({"min-width": "400px"});
-                // $('.url-content-data').width($(window).width() * .5);
 
                 /* add collect boxes when the page is first loaded */
                 if (num_annotations > 0) {
@@ -351,7 +351,7 @@
                 var is_judger = ("{{is_judger}}" == 'True');
                 var annotation_box = $(`#annotation-box-${annotation_id}`);
                 var index = parseInt(annotation_id);
-                var id = parseInt(annotation_box.find('.annotation-id').text());
+                var annotation_box_backend_id = parseInt(annotation_box.find('.backend-id').text());
                 var collect_box = $(`#collect-box-${annotation_id}`);
 
                 /* --- annotator control --- */
@@ -438,38 +438,45 @@
 
                 /* --- judger control --- */
                 if (is_judger) {
-                    $(`#nl-submission-edit-${annotation_id}`).click(function(event) {
+                    var edit_btn = annotation_box.find('.nl-submission').find('.nl-submission-edit');
+                    var edit_input = annotation_box.find('.nl-submission-edit-input');
+                    edit_btn.click(function(event) {
                         // cache the old nl submission
                         var nl = annotation_box.find('.nl-submission').text();
                         nl_submission_cache[index-1] = nl;
                         $(this).parent().hide();
-                        $(`#nl-submission-edit-input-${annotation_id}`).css("display", "block");
-                        $(`#nl-submission-edit-input-${annotation_id}`).css("width", "100%");
-                        $(`#nl-submission-edit-input-${annotation_id}`).css("border-style", "solid");
-                        $(`#nl-submission-edit-input-${annotation_id}`).css("border-color", "#D6EAF8");
-                        add_annotation_update_panel(annotation_id);
+                        edit_input.css("display", "block");
+                        edit_input.css("width", "100%");
+                        edit_input.css("border-style", "solid");
+                        edit_input.css("border-color", "#D6EAF8");
+                        open_change_and_comment_panel(annotation_box, 'annotation', 0,
+                            'Leave a comment for your changes...');
                     });
                 }
 
-                /* -- for both judger and annotator, display update requests of each annotation
-                    if there is any, including their replies. -- */
-                if (!isNaN(id)) {
-                    $.get(`get_relevant_updates`, {annotation_id: id}, function(data) {
+                /* -- judger & annotator: display update requests of each annotation
+                    if there is any, including their replies -- */
+                if (!isNaN(annotation_box_backend_id)) {
+                    $.get(`get_relevant_updates`, {annotation_id: annotation_box_backend_id},
+                                                   function(data) {
                         if (data.update_list.length > 0) {
                             $(`#edit-pair-${annotation_id}`).hide();
                         }
                         for (i = 0; i < data.update_list.length; i ++) {
-                            update = data.update_list[i];
-                            add_annotation_update(annotation_id, update.update_id, update.access_code,
-                                update.submission_time, update.update_str, update.comment_str);
-                            set_up_annotation_update(update.update_id, annotation_id);
+                            var update = data.update_list[i];
+                            if (update.access_code == update.annotation_access_code) {
+                                add_update_and_comment(annotation_box, update.access_code,
+                                    update.submission_time, update.update_str, update.comment_str, 'by-author',
+                                    update.update_id);
+                            } else {
+                                add_update_and_comment(annotation_box, update.access_code,
+                                    update.submission_time, update.update_str, update.comment_str, 'by-judger',
+                                    update.update_id);
+                            }
+                            set_up_update_and_comment(i, update.update_id, annotation_box, '{{access_code}}');
                         }
                     });
                 }
             }
-
-
-
-
         </script>
     {% endblock %}

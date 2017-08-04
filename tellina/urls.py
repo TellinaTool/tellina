@@ -51,13 +51,14 @@ urlpatterns = [
 
     url(r'^accept_update', annotator.accept_update),
     url(r'^retract_update', annotator.retract_update),
-    url(r'^submit_update', annotator.submit_update),
+    url(r'^submit_annotation_update', annotator.submit_annotation_update),
     url(r'^get_relevant_updates', annotator.get_relevant_updates),
-    url(r'^get_update_replies', annotator.get_update_replies),
+    url(r'^get_update_status', annotator.get_update_status),
     url(r'^get_url_stats', annotator.get_url_stats),
     url(r'^get_utility_stats', annotator.get_utility_stats),
     url(r'^get_utility_num_notifications', annotator.get_utility_num_notifications),
     url(r'^get_url_num_notifications', annotator.get_url_num_notifications),
+    url(r'^reject_update', annotator.reject_update),
 
     url(r'user_panel', annotator.user_panel),
     url(r'user_profile', annotator.user_profile),
