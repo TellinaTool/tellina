@@ -559,7 +559,8 @@ def user_panel(request, access_code):
         u_obj['name'] = first_name_disp + ' ' + last_name_disp
         u_obj['access_code'] = user.access_code
         u_obj['num_annotations'] = Annotation.objects.filter(
-            annotator=user).exclude(nl__str="NA").count()
+            annotator=user).exclude(nl__str="NA").exclude(nl__str="ERROR")\
+                .exclude(nl__str="DUPLICATE").exclude(nl__str="I DON'T KNOW").count()
         if user.time_logged is None:
             user.time_logged = 0
             user.save()
