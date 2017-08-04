@@ -11,8 +11,7 @@ from website.models import NL, Command, Comment, URL, User, URLTag, \
 from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
-BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
-              'vim'}
+BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs', 'vim'}
 
 GREY_LIST = {'alias', 'unalias', 'set', 'unset', 'screen', 'apt-get', 'brew',
              'yum', 'export', 'shift', 'exit', 'logout'}
@@ -222,6 +221,7 @@ def get_relevant_updates(request, access_code):
             # the updates and their replies
             update_list.append({
                 'update_id': update.id,
+                'annotation_access_code': annotation.annotator.access_code,
                 'access_code': update.judger.access_code,
                 'submission_time': update.submission_time,
                 'update_str': update.update_str,
@@ -232,17 +232,11 @@ def get_relevant_updates(request, access_code):
 
 
 @access_code_required
-def get_update_replies(request, access_code):
+def get_update_status(request, access_code):
     update_id = request.GET.get('update_id')
     update = AnnotationUpdate.objects.get(id=update_id)
 
-    reply_list = []
-    cur = update.comment
-    while cur.reply is not None:
-        reply_list.append(cur.reply)
-        cur = cur.reply
-
-    return json_response({'reply_list': reply_list})
+    return json_response({'update_status': update.status})
 
 
 @access_code_required
@@ -494,26 +488,32 @@ def get_utility_num_notifications(request, access_code):
 # --- Annotator Interaction Controls --- #
 
 @access_code_required
-def submit_update(request, access_code):
+def submit_annotation_update(request, access_code):
     user = User.objects.get(access_code=access_code)
     annotation_id = request.GET.get('annotation_id')
+    update_id = request.GET.get('update_id')
     update_str = request.GET.get('update')
     comment_str = request.GET.get('comment')
     annotation = Annotation.objects.get(id=annotation_id)
+    if update_id:
+        pre_update = AnnotationUpdate.objects.get(id=update_id)
+        receiver = pre_update.judger
+    else:
+        receiver = annotation.annotator
 
     comment = Comment.objects.create(user=user, str=comment_str)
     update = AnnotationUpdate.objects.create(annotation=annotation,
         judger=user, update_str=update_str, comment=comment)
 
     # create notification
-    Notification.objects.create(sender=user, receiver=annotation.annotator,
+    Notification.objects.create(sender=user, receiver=receiver,
         type='annotation_update', annotation_update=update, url=annotation.url)
 
     return json_response({
         'update_id': update.id,
         'access_code': access_code,
         'submission_time': update.submission_time,
-    }, status='UPDATE_SAVE_SUCCESS')
+    }, status='ANNOTATION_UPDATE_SAVE_SUCCESS')
 
 
 @access_code_required
@@ -531,12 +531,29 @@ def accept_update(request, access_code):
     notification.status = 'cleared'
     notification.save()
 
-    update.delete()
+    update.status = 'accepted'
+    update.save()
 
     return json_response({
         'old_annotation_nl': old_annotation_nl,
         'updated_str': update_str
     }, status='ACCEPT_UPDATE_SUCCESS')
+
+
+@access_code_required
+def reject_update(request, access_code):
+    update_id = request.GET.get('update_id')
+    update = AnnotationUpdate.objects.get(id=update_id)
+
+    # remove annotation update notification flag
+    notification = Notification.objects.get(annotation_update=update)
+    notification.status = 'cleared'
+    notification.save()
+
+    update.status = 'rejected'
+    update.save()
+
+    return json_response(status='REJECT_UPDATE_SUCCESS')
 
 # --- Monitor User Performance --- #
 
