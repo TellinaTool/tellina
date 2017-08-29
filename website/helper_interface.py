@@ -13,7 +13,7 @@ sys.path.append(learning_module_dir)
 from encoder_decoder import classifiers
 from encoder_decoder import data_utils
 from encoder_decoder import decode_tools
-from encoder_decoder import translate as trans
+from encoder_decoder import translate
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
@@ -61,7 +61,7 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
                   log_device_placement=FLAGS.log_device_placement))
 
 # create model and load nerual model parameters.
-model = trans.create_model(sess, forward_only=True, buckets=[(30, 40)])
+model = translate.define_model(sess, forward_only=True, buckets=[(30, 40)])
 vocabs = data_utils.load_vocab(FLAGS)
 
 if FLAGS.fill_argument_slots:
