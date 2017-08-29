@@ -11,7 +11,8 @@ from website.models import NL, Command, Comment, URL, User, URLTag, \
 from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
-BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs', 'vim'}
+BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
+              'vim'}
 
 GREY_LIST = {'alias', 'unalias', 'set', 'unset', 'screen', 'apt-get', 'brew',
              'yum', 'export', 'shift', 'exit', 'logout'}
