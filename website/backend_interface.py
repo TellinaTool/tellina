@@ -45,27 +45,30 @@ FLAGS.decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 100
 FLAGS.alpha = 1.0
 
-FLAGS.nl_vocab_size = 3100
-FLAGS.cm_vocab_size = 3400
-FLAGS.sc_token_embedding_size = 630
-FLAGS.sc_vocab_size = 3100
-FLAGS.tg_token_embedding_size = 400
-FLAGS.tg_vocab_size = 3400
-
 FLAGS.dataset = 'bash'
 FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
 FLAGS.model_root_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 
-# create tensorflow session
+# Data-dependent parameters
+FLAGS.max_sc_length = 100
+FLAGS.max_tg_length = 100
+FLAGS.sc_vocab_size = 1159
+FLAGS.tg_vocab_size = 1095
+FLAGS.max_sc_token_size = 100
+FLAGS.max_tg_token_size = 100
+buckets = [(30, 30), (35, 44), (40, 58)]
+
+# Create tensorflow session
 sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
-                  log_device_placement=FLAGS.log_device_placement))
+    log_device_placement=FLAGS.log_device_placement))
 
 # create model and load nerual model parameters.
-model = translate.define_model(sess, forward_only=True, buckets=[(30, 40)])
+model = translate.define_model(sess, forward_only=True, buckets=buckets)
+
 vocabs = data_utils.load_vocab(FLAGS)
 
 if FLAGS.fill_argument_slots:
-    # create slot filling classifier
+    # Create slot filling classifier
     model_param_dir = os.path.join(FLAGS.model_dir, 'train.mappings.X.Y.npz')
     train_X, train_Y = data_utils.load_slot_filling_data(model_param_dir)
     slot_filling_classifier = classifiers.KNearestNeighborModel(
@@ -77,5 +80,5 @@ else:
 def translate_fun(sentence, slot_filling_classifier=slot_filling_classifier):
     print('start running translation model')
     print(sentence)
-    return decode_tools.translate_fun(sentence, sess, model, vocabs, FLAGS,
-                                      slot_filling_classifier)
+    return decode_tools.translate_fun(
+        sentence, sess, model, vocabs, FLAGS, slot_filling_classifier)
