@@ -58,8 +58,8 @@ beam_search*eval*
 *.debug
 /paper
 /data/reader
+website/scripts/export_pairs.py
 tools/spellcheck/*.txt
-grammar/primitive_cmds_grammar2.json
 
 # IDE-specific stuff:
 __pycache__
