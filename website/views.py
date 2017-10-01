@@ -35,10 +35,10 @@ from website.scripts.export_pairs import *
 # ast = data_tools.bash_parser("cd $(find . -name Subscription.java | xargs dirname)")
 # data_tools.pretty_print(ast)
 # print(data_tools.get_utilities(ast))
-export_pairs('.')
+gen_annotation_check_sheet('.')
 
 if not WEBSITE_DEVELOP:
-    from website.helper_interface import translate_fun
+    from website.backend_interface import translate_fun
 
 
 def ip_address_required(f):

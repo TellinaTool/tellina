@@ -20,13 +20,12 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 FLAGS = tf.app.flags.FLAGS
 
 FLAGS.demo = True
-FLAGS.fill_argument_slots = True
+FLAGS.fill_argument_slots = False
 FLAGS.num_nn_slot_filling = 5
 
-FLAGS.normalized = True
 FLAGS.encoder_topology = 'birnn'
 
-FLAGS.sc_token_dim = 150
+FLAGS.sc_token_dim = 200
 FLAGS.batch_size = 128
 FLAGS.num_layers = 1
 FLAGS.learning_rate = 0.0001
@@ -44,6 +43,12 @@ FLAGS.beta = 0.0
 FLAGS.decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 100
 FLAGS.alpha = 1.0
+
+FLAGS.min_vocab_frequency = 4
+FLAGS.normalized = False
+FLAGS.channel = 'partial.token'
+FLAGS.use_copy = True
+FLAGS.copy_fun = 'copynet'
 
 FLAGS.dataset = 'bash'
 FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
@@ -65,7 +70,7 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
 # create model and load nerual model parameters.
 model = translate.define_model(sess, forward_only=True, buckets=buckets)
 
-vocabs = data_utils.load_vocab(FLAGS)
+vocabs = data_utils.load_vocabulary(FLAGS)
 
 if FLAGS.fill_argument_slots:
     # Create slot filling classifier
@@ -78,7 +83,6 @@ else:
     slot_filling_classifier = None
 
 def translate_fun(sentence, slot_filling_classifier=slot_filling_classifier):
-    print('start running translation model')
-    print(sentence)
+    print('translating |{}|'.format(sentence))
     return decode_tools.translate_fun(
         sentence, sess, model, vocabs, FLAGS, slot_filling_classifier)
