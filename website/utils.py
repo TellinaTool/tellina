@@ -22,10 +22,12 @@ def get_command(command_str):
         cmd = Command.objects.get(str=command_str)
     else:
         cmd = Command.objects.create(str=command_str)
-    if not cmd.tags:
         ast = data_tools.bash_parser(command_str)
         for utility in data_tools.get_utilities(ast):
             cmd.tags.add(get_tag(utility))    
+        template = data_tools.ast2template(ast)
+        cmd.template = template
+        cmd.save()
     return cmd
 
 def get_tag(tag_str):
@@ -48,6 +50,7 @@ def get_url(url_str):
 def extract_html(url):
     hypothes_prefix = "https://via.hypothes.is/"
     try:
+        sleep(0.1)
         html = urllib.request.urlopen(hypothes_prefix + url, timeout=2)
     except urllib.error.URLError:
         print("Error: extract_text_from_url() urllib2.URLError")
