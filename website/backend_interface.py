@@ -10,7 +10,6 @@ learning_module_dir = os.path.join(os.path.dirname(__file__), "..",
                                    "tellina_learning_module")
 sys.path.append(learning_module_dir)
 
-from encoder_decoder import classifiers
 from encoder_decoder import data_utils
 from encoder_decoder import decode_tools
 from encoder_decoder import translate
@@ -55,13 +54,13 @@ FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
 FLAGS.model_root_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 
 # Data-dependent parameters
-FLAGS.max_sc_length = 100
-FLAGS.max_tg_length = 100
-FLAGS.sc_vocab_size = 1159
-FLAGS.tg_vocab_size = 1095
+FLAGS.max_sc_length = 41
+FLAGS.max_tg_length = 56
+FLAGS.sc_vocab_size = 1332
+FLAGS.tg_vocab_size = 1222
 FLAGS.max_sc_token_size = 100
 FLAGS.max_tg_token_size = 100
-buckets = [(30, 30), (35, 44), (40, 58)]
+buckets = [(13, 57), (18, 57), (42, 57)]
 
 # Create tensorflow session
 sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
