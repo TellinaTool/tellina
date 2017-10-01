@@ -73,7 +73,7 @@ def tokens2html(cmd_str):
 
 def ast2html(node):
 
-  """ Translate a bash AST from tellina_learning_module/bashlex/nast.py into html code,
+  """ Translate a bash AST from tellina_learning_module/bashlint/nast.py into html code,
     with proper syntax highlighting.
     Argument:
       node: an ast returned from tellina_learning_module.data_tools.bash_parser(cmd_str)

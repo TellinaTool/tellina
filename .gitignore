@@ -1,5 +1,71 @@
 website/migrations
+website/config.py
+
+# LaTeX junk
+*.aux
+*.log
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.pdf
+*.synctex.gz
+*.out
+*.dvi
+
+# uncompressed StackOverflow data
+*.sqlite
+
+# IDE junk
+*.sublime-*
+
+# Python
 *.pyc
+
+# Java
+*.class
+
+# moses files
+*.final
+*.vcb
+
+# auto-generated files
+parsetab.py
+/man-parser/out
+
+# Shell scripts
+*.sh
+
+# Database file
+*.db
+*.txt
+*.sqlite3
+
+# Misc
+MANIFEST
 .DS_Store
-db.sqlite3
-db2.sqlite3
+*.csv
+*.key
+eval.*
+temp*.txt
+*dump*.txt
+spell.txt
+manual.eval.results*
+*beam_search.eval
+beam_search*eval*
+*.swp
+*.swo
+*.debug
+/paper
+/data/reader
+website/scripts/export_pairs.py
+tools/spellcheck/*.txt
+
+# IDE-specific stuff:
+__pycache__
+.idea
+*.iml
+site_config.py
+
+# Intellij project
+parsers/out/production/*

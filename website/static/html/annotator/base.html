@@ -8,8 +8,8 @@
         <!-- Fonts -->
 
         <!-- CSS -->
-        <link href="/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
-        <link href="/static/css/font-awesome.min.css" rel="stylesheet" media="screen">
+        <link href="/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link href="/static/css/font-awesome.min.css" rel="stylesheet">
         <link href="/static/css/main.css" rel="stylesheet" media="screen">
 
         <!-- Web Resources -->
@@ -22,9 +22,10 @@
         <header>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4 col-xs-12">
-                        <span class="logo"><a href="/login">NL2Command</a></span>
+                    <div class="col-md-2 col-xs-12">
+                        <span class="logo"><a href="/login">Command2NL</a></span>
                     </div>
+                    {% block navbar %}{% endblock %}
                 </div>
             </div>
         </header>
