@@ -38,7 +38,7 @@ html, body {
 }
 
 .instruction-panel {
-    margin: 0px 20px 0px 70px;
+    margin: 0px 15px 0px 85px;
     background-color: rgba(76, 175, 80, 0.1);
     color: rgb(72, 72, 72);
     font-size: 16px;
@@ -49,6 +49,7 @@ html, body {
     text-align: left;
     font-size: 20px;
     font-weight: 400;
+    margin: 12px 0 0 0;
 }
 
 .instruction-panel > h2 {
@@ -60,7 +61,7 @@ html, body {
 
 .instruction-panel > ul > li{
     list-style-type:none;
-    margin: 20px 0;
+    margin: 12px 0;
 }
 
 .instruction-panel > ul > li > ul > li{
@@ -73,7 +74,7 @@ html, body {
     font-size: 12px;
     float: left;
     margin-top: 4px;
-    margin-left: -24px;
+    margin-left: -30px;
     color: rgb(72, 72, 72);
 }
 
@@ -84,7 +85,7 @@ html, body {
 
 .footer{
     text-align: left;
-    margin-left: 70px;
+    margin-left: 90px;
     color: rgb(108, 108, 108);
 }
 
