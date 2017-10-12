@@ -25,8 +25,8 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
-                                <li class="example-or-recently-asked"><a class="example-or-recently-asked-text-display">Examples</a></li>
-                                <li><a>Research</a></li>
+                                <li class="example-or-recently-asked"><a class="example-or-recently-asked-text-display">Sample Questions</a></li>
+                                <li><a>Developers</a></li>
                             </ul>
 
                         </div><!-- /.navbar-collapse -->
@@ -120,7 +120,7 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="recent-post-panel col-sm-6 col-xs-12">
+                <div class="recent-post-panel col-sm-6 col-xs-12 animated fadeInUp">
                     {% if latest_request_list %}
                         {% for request, top_ranked_cmd in latest_request_list %}
                             <div class="row">
@@ -226,7 +226,7 @@
                     } else {
                         $('.example-panel').hide();
                         $('.recent-post-panel').show();
-                        $('.example-or-recently-asked-text-display').text('Examples');
+                        $('.example-or-recently-asked-text-display').text('Sample Questions');
                         recently_asked = true;
                     }
                 });

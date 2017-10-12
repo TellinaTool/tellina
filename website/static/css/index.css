@@ -85,6 +85,7 @@ html, body {
 
 .footer{
     text-align: left;
+    line-height: 16px;
     margin-left: 90px;
     color: rgb(108, 108, 108);
 }

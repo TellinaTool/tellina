@@ -176,27 +176,27 @@ body.loading .modal {
     left: 120px;
 }
 
+.top-search-container {
+    padding-top: 6px;
+}
+
 .input-group .nl-request {
     width: 100%;
-    border-radius: 12px;
+    border-radius: 6px;
 }
 
 #top-search {
-   width: 600px;
    -webkit-transition: all .5s ease;
    -moz-transition: all .5s ease;
    transition: all .5s ease;
    position: relative;
-   top: -3px; // looks a bit unaligned without this in chrome
    left: 0;
 }
 
 #top-search:focus {
-   width: 640px;
-
-   border-color: #f08080;
-   -moz-box-shadow: 0 0 8px rgba(255, 153, 153, 0.6);
-   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(255, 153, 153, 0.6);
+   border-color: #7DCEA0;
+   -moz-box-shadow: 0 0 8px rgba(125, 206, 160, 0.6);
+   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(125, 206, 160,  0.6);
    outline: 0 none;
 }
 
@@ -234,8 +234,8 @@ body.loading .modal {
 }
 
 .btn-search:hover{
-    background: #ffbbbb;
-    # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);
+    background: rgba(250, 215, 160, 1);
+    # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(250, 215, 160, 0.75);
 }
 
 .btn-copy{

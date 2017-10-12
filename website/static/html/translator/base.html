@@ -12,7 +12,7 @@
         <link href="/static/css/main.css" rel="stylesheet" media="screen">
 
         <!-- Web Resources -->
-        <link rel="shortcut icon" href="/static/img/tellina.png"/>
+        <link rel="shortcut icon" href="/static/img/tellina_avatar.svg"/>
 
         {% block head %}{% endblock %}
     </head>
@@ -23,19 +23,19 @@
                 <div class="row">
                     <div class="col-md-8 col-xs-12">
                         <div class="col-md-2 col-xs-12">
-                            <span class="logo"><a href="/">Tellina</a></span>
+                            <a href="/"><img src="/static/img/tellina.svg" alt="Project Logo" style="height:48px;"></a>
                         </div>
-                        <div class="col-md-10 col-xs-12">
+                        <div class="col-md-10 col-xs-12 top-search-container">
                             <div class="input-group nl-request">
                                 <span class="input-group-btn">
-                                    <button id="submit-to-google" class="btn btn-default" type="button">
-                                        <i class="glyphicon glyphicon-globe"></i>
+                                    <button id="submit-to-google" class="btn btn-default btn-search" data-toggle="tooltip" data-placement="bottom" title='Search with Google' type="button">
+                                        <i class="glyphicon glyphicon-globe fa-3x"></i>
                                     </button>
                                 </span>
-                                <input type="text" class="form-control nl-request-input" placeholder="Type a natural language command...">
+                                <input type="text" id="top-search" class="form-control nl-request-input" placeholder="Type a natural language command...">
                                 <span class="input-group-btn">
-                                    <button id="submit-to-tellina" class="btn btn-default" type="button">
-                                        Go!
+                                    <button id="submit-to-tellina" class="btn btn-default btn-search" data-toggle="tooltip" data-placement="bottom" title='Ask Tellina' type="button">
+                                        <img src="/static/img/tellina_avatar.svg" style="height:18px;">
                                     </button>
                                 </span>
                             </div>
