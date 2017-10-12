@@ -3,7 +3,7 @@
 
 LR_MODULE=tellina_learning_module
 
-git: 
+submodule: 
 	# Update learning submodule
 	git submodule update --remote
 	# Set up data files used in the learning module
