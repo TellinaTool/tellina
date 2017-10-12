@@ -23,10 +23,11 @@ pip3 install -r requirements.txt
 ```
 git submodule update --init --remote
 git submodule foreach git pull origin master
+make submodule
 ```
 To update the tellina_learning_module in the future, run:
 ```
-make git
+make submodule
 ```
 
 ### Set up databases:
