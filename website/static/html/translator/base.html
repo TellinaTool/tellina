@@ -65,6 +65,13 @@
                     console.log('IP Address for study session logged: ' + ip_address);
                 }, "jsonp");
 
+                // trigger button click on enter
+                $(".nl-request-input").keyup(function(event){
+                    if(event.keyCode == 13){
+                        $("#submit-to-tellina").click();
+                    }
+                });
+
                 $("#submit-to-google").click(function() {
                     var nl_request_str = $(".nl-request-input").val();
                     href="https://www.google.com/search?q=" + nl_request_str;
