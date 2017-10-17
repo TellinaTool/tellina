@@ -1,3 +1,4 @@
+import html
 import numpy as np
 import os, sys
 import requests
@@ -14,7 +15,7 @@ sys.path.append(os.path.join(
 
 from bashlint import data_tools
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = False
 
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
@@ -43,9 +44,9 @@ def ip_address_required(f):
 def translate(request, ip_address):
     template = loader.get_template('translator/translate.html')
     if request.method == 'POST':
-        request_str = request.POST.get('request_str')
+        request_str = html.unescape(request.POST.get('request_str'))
     else:
-        request_str = request.GET.get('request_str')
+        request_str = html.unescape(request.GET.get('request_str'))
 
     if not request_str or not request_str.strip():
         return redirect('/')
@@ -197,7 +198,6 @@ def remember_ip_address(request):
 def index(request):
     template = loader.get_template('translator/index.html')
     context = {
-        'example_request_list': example_requests_with_translations(),
         'latest_request_list': latest_requests_with_translations()
     }
     return HttpResponse(template.render(context, request))
