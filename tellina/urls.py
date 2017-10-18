@@ -23,7 +23,9 @@ urlpatterns = [
     url(r'^$', views.index),
     url(r'^index$', views.index),
     url(r'^translate$', views.translate),
-    url(r'^info$', views.info),
+    url(r'^load_example_requests_with_translations', views.example_requests_with_translations),
+    url(r'^load_latest_requests_with_translations', views.latest_requests_with_translations),
+    url(r'^developers$', views.developers),
 
     url(r'^remember_ip_address$', views.remember_ip_address),
     url(r'^vote$', views.vote),
