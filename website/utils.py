@@ -25,7 +25,7 @@ def get_command(command_str):
         ast = data_tools.bash_parser(command_str)
         for utility in data_tools.get_utilities(ast):
             cmd.tags.add(get_tag(utility))    
-        template = data_tools.ast2template(ast)
+        template = data_tools.ast2template(ast, loose_constraints=True)
         cmd.template = template
         cmd.save()
     return cmd

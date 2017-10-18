@@ -44,9 +44,10 @@ def ip_address_required(f):
 def translate(request, ip_address):
     template = loader.get_template('translator/translate.html')
     if request.method == 'POST':
-        request_str = html.unescape(request.POST.get('request_str'))
+        request_str = request.POST.get('request_str')
     else:
-        request_str = html.unescape(request.GET.get('request_str'))
+        request_str = request.GET.get('request_str')
+    print(request_str)
 
     if not request_str or not request_str.strip():
         return redirect('/')
