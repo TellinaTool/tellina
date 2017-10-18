@@ -17,7 +17,7 @@ sys.path.append(os.path.join(
 
 from bashlint import data_tools
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
@@ -202,7 +202,7 @@ def index(request):
     template = loader.get_template('translator/index.html')
     return HttpResponse(template.render({}, request))
 
-def example_requests_with_translations():
+def example_requests_with_translations(request):
     example_requests_with_translations = []
     example_request_list = [
         'remove all pdfs in my current directory',
@@ -243,11 +243,15 @@ def example_requests_with_translations():
                             nl=nl, pred_cmd=cmd, score=score)
             else:
                 top_translation = 'No translation available.'
-        example_requests_with_translations.append((nl, top_translation))
+        example_requests_with_translations.append({
+            'nl': nl.str,
+            'top_translation': top_translation
+        })
 
-    return json_response(example_requests_with_translations)
+    return json_response({
+        'example_requests_with_translations': example_requests_with_translations})
 
-def latest_requests_with_translations():
+def latest_requests_with_translations(request):
     latest_requests_with_translations = []
     max_num_translation = 0
 
@@ -261,12 +265,20 @@ def latest_requests_with_translations():
             top_translation = top_translation.pred_cmd.str
         else:
             top_translation = 'No translation available.'
-        latest_requests_with_translations.append((request, top_translation))
+        latest_requests_with_translations.append({
+            'nl': request.nl.str, 
+            'top_translation': top_translation,
+            'submission_time': request.submission_time.strftime("%Y-%m-%d %H:%M:%S"),
+            'user_city': request.user.city,
+            'user_region': request.user.region,
+            'user_country': request.user.country
+        })
         max_num_translation += 1
         if max_num_translation % 20 == 0:
             break
 
-    return json_response(latest_requests_with_translations)
+    return json_response({
+        'latest_requests_with_translations': latest_requests_with_translations})
 
 def developers(request):
     template = loader.get_template('translator/developers.html')
