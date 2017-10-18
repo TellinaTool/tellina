@@ -57,7 +57,7 @@ beam_search*eval*
 *.swo
 *.debug
 /paper
-/data/reader
+website/data/
 website/scripts/export_pairs.py
 tools/spellcheck/*.txt
 
