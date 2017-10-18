@@ -1,13 +1,12 @@
-import collections 
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.template import loader
 
 from website import functions
 from website.models import NL, Command, Comment, URL, User, URLTag, \
     Annotation, AnnotationUpdate, AnnotationProgress, Notification
+from website.utils import json_response
 from website.utils import get_nl, get_command, get_url, get_tag
 
 WHITE_LIST = {'find', 'xargs'}
@@ -16,11 +15,6 @@ BLACK_LIST = {'cpp', 'g++', 'java', 'perl', 'python', 'ruby', 'nano', 'emacs',
 
 GREY_LIST = {'alias', 'unalias', 'set', 'unset', 'screen', 'apt-get', 'brew',
              'yum', 'export', 'shift', 'exit', 'logout'}
-
-def json_response(d={}, status='SUCCESS'):
-    d.update({'status': status})
-    resp = JsonResponse(d)
-    return resp
 
 
 def access_code_required(f):

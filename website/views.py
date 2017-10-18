@@ -10,6 +10,8 @@ from django.shortcuts import redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_protect
 
+from website.utils import json_response
+
 sys.path.append(os.path.join(
     os.path.dirname(__file__), "..", "tellina_learning_module"))
 
@@ -198,10 +200,7 @@ def remember_ip_address(request):
 
 def index(request):
     template = loader.get_template('translator/index.html')
-    context = {
-        'latest_request_list': latest_requests_with_translations()
-    }
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render({}, request))
 
 def example_requests_with_translations():
     example_requests_with_translations = []
@@ -246,7 +245,7 @@ def example_requests_with_translations():
                 top_translation = 'No translation available.'
         example_requests_with_translations.append((nl, top_translation))
 
-    return example_requests_with_translations
+    return json_response(example_requests_with_translations)
 
 def latest_requests_with_translations():
     latest_requests_with_translations = []
@@ -267,10 +266,10 @@ def latest_requests_with_translations():
         if max_num_translation % 20 == 0:
             break
 
-    return latest_requests_with_translations
+    return json_response(latest_requests_with_translations)
 
-def info(request):
-    template = loader.get_template('translator/info.html')
+def developers(request):
+    template = loader.get_template('translator/developers.html')
     context = {}
     return HttpResponse(template.render(context, request))
 

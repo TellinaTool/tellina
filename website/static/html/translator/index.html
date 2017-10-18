@@ -63,99 +63,8 @@
                         <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
                     </footer>
                 </div>
-                <div class="example-panel col-sm-6 col-xs-12 animated fadeInUp" style="display: None">
-                    {% for nl, top_ranked_cmd in example_request_list %}
-                        <div class="row">
-                            <div class="[ panel panel-default ] panel-google-plus">
-                                <div class="panel-google-plus-tags">
-                                    <ul>
-                                        <li><code>find</code></li>
-                                    </ul>
-                                </div>
-                                <div class="panel-request">
-                                    <i class="glyphicon glyphicon-user"></i>&nbsp;
-                                    <span class="nl-request">{{nl.str}}</span><br>
-                                </div>
-                                <div class="panel-body">
-                                    <div style="margin: 0px 20px 0px 20px">
-                                        <code class="panel-command command bash hljs">
-                                            {{top_ranked_cmd}}
-                                        </code>
-                                    </div>
-                                </div>
-                                <div class="panel-footer">
-                                    <button type="button" class="[ btn btn-default expand-translation-instance ]">
-                                        <span class="[ glyphicon glyphicon-option-vertical ]"></span>
-                                    </button>
-                                    <button type="button" class="[ btn btn-default copy-current-command ]">
-                                        <span class="[ glyphicon glyphicon-copy ]"></span>
-                                    </button>
-                                    <button type="button" class="[ btn btn-default ]">-1</button>
-                                    <button type="button" class="[ btn btn-default ]">+1</button>
-                                    <!-- <div class="input-placeholder">Add a comment...</div> -->
-                                </div>
-                                <div class="panel-google-plus-comment">
-                                    <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
-                                    <div class="panel-google-plus-textarea">
-                                        <textarea rows="4"></textarea>
-                                        <button type="submit" class="[ btn btn-success disabled ]">Post comment</button>
-                                        <button type="reset" class="[ btn btn-default ]">Cancel</button>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="recent-post-panel col-sm-6 col-xs-12 animated fadeInUp">
-                    {% if latest_request_list %}
-                        {% for request, top_ranked_cmd in latest_request_list %}
-                            <div class="row">
-                                <div class="[ panel panel-default ] panel-google-plus">
-                                    <div class="panel-google-plus-tags">
-                                        <ul>
-                                            <li><code>find</code></li>
-                                        </ul>
-                                    </div>
-                                    <div class="panel-request">
-                                        <i class="glyphicon glyphicon-user"></i>&nbsp;
-                                        <span class="nl-request">{{request.nl.str}}</span><br>
-                                        <span class="post-time"><i class="glyphicon glyphicon-time"></i>&nbsp;{{request.submission_time}}</span>&nbsp;
-                                        <span class="post-location"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;
-                                            {{request.user.city}}, {{request.user.region}}, {{request.user.country}}</span>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div style="margin: 0px 20px 0px 20px">
-                                            <code class="panel-command command bash hljs">
-                                                {{top_ranked_cmd}}
-                                            </code>
-                                        </div>
-                                    </div>
-                                    <div class="panel-footer">
-                                        <button type="button" class="[ btn btn-default expand-translation-instance ]">
-                                            <span class="[ glyphicon glyphicon-option-vertical ]"></span>
-                                        </button>
-                                        <button type="button" class="[ btn btn-default copy-current-command ]">
-                                            <span class="[ glyphicon glyphicon-copy ]"></span>
-                                        </button>
-                                        <button type="button" class="[ btn btn-default ]">-1</button>
-                                        <button type="button" class="[ btn btn-default ]">+1</button>
-                                        <!-- <div class="input-placeholder">Add a comment...</div> -->
-                                    </div>
-                                    <div class="panel-google-plus-comment">
-                                        <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
-                                        <div class="panel-google-plus-textarea">
-                                            <textarea rows="4"></textarea>
-                                            <button type="submit" class="[ btn btn-success disabled ]">Post comment</button>
-                                            <button type="reset" class="[ btn btn-default ]">Cancel</button>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                <div class="example-panel col-sm-6 col-xs-12 animated fadeInUp"></div>
+                <div class="recently-asked-panel col-sm-6 col-xs-12 animated fadeInUp"></div>
             </div>
         </div>
     {% endblock %}
@@ -191,16 +100,65 @@
                     window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
                 });
 
+                // load recently asked
+                $.get("load_latest_requests_with_translations", function(data) {
+                    for (var i = 0; i < data.length, i ++) {
+                        $('.recenly_asked_panel').append(
+                            <div class="row">
+                                <div class="[ panel panel-default ] panel-google-plus">
+                                    <div class="panel-google-plus-tags">
+                                        <ul>
+                                            <li><code>find</code></li>
+                                        </ul>
+                                    </div>
+                                    <div class="panel-request">
+                                        <i class="glyphicon glyphicon-user"></i>&nbsp;
+                                        <span class="nl-request">${data[i][0].str}</span><br>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div style="margin: 0px 20px 0px 20px">
+                                            <code class="panel-command command bash hljs">
+                                                {{data[i][1]}}
+                                            </code>
+                                        </div>
+                                    </div>
+                                    <div class="panel-footer">
+                                        <button type="button" class="[ btn btn-default expand-translation-instance ]">
+                                            <span class="[ glyphicon glyphicon-option-vertical ]"></span>
+                                        </button>
+                                        <button type="button" class="[ btn btn-default copy-current-command ]">
+                                            <span class="[ glyphicon glyphicon-copy ]"></span>
+                                        </button>
+                                        <button type="button" class="[ btn btn-default ]">-1</button>
+                                        <button type="button" class="[ btn btn-default ]">+1</button>
+                                        <!-- <div class="input-placeholder">Add a comment...</div> -->
+                                    </div>
+                                    <div class="panel-google-plus-comment">
+                                        <img class="img-circle" src="https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46" alt="User Image" />
+                                        <div class="panel-google-plus-textarea">
+                                            <textarea rows="4"></textarea>
+                                            <button type="submit" class="[ btn btn-success disabled ]">Post comment</button>
+                                            <button type="reset" class="[ btn btn-default ]">Cancel</button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+                });
+
+                // switch between "recently asked" and "sample questions"
                 var recently_asked = true;
                 $(".example-or-recently-asked").click(function() {
                     if (recently_asked) {
                         $('.example-panel').show();
-                        $('.recent-post-panel').hide();
+                        $('.recently-asked-panel').hide();
                         $('.example-or-recently-asked-text-display').text('Recently Asked');
                         recently_asked = false;
                     } else {
                         $('.example-panel').hide();
-                        $('.recent-post-panel').show();
+                        $('.recently-asked-panel').show();
                         $('.example-or-recently-asked-text-display').text('Sample Questions');
                         recently_asked = true;
                     }
