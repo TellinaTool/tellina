@@ -102,8 +102,8 @@
 
                 // load recently asked
                 $.get("load_latest_requests_with_translations", function(data) {
-                    display_pairs($('.recently-asked_panel'), data.latest_requests_with_translations,
-                                  true);
+                    display_pairs($('.recently-asked-panel'), data.latest_requests_with_translations,
+                                  true); 
                 });
 
                 // switch between "recently asked" and "sample questions"
@@ -111,13 +111,19 @@
                 $(".example-or-recently-asked").click(function() {
                     if (recently_asked) {
                         $('.recently-asked-panel').hide();
-                        display_pairs($('.example-panel'), data.example_requests_with_translations);
+                        $.get("load_example_requests_with_translations", function(data) {
+                            display_pairs($('.example-panel'), data.example_requests_with_translations,
+                                          false);
+                        });
                         $('.example-panel').show();
                         $('.example-or-recently-asked-text-display').text('Recently Asked');
                         recently_asked = false;
                     } else {
                         $('.example-panel').hide();
-                        display_pairs($('.recently-asked-panel'), data.example_requests_with_translations);
+                        $.get("load_latest_requests_with_translations", function(data) {    
+                            display_pairs($('.recently-asked-panel'), data.latest_requests_with_translations,
+                                          true);
+                        });
                         $('.recently-asked-panel').show();
                         $('.example-or-recently-asked-text-display').text('Sample Questions');
                         recently_asked = true;
@@ -125,7 +131,8 @@
                 });
             });
 
-            function display_pairs(object, data_points, show_user_credentials) {
+            function display_pairs(panel_obj, data_points, show_user_credentials) {
+                panel_obj.html('');
                 for (var i = 0; i < data_points.length; i ++) {
                     var data_point = data_points[i];
                     var panel_request = '';
@@ -145,7 +152,7 @@
                                     <span class="nl-request">${data_point.nl}</span><br>
                             </div>`;
                     };
-                    $('.recently-asked-panel').append(
+                    panel_obj.append(
                         `<div class='row'>
                             <div class='[ panel panel-default ] panel-google-plus'>
                                 <div class='panel-google-plus-tags'>
