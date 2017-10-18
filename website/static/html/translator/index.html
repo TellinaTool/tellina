@@ -102,72 +102,89 @@
 
                 // load recently asked
                 $.get("load_latest_requests_with_translations", function(data) {
-                    for (var i = 0; i < data.latest_requests_with_translations.length; i ++) {
-                        var data_point = data.latest_requests_with_translations[i]
-                        $('.recently-asked-panel').append(
-                            `<div class='row'>
-                                <div class='[ panel panel-default ] panel-google-plus'>
-                                    <div class='panel-google-plus-tags'>
-                                        <ul>
-                                            <li><code>find</code></li>
-                                        </ul>
-                                    </div>
-                                    <div class="panel-request">
-                                        <!-- <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/-CxXg7_7ylq4/AAAAAAAAAAI/AAAAAAAAAQ8/LhCIKQC5Aq4/s46-c-k-no/photo.jpg" alt="Mouse0270" /> -->
-                                        <i class="glyphicon glyphicon-user"></i>&nbsp;
-                                        <span class="nl-request">${data_point.nl}</span><br>
-                                        <span class="post-time"><i class="glyphicon glyphicon-time"></i>&nbsp;${data_point.submission_time}</span>&nbsp;
-                                        <span class="post-location"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;
-                                            ${data_point.user_city}, ${data_point.user_region}, ${data_point.user_country}</span>
-                                    </div>
-                                    <div class='panel-body'>
-                                        <div style='margin: 0px 20px 0px 20px'>
-                                            <code class='panel-command command bash hljs'>
-                                                ${data_point.top_translation}
-                                            </code>
-                                        </div>
-                                    </div>
-                                    <div class='panel-footer'>
-                                        <button type='button' class='[ btn btn-default expand-translation-instance ]'>
-                                            <span class='[ glyphicon glyphicon-option-vertical ]'></span>
-                                        </button>
-                                        <button type='button' class='[ btn btn-default copy-current-command ]'>
-                                            <span class='[ glyphicon glyphicon-copy ]'></span>
-                                        </button>
-                                        <button type='button' class='[ btn btn-default ]'>-1</button>
-                                        <button type='button' class='[ btn btn-default ]'>+1</button>
-                                        <!-- <div class='input-placeholder'>Add a comment...</div> -->
-                                    </div>
-                                    <div class='panel-google-plus-comment'>
-                                        <img class='img-circle' src='https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46' alt='User Image' />
-                                        <div class='panel-google-plus-textarea'>
-                                            <textarea rows='4'></textarea>
-                                            <button type='submit' class='[ btn btn-success disabled ]'>Post comment</button>
-                                            <button type='reset' class='[ btn btn-default ]'>Cancel</button>
-                                        </div>
-                                        <div class='clearfix'></div>
-                                    </div>
-                                </div>
-                            </div>`
-                        ) 
-                    }
-                }); 
+                    display_pairs($('.recently-asked_panel'), data.latest_requests_with_translations,
+                                  true);
+                });
 
                 // switch between "recently asked" and "sample questions"
                 var recently_asked = true;
                 $(".example-or-recently-asked").click(function() {
                     if (recently_asked) {
                         $('.recently-asked-panel').hide();
+                        display_pairs($('.example-panel'), data.example_requests_with_translations);
                         $('.example-panel').show();
                         $('.example-or-recently-asked-text-display').text('Recently Asked');
                         recently_asked = false;
                     } else {
                         $('.example-panel').hide();
+                        display_pairs($('.recently-asked-panel'), data.example_requests_with_translations);
                         $('.recently-asked-panel').show();
                         $('.example-or-recently-asked-text-display').text('Sample Questions');
                         recently_asked = true;
                     }
                 });
             });
+
+            function display_pairs(object, data_points, show_user_credentials) {
+                for (var i = 0; i < data_points.length; i ++) {
+                    var data_point = data_points[i];
+                    var panel_request = '';
+                    if (show_user_credentials) {
+                        panel_request =
+                            `<div class="panel-request">
+                                <i class="glyphicon glyphicon-user"></i>&nbsp;
+                                <span class="nl-request">${data_point.nl}</span><br>
+                                <span class="post-time"><i class="glyphicon glyphicon-time"></i>&nbsp;${data_point.submission_time}</span>&nbsp;
+                                <span class="post-location"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;
+                                    ${data_point.user_city}, ${data_point.user_region}, ${data_point.user_country}</span>
+                            </div>`;
+                    } else {
+                        panel_request =
+                            `<div class="panel-request">
+                                    <i class="glyphicon glyphicon-user"></i>&nbsp;
+                                    <span class="nl-request">${data_point.nl}</span><br>
+                            </div>`;
+                    };
+                    $('.recently-asked-panel').append(
+                        `<div class='row'>
+                            <div class='[ panel panel-default ] panel-google-plus'>
+                                <div class='panel-google-plus-tags'>
+                                    <ul>
+                                        <li><code>find</code></li>
+                                    </ul>
+                                </div>
+                        ` + panel_request +
+                        `        <div class='panel-body'>
+                                    <div style='margin: 0px 20px 0px 20px'>
+                                        <code class='panel-command command bash hljs'>
+                                            ${data_point.top_translation}
+                                        </code>
+                                    </div>
+                                </div>
+                                <div class='panel-footer'>
+                                    <button type='button' class='[ btn btn-default expand-translation-instance ]'>
+                                        <span class='[ glyphicon glyphicon-option-vertical ]'></span>
+                                    </button>
+                                    <button type='button' class='[ btn btn-default copy-current-command ]'>
+                                        <span class='[ glyphicon glyphicon-copy ]'></span>
+                                    </button>
+                                    <button type='button' class='[ btn btn-default ]'>-1</button>
+                                    <button type='button' class='[ btn btn-default ]'>+1</button>
+                                    <!-- <div class='input-placeholder'>Add a comment...</div> -->
+                                </div>
+                                <div class='panel-google-plus-comment'>
+                                    <img class='img-circle' src='https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46' alt='User Image' />
+                                    <div class='panel-google-plus-textarea'>
+                                        <textarea rows='4'></textarea>
+                                        <button type='submit' class='[ btn btn-success disabled ]'>Post comment</button>
+                                        <button type='reset' class='[ btn btn-default ]'>Cancel</button>
+                                    </div>
+                                    <div class='clearfix'></div>
+                                </div>
+                            </div>
+                        </div>`
+                    )
+                }
+            }
         </script>
     {% endblock %}
