@@ -8,7 +8,7 @@
 .panel-google-plus > .dropdown {
     position: absolute;
     top: 5px;
-    right: 15px;
+    right: 15px; 
 }
 .panel-google-plus > .dropdown > span > span {
     font-size: 10px;

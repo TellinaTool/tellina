@@ -7,10 +7,10 @@
         <link rel="stylesheet" href="/static/lib/google-plus.themes/google-plus.css">
         <link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
     {% endblock %}
+        
 
-    {% block body %}
-        {% block navbar %}
-            <div class="col-md-4 col-xs-12">
+    {% block navbar %}
+            <div class="col-md-4">
                 <nav class="navbar navbar-default" role="navigation">
                     <div class="container-fluid">
                         <div class="navbar-header">
@@ -35,14 +35,14 @@
             </div>
         {% endblock %}
 
-        <div class="body-panel">
+    {% block body %}
+        <div class="container-fluidr body-panel">
             <div class="row">
-                <div class="col-sm-5 col-xs-12">
-                    <div class="well instruction-panel ">
+                <div class="col-md-5 instruction-col" style="padding-left: 85px; padding-right: 15px">
+                    <div class="well instruction-panel hidden-xs">
                         <h1>Commanding your terminal with natural language</h1>
 
                         <h2>Tellina automatically translates the input into executable bash commands using deep learning.
-                            <!-- <button type="button" class="btn btn-primary btn-xs">Examples</button>-->
                         </h2>
 
                         <div class="tiny-push"></div>
@@ -58,13 +58,14 @@
                             <li>Put <code>/</code> at the end of a directory name such that Tellina interprets it as a folder.</li>
                         </ul>
                     </div>
-                    <div class="small-push"></div>
-                    <footer>
+                    <footer class="hidden-xs hidden-sm">
                         <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
                     </footer>
                 </div>
-                <div class="example-panel col-sm-6 col-xs-12 animated fadeInUp"></div>
-                <div class="recently-asked-panel col-sm-6 col-xs-12 animated fadeInUp"></div>
+                <div class="col-md-6" style="padding-right: 0px">
+                    <div class="example-panel animated fadeInUp" style="display:none;"></div>
+                    <div class="recently-asked-panel animated fadeInUp"></div>
+                </div>
             </div>
         </div>
     {% endblock %}
@@ -74,37 +75,34 @@
         <script src="/static/lib/hljs.themes/hljs-9.8.0.min.js"></script>
         <script src="/static/lib/hljs.themes/bash.js"></script>
         <script>
+            // get user's ip address as a global variable
+            var ip_address = '';
+            $.get("http://ipinfo.io", function(response) {
+                ip_address = response.ip;
+                $.get(`/remember_ip_address`, {ip_address: ip_address});
+                console.log('IP Address for study session logged: ' + ip_address);
+            }, "jsonp");
+
             $(document).ready(function () {
                 console.log(window.location.hash);
 
-                // get user's ip address as a global variable
-                var ip_address = '';
-                $.get("http://ipinfo.io", function(response) {
-                    ip_address = response.ip;
-                    $.get(`/remember_ip_address`, {ip_address: ip_address});
-                    console.log('IP Address for study session logged: ' + ip_address);
-                }, "jsonp");
-
                 $(".nl-request-input").focus()
-
-                $(".nl_request_link").click(function() {
-                    // show waiting icon
-                    $("body").addClass("loading");
-                    var nl_request = $(this).text();
-                    window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
-                });
-
-                $(".expand-translation-instance").click(function() {
-                    var nl_request_str = $(this).parent().parent().find('.panel-request').find('.nl-request').text();
-                    console.log(nl_request_str);
-                    window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
-                });
 
                 // load recently asked
                 $.get("load_latest_requests_with_translations", function(data) {
                     display_pairs($('.recently-asked-panel'), data.latest_requests_with_translations,
                                   true); 
                 });
+
+                // fix instruction panel during scroll
+                // fix header during scroll
+                /* $(window).scroll(function(){
+                  if ($(this).scrollTop() > 0) {
+                    $('.instruction-col').addClass('fixed-in-scroll');
+                  } else {
+                    $('.instruction-col').removeClass('fixed-in-scroll');
+                  }
+                }); */
 
                 // switch between "recently asked" and "sample questions"
                 var recently_asked = true;
@@ -154,7 +152,7 @@
                     };
                     panel_obj.append(
                         `<div class='row'>
-                            <div class='[ panel panel-default ] panel-google-plus'>
+                            <div class="[ panel panel-default ] panel-google-plus">
                                 <div class='panel-google-plus-tags'>
                                     <ul>
                                         <li><code>find</code></li>
@@ -169,28 +167,33 @@
                                     </div>
                                 </div>
                                 <div class='panel-footer'>
-                                    <button type='button' class='[ btn btn-default expand-translation-instance ]'>
-                                        <span class='[ glyphicon glyphicon-option-vertical ]'></span>
+                                    <button type='button' class="[ btn btn-default expand-translation-instance ]">
+                                        <span class="[ glyphicon glyphicon-option-vertical ]"></span>
                                     </button>
-                                    <button type='button' class='[ btn btn-default copy-current-command ]'>
-                                        <span class='[ glyphicon glyphicon-copy ]'></span>
+                                    <button type='button' class="[ btn btn-default copy-current-command ]">
+                                        <span class="[ glyphicon glyphicon-copy ]"></span>
                                     </button>
-                                    <button type='button' class='[ btn btn-default ]'>-1</button>
-                                    <button type='button' class='[ btn btn-default ]'>+1</button>
+                                    <button type='button' class="[ btn btn-default ]">-1</button>
+                                    <button type='button' class="[ btn btn-default ]">+1</button>
                                     <!-- <div class='input-placeholder'>Add a comment...</div> -->
                                 </div>
                                 <div class='panel-google-plus-comment'>
                                     <img class='img-circle' src='https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46' alt='User Image' />
                                     <div class='panel-google-plus-textarea'>
                                         <textarea rows='4'></textarea>
-                                        <button type='submit' class='[ btn btn-success disabled ]'>Post comment</button>
-                                        <button type='reset' class='[ btn btn-default ]'>Cancel</button>
+                                        <button type='submit' class="[ btn btn-success disabled ]">Post comment</button>
+                                        <button type='reset' class="[ btn btn-default ]">Cancel</button>
                                     </div>
                                     <div class='clearfix'></div>
                                 </div>
                             </div>
                         </div>`
-                    )
+                    );
+                    panel_obj.find(".row").find(".panel-footer").find(".expand-translation-instance").click(function() {
+                        var nl_request_str = $(this).parent().parent().find('.panel-request').find('.nl-request').text();
+                        console.log(nl_request_str);
+                        window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);
+                    });
                 }
             }
         </script>

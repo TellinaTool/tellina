@@ -18,8 +18,8 @@
     </head>
 
     <body>
-        <header>
-            <div class="container">
+        <header class="main-website-header" style="margin-bottom: 12px">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-8 col-xs-12">
                         <div class="col-md-2 col-xs-12">
@@ -47,7 +47,6 @@
         </header>
 
         {% block body %}{% endblock %}
-
         <div class="modal"><!-- Place at bottom of page --></div>
 
         <!-- JS -->
@@ -64,6 +63,15 @@
                     $.get(`/remember_ip_address`, {ip_address: ip_address});
                     console.log('IP Address for study session logged: ' + ip_address);
                 }, "jsonp");
+
+                // fix header during scroll
+                $(window).scroll(function(){
+                  if ($(this).scrollTop() > 0) {
+                    $('.main-website-header').addClass('fixed-in-scroll');
+                  } else {
+                    $('.main-website-header').removeClass('fixed-in-scroll');
+                  }
+                });
 
                 // trigger button click on enter
                 $(".nl-request-input").keyup(function(event){
