@@ -16,10 +16,10 @@ li {
   text-align: left;
 }
 
-.main {
+/* .main {
     padding: 60px 20px 20px 20px;
     margin: 0 auto;
-}
+} */
 
 /* Start by setting display:none to make this hidden.
    Then we position it in relation to the viewport window
@@ -331,7 +331,6 @@ header {
   padding: 8px 0;
   /* position: fixed;
   */
-  width: 100%;
   z-index: 999;
 }
 

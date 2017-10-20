@@ -38,8 +38,8 @@
     {% block body %}
         <div class="container-fluidr body-panel">
             <div class="row">
-                <div class="col-md-5 instruction-col" style="padding-left: 85px; padding-right: 15px">
-                    <div class="well instruction-panel hidden-xs">
+                <div class="col-md-5 col-xs-12 col-sm-12 hidden-xs">
+                    <div class="well instruction-panel">
                         <h1>Commanding your terminal with natural language</h1>
 
                         <h2>Tellina automatically translates the input into executable bash commands using deep learning.
@@ -62,14 +62,18 @@
                         <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
                     </footer>
                 </div>
-                <div class="col-md-6" style="padding-right: 0px">
+                <div class="col-md-7 col-xs-12 col-sm-12">
                     <div class="example-panel animated fadeInUp" style="display:none;"></div>
                     <div class="recently-asked-panel animated fadeInUp"></div>
                 </div>
             </div>
         </div>
+        
+        <footer class="hidden-md hidden-lg hidden-xl" style="text-align: center">
+            <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
+        </footer>
     {% endblock %}
-
+    
     {% block other-js %}
         <script type="text/javascript" src="/static/js/intro.min.js"></script>
         <script src="/static/lib/hljs.themes/hljs-9.8.0.min.js"></script>
