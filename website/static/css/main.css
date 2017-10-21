@@ -16,10 +16,10 @@ li {
   text-align: left;
 }
 
-.main {
+/* .main {
     padding: 60px 20px 20px 20px;
     margin: 0 auto;
-}
+} */
 
 /* Start by setting display:none to make this hidden.
    Then we position it in relation to the viewport window
@@ -329,8 +329,8 @@ header {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.96);
   padding: 8px 0;
-  position: fixed;
-  width: 100%;
+  /* position: fixed;
+  */
   z-index: 999;
 }
 
@@ -356,4 +356,10 @@ header .social-info li a {
 
 header .social-info li a:hover {
   color: #f48e5c;
+}
+
+.fixed-in-scroll {
+    position:fixed; 
+    top:0; 
+    left:0;
 }

@@ -18,8 +18,8 @@
     </head>
 
     <body>
-        <header>
-            <div class="container">
+        <div class="container-fluid" style="margin-bottom: 12px; padding-right: 0px; padding-left: 0px">
+            <header class="main-website-header" style="margin: 0px 0px 0px 0px">
                 <div class="row">
                     <div class="col-md-8 col-xs-12">
                         <div class="col-md-2 col-xs-12">
@@ -43,11 +43,10 @@
                     </div>
                     {% block navbar %}{% endblock %}
                 </div>
-            </div>
-        </header>
+            </header>
+        </div>
 
         {% block body %}{% endblock %}
-
         <div class="modal"><!-- Place at bottom of page --></div>
 
         <!-- JS -->
@@ -65,6 +64,15 @@
                     console.log('IP Address for study session logged: ' + ip_address);
                 }, "jsonp");
 
+                // fix header during scroll
+                $(window).scroll(function(){
+                  if ($(this).scrollTop() > 0) {
+                    $('.main-website-header').addClass('fixed-in-scroll');
+                  } else {
+                    $('.main-website-header').removeClass('fixed-in-scroll');
+                  }
+                });
+
                 // trigger button click on enter
                 $(".nl-request-input").keyup(function(event){
                     if(event.keyCode == 13){
@@ -74,8 +82,7 @@
 
                 $("#submit-to-google").click(function() {
                     var nl_request_str = $(".nl-request-input").val();
-                    href="https://www.google.com/search?q=" + nl_request_str;
-                    window.open(href);
+                    window.open("https://www.google.com/search?q=" + nl_request_str);
                 });
 
                 $("#submit-to-tellina").click(function() {
