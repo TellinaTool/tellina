@@ -4,8 +4,6 @@
         <link rel="stylesheet" href="/static/css/animate.css">
         <link rel="stylesheet" href="/static/css/introjs.min.css">
 
-        <link rel="stylesheet" href="/static/lib/font-awesome-4.7.0 2/css/font-awesome.min.css">
-
         <link rel="stylesheet" href="/static/lib/google-plus.themes/google-plus.css">
         <link rel="stylesheet" href="/static/lib/hljs.themes/tomorrow.css">
     {% endblock %}
@@ -28,7 +26,7 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                                 <li class="example-or-recently-asked"><a class="example-or-recently-asked-text-display">Sample Questions</a></li>
-                                <li><a>Developers</a></li>
+                                <li><a href="developers">Developers</a></li>
                             </ul>
 
                         </div><!-- /.navbar-collapse -->
@@ -152,7 +150,7 @@
                     } else {
                         panel_request =
                             `<div class="panel-request">
-                                    <i class="glyphicon glyphicon-user"></i>&nbsp;
+                                    <i class="fa fa-hand-o-right"></i>&nbsp;
                                     <span class="nl-request">${data_point.nl}</span><br>
                             </div>`;
                     };

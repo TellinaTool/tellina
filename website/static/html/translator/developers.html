@@ -1,37 +1,12 @@
 {% extends "translator/base.html" %}
 {% block body %}
-<div id="info" style='width:720px;padding-left:20px; padding-right:20px; margin:auto;'>
-		<div>
-    	<p>Tellina translates natural language to bash commands. For example, it translates "Find text file in the current folder" into the bash command <code>find . -name "*.txt"</code>.
-    </p>
-		</div>
-    
-    <div>
-    	<h3>How to use Tellina</h3>
-    	<h4>Translating a command</h4> 
-    	<p>Type a complete imperative sentence in <a href="/">the search page</a> and click the "Translate" button to tranlate it to a bash command.. If Tellina isn't helpful, you can also search your sentence on Google using the "Search with Google" button. </p>
-    	<h4> Interpreting the results</h4>
-    	<p>The result page lists multiple possible translations.</p>
-    	<img src="/static/img/example_entry.png" style="width:100%;">
-        <p>Tokens highlighted in <font color="#f5871f">orange</font> are command heads, tokens highlighted in <font color="#8959a8">purple</font> are flags of a command, and tokens with <u>underline</u> are arguments or flags.</p>
-    	<p>Not every translation may be correct.  .  You might need to <b>modify</b> the command as well, especially the <u>underlined</u> arguments.</p>
-        <p>If you don't understand a command, you can <b>hover</b> over each part of the command for an explanation (from bash man pages).  The gear icon <img src="/static/img/gear.svg" width="14"> on the right takes you to <a href="http://explainshell.com/">explainshell.com</a> which gives similar functionality.</p>
-        <p>You can <b>copy a command to your clipboard</b> by clicking the <img src="/static/img/clippy.svg" width="14"> button on the right hand side.
-  	</div>
-
-  	<div>
-  		<h3>Implementation</h3>
-                <p>Tellina is written in Python and uses <a href="https://github.com/idank/bashlex">bashlex</a>, <a href="https://www.tensorflow.org/versions/r0.9/get_started/os_setup.html">Tensorflow</a> and Django. Source code is available <a href="https://github.com/TellinaTool/tellina">on github</a>.
-  	</div>
-
-  	<div>
-  		<h3>Questions?</h3>
-  		<p>If you have any questions about the tool or the technique, please drop us a line on <a href="https://github.com/TellinaTool/tellina">our Github</a>.</p>
-  	</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-12">
+            <h1>Introduction</h1>
+        </div>
+    </div>
 </div>
 {% endblock %}
-{% block other-js %}
-<script type="text/javascript">
- function startIntro(){}
-</script>
-{% endblock %}
+
+{% block other-js %}{% endblock %}

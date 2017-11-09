@@ -12,10 +12,13 @@ sys.path.append(learning_module_dir)
 
 from encoder_decoder import data_utils
 from encoder_decoder import decode_tools
+from encoder_decoder import parse_args
 from encoder_decoder import translate
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
+# initialize FLAGS by parsing a dummy argument list
+tf.app.flags.FLAGS(sys.argv[:1])
 FLAGS = tf.app.flags.FLAGS
 
 FLAGS.demo = True
@@ -39,7 +42,7 @@ FLAGS.attention_input_keep = 0.6
 FLAGS.attention_output_keep = 0.6
 FLAGS.beta = 0.0
 
-FLAGS.decoding_algorithm = 'beam_search'
+FLAGS.token_decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 100
 FLAGS.alpha = 1.0
 
@@ -54,8 +57,8 @@ FLAGS.data_dir = os.path.join(learning_module_dir, "data", FLAGS.dataset)
 FLAGS.model_root_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 
 # Data-dependent parameters
-FLAGS.max_sc_length = 41
-FLAGS.max_tg_length = 56
+FLAGS.max_sc_length = 42
+FLAGS.max_tg_length = 57
 FLAGS.sc_vocab_size = 1332
 FLAGS.tg_vocab_size = 1222
 FLAGS.max_sc_token_size = 100
