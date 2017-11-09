@@ -44,7 +44,7 @@ FLAGS.beta = 0.0
 
 FLAGS.token_decoding_algorithm = 'beam_search'
 FLAGS.beam_size = 100
-FLAGS.alpha = 1.0
+FLAGS.alpha = 1
 
 FLAGS.min_vocab_frequency = 4
 FLAGS.normalized = False
@@ -59,8 +59,8 @@ FLAGS.model_root_dir = os.path.join(learning_module_dir, "model", "seq2seq")
 # Data-dependent parameters
 FLAGS.max_sc_length = 42
 FLAGS.max_tg_length = 57
-FLAGS.sc_vocab_size = 1332
-FLAGS.tg_vocab_size = 1222
+FLAGS.sc_vocab_size = 1324
+FLAGS.tg_vocab_size = 1219
 FLAGS.max_sc_token_size = 100
 FLAGS.max_tg_token_size = 100
 buckets = [(13, 57), (18, 57), (42, 57)]
@@ -71,6 +71,7 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
 
 # create model and load nerual model parameters.
 model = translate.define_model(sess, forward_only=True, buckets=buckets)
+print('loading models from {}'.format(FLAGS.model_dir))
 
 vocabs = data_utils.load_vocabulary(FLAGS)
 
