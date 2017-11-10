@@ -49,8 +49,18 @@ To experiment with the translation model locally, make sure to set following con
 ```
 WEBSITE_DEVELOP (website/views.py) 
 
-  - True (default), start the web server without importing the Tensorflow translation module (fast start)
-  - False, start the web server and translate new queries (5-10 secs delay during start)
+  - True, start the web server without importing the Tensorflow translation module (fast start)
+  - False (default), start the web server and translate new queries (5-10 secs delay during start)
+
+CACHE_TRANSLATIONS (website/views.py)
+
+  - True, cache translation results for natural language queries that were seen
+  - False (default), run translation model on every query, regardless of whether it has been seen or not
+  
+CPU_ONLY (website/backend_interface.py)
+
+  - True (default), run Tellina on CPU
+  - False, run Tellina on GPU if and only if the host machine has GPU installed 
 ```
 Visit http://127.0.0.1:8000 in your browser.
 
