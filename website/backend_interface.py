@@ -15,7 +15,9 @@ from encoder_decoder import decode_tools
 from encoder_decoder import parse_args
 from encoder_decoder import translate
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+CPU_ONLY=True
+if CPU_ONLY:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # initialize FLAGS by parsing a dummy argument list
 tf.app.flags.FLAGS(sys.argv[:1])
