@@ -49,8 +49,8 @@ To experiment with the translation model locally, make sure to set following con
 ```
 WEBSITE_DEVELOP (website/views.py) 
 
-  - True, start the web server without importing the Tensorflow translation module (fast start)
-  - False (default), start the web server and translate new queries (5-10 secs delay during start)
+  - True, start the web server without importing the Tensorflow translation module (no server start delay, suggested setting when testing peripheral website functions)
+  - False (default), start the web server and translate new queries (5-10 secs server start delay due to Tensorflow graph building)
 
 CACHE_TRANSLATIONS (website/views.py)
 
