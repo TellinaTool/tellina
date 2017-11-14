@@ -2,6 +2,7 @@ import html
 import numpy as np
 import os, sys
 import requests
+import time
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
@@ -20,10 +21,10 @@ from bashlint import data_tools
 WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = False
 
-from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
-from website.utils import get_tag, get_nl, get_command
 from website import functions
 from website.cmd2html import tokens2html
+from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
+from website.utils import get_tag, get_nl, get_command, NUM_TRANSLATIONS
 
 if not WEBSITE_DEVELOP:
     from website.backend_interface import translate_fun
@@ -60,18 +61,21 @@ def translate(request, ip_address):
     nl = get_nl(request_str)
 
     trans_list = []
-    html_strs = []
+    annotated_trans_list = []    
 
     if CACHE_TRANSLATIONS and \
             Translation.objects.filter(nl=nl).exists():
         # model translations exist
-        cached_trans = Translation.objects.filter(nl=nl)
+        cached_trans = Translation.objects.filter(nl=nl).order_by('score')
+        count = 0
         for trans in cached_trans:
-            pred_tree = data_tools.bash_parser(trans.pred_cmd)
+            pred_tree = data_tools.bash_parser(trans.pred_cmd.str)
             if pred_tree is not None:
                 trans_list.append(trans)
-                html_str = tokens2html(pred_tree)
-                html_strs.append(html_str)
+                annotated_trans_list.append(tokens2html(pred_tree))
+            count += 1
+            if count >= NUM_TRANSLATIONS:
+                break
 
     # check if the user is in the database
     try:
@@ -122,11 +126,13 @@ def translate(request, ip_address):
                         trans.score = score
                         trans.save()
                     trans_list.append(trans)
-                    html_str = tokens2html(pred_tree)
-                    html_strs.append(html_str)
+                    start_time = time.time()
+                    annotated_trans_list.append(tokens2html(pred_tree))
+                    print(time.time() - start_time)
+                    start_time = time.time()
 
     translation_list = []
-    for trans, html_str in zip(trans_list, html_strs):
+    for trans, annotated_cmd in zip(trans_list, annotated_trans_list):
         upvoted, downvoted, starred = "", "", ""
         if Vote.objects.filter(translation=trans, ip_address=ip_address).exists():
             v = Vote.objects.get(translation=trans, ip_address=ip_address)
@@ -134,7 +140,7 @@ def translate(request, ip_address):
             downvoted = 1 if v.downvoted else ""
             starred = 1 if v.starred else ""
         translation_list.append((trans, upvoted, downvoted, starred,
-            trans.pred_cmd.str.replace('\\', '\\\\'), html_str))
+            trans.pred_cmd.str.replace('\\', '\\\\'), annotated_cmd))
 
     # sort translation_list based on voting results
     translation_list.sort(

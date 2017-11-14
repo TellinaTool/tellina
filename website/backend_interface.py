@@ -10,14 +10,17 @@ learning_module_dir = os.path.join(os.path.dirname(__file__), "..",
                                    "tellina_learning_module")
 sys.path.append(learning_module_dir)
 
+from website.utils import NUM_TRANSLATIONS
 from encoder_decoder import data_utils
 from encoder_decoder import decode_tools
 from encoder_decoder import parse_args
 from encoder_decoder import translate
 
-CPU_ONLY=True
+CPU_ONLY=False
 if CPU_ONLY:
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+else:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 # initialize FLAGS by parsing a dummy argument list
 if tf.__version__.startswith('1.4'):
@@ -46,7 +49,7 @@ FLAGS.attention_output_keep = 0.6
 FLAGS.beta = 0.0
 
 FLAGS.token_decoding_algorithm = 'beam_search'
-FLAGS.beam_size = 100
+FLAGS.beam_size = 20
 FLAGS.alpha = 1
 
 FLAGS.min_vocab_frequency = 4
@@ -90,5 +93,6 @@ else:
 
 def translate_fun(sentence, slot_filling_classifier=slot_filling_classifier):
     print('translating |{}|'.format(sentence))
-    return decode_tools.translate_fun(
+    list_of_translations = decode_tools.translate_fun(
         sentence, sess, model, vocabs, FLAGS, slot_filling_classifier)
+    return list_of_translations

@@ -14,6 +14,10 @@ sys.path.append(os.path.join(
 from bashlint import data_tools
 
 
+# Number of translations to show
+NUM_TRANSLATIONS = 20
+
+
 def extract_html(url):
     hypothes_prefix = "https://via.hypothes.is/"
     try:
