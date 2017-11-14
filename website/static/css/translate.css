@@ -37,5 +37,9 @@
 .tooltip-inner > .cmd-expl {
 	font-family: "Lucida Console", Monaco, monospace;
  	text-align: left;
- 	white-space:pre
+ 	white-space: pre
+}
+
+.code {
+  font-family: "Lucida Console", Monaco, monospace;
 } 
