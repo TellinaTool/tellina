@@ -49,7 +49,7 @@ FLAGS.attention_output_keep = 0.6
 FLAGS.beta = 0.0
 
 FLAGS.token_decoding_algorithm = 'beam_search'
-FLAGS.beam_size = 20
+FLAGS.beam_size = 100
 FLAGS.alpha = 1
 
 FLAGS.min_vocab_frequency = 4
