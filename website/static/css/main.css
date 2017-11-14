@@ -235,48 +235,8 @@ body.loading .modal {
 
 .btn-search:hover{
     background: rgba(250, 215, 160, 1);
-    # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(250, 215, 160, 0.75);
+    #box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(250, 215, 160, 0.75);
 }
-
-.btn-copy{
-    background: white;
-    box-shadow: none;
-    outline: 0;
-}
-
-/*.btn-copy:hover{
-    background: #ffbbbb;
-    # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);    
-}*/
-
-.btn-expl{
-    background: white;
-    box-shadow: none;
-    outline: 0;
-}
-
-/*.btn-expl:hover{
-    background: #ffbbbb;
-    # box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 6px rgba(255, 72, 72, 0.75);
-}*/
-
-/* .btn-copy {
-    color: white;
-    height: 18px;
-    background: #ffbbbb;
-    border: 0px;
-    margin-top: 0em;
-    padding-top: 0em;
-}
-
-.btn-copy:hover {
-    color: white;
-    height: 18px;
-    background: #ff6666;
-    border: 0px;
-    margin-top: 0em;
-    padding-top: 0em;
-} */
 
 /* -- navigation bar -- */
 
@@ -329,8 +289,6 @@ header {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.96);
   padding: 8px 0;
-  /* position: fixed;
-  */
   z-index: 999;
 }
 

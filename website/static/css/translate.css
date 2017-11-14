@@ -1,12 +1,28 @@
 .translate-panel {
-	max-width: 720px;
 	text-align: left;
-	padding-top: 80px;
-	margin: 0 auto; 
+	padding: 0 12px 0 12px; 
 }
 
-.btn {
-	border-radius: 0 !important;
+.btn-copy{
+    border:0px solid transparent;
+}
+
+.btn-expl{
+    border:0px solid transparent;
+}
+
+.btn-copy:hover,
+.btn-copy:focus,
+.btn-copy:active {
+    background-color: rgb(255, 255, 255);
+    color: #f48e5c
+}
+
+.btn-expl:hover,
+.btn-expl:focus,
+.btn-expl:active {
+    background-color: rgb(255, 255, 255);
+    color: #f48e5c
 }
 
 .cmd-result {

@@ -1,11 +1,60 @@
 {% extends "translator/base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="static/css/developers.css">
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+{% endblock %}
+
 {% block body %}
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2 col-xs-12">
-            <h1>Introduction</h1>
+    <div class="project-description" style="text-align: left">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-12">
+                <h2>About Tellina</h2>
+                    <div style="text-align: left;">
+                        <a class="github-button" href="https://github.com/TellinaTool/tellina" data-icon="octicon-star" data-show-count="true" aria-label="Star uwdb/cosette on GitHub">Star</a>
+                        <a class="github-button" href="https://github.com/TellinaTool/tellina/fork" data-icon="octicon-repo-forked" aria-label="Fork uwdb/cosette on GitHub">Fork</a>
+                        <a class="github-button" href="https://github.com/TellinaTool/tellina/issues" data-icon="octicon-issue-opened" aria-label="Issue uwdb/cosette on GitHub">Issue</a>
+                    </div>
+                <p>Tellina is a tool that automatically translates natural language command of programmers into a programming language. Currently Tellina supports the Linux shell command as its target language.</p>
+                <h3>Source Code & Data</h3>
+                <p>The source code for our <a href="https://github.com/TellinaTool/tellina">website</a> and <a href="https://github.com/TellinaTool/awesome_nmt">machine learning module</a> is publicly available on <a href="https://github.com/TellinaTool/awesome_nmt">Github</a>.</p>               
+                
+                <h3>Publications</h3>
+                <p>If you use Tellina in your work, please cite the following papers accordingly.</p>
+                <div>
+                    <div class="paper">
+                        <a href="http://victorialin.net/pubs/tellina_tr170510.pdf">Program Synthesis from Natural Language
+Using Recurrent Neural Networks</a>
+                        <pre class="bibtex">@techreport{LinWPVZE2017:TR, 
+  author = {Xi Victoria Lin and Chenglong Wang and Deric Pang and Kevin Vu and Luke Zettlemoyer and Michael D. Ernst}, 
+  title = {Program synthesis from natural language using recurrent neural networks}, 
+  institution = {University of Washington Department of Computer Science and Engineering}, 
+  number = {UW-CSE-17-03-01}, 
+  address = {Seattle, WA, USA}, 
+  month = mar, 
+  year = {2017} 
+}</pre>
+                    </div>
+                </ui>
+                <h3>Technical Details Explained</h3>
+                    <h4>Augmented Seq2Seq: A Stage-Wised Approach</h4>
+                        <div style="display:block"> 
+                            <img src="static/img/developers/system_overview.png" class="img-responsive" style="max-width: 960px"></img>
+                        </div>
+
+                    <h4>Sub-token CopyNet: An End-to-End Approach</h4>
+                        We expect any <a href="https://arxiv.org/pdf/1706.03762.pdf">state-of-the-art neural machine translation model</a> to perform competitively on this task, as long as you pay attention to the few details mentioned above (copying, grammar constraints, etc.). The next section benchmarks how "well" Tellina can do so far.
+
+                   
+                <h4>Accuracy & User Impact</h4>                
+
+                <h3>Remarks on Future Work</h3>
+                    <h4>The Unbearable Complication of Bash As the Target Language</h4> 
+                    So all system adminstrators, you may want to keep an eye on this tool!
+                    <!-- <h4>How should Tellina's machine learning module be improved?</h4> -->
+            </div>
         </div>
-    </div>
+    
 </div>
 {% endblock %}
 

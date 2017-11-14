@@ -14,23 +14,33 @@
 
         <!-- Web Resources -->
         <link rel="shortcut icon" href="/static/img/tellina_avatar.svg"/>
-
+        <link rel="canonical" href="http://tellina.rocks">
         {% block head %}{% endblock %}
+        
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108707366-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-108707366-1');
+        </script>
     </head>
 
     <body>
         <div class="container-fluid" style="margin-bottom: 12px; padding-right: 0px; padding-left: 0px">
-            <header class="main-website-header" style="margin: 0px 0px 0px 0px">
+            <header class="main-website-header" style="padding-top: 12px">
                 <div class="row">
                     <div class="col-md-8 col-xs-12">
                         <div class="col-md-2 col-xs-12">
-                            <a href="/"><img src="/static/img/tellina.svg" alt="Project Logo" style="height:48px;"></a>
+                            <a href="/"><img src="/static/img/tellina.svg" alt="Project Logo" style="height:50px;"></a>
                         </div>
                         <div class="col-md-10 col-xs-12 top-search-container">
                             <div class="input-group nl-request">
                                 <span class="input-group-btn">
                                     <button id="submit-to-google" class="btn btn-default btn-search" data-toggle="tooltip" data-placement="bottom" title='Search with Google' type="button">
-                                        <i class="fa fa-globe fa-1x"></i>
+                                        <i class="fa fa-globe fa-lg"></i>
                                     </button>
                                 </span>
                                 <input type="text" id="top-search" class="form-control nl-request-input" placeholder="Type a natural language command...">

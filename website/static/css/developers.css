@@ -1,0 +1,18 @@
+.project-description {
+    font:18px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:300;
+    color:#333;
+    font-size: 18px;
+}
+
+.project-description h3 {
+    margin-top: 30px;
+}
+
+.project-description h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-style: bold;
+    font-weight: 600;
+    color:#777;
+}
