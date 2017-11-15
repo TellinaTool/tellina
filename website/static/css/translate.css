@@ -1,6 +1,6 @@
 .translate-panel {
 	text-align: left;
-	padding: 120px 12px 0 12px; 
+	padding: 72px 12px 0 12px; 
 }
 
 .btn-copy{
@@ -42,4 +42,10 @@
 
 .code {
   font-family: "Lucida Console", Monaco, monospace;
+}
+
+@media (max-width: 980px) {
+    .translate-panel {
+      padding-top: 140px;
+    }
 } 
