@@ -259,10 +259,6 @@ body.loading .modal {
   display: inline-block;
 }
 
-.navbar {
-  min-height: 0;
-}
-
 .logo > a {
   font-size: 24px;
   font-family: 'Source Sans Pro', sans-serif;
