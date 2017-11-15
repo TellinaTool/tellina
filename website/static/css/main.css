@@ -16,11 +16,6 @@ li {
   text-align: left;
 }
 
-/* .main {
-    padding: 60px 20px 20px 20px;
-    margin: 0 auto;
-} */
-
 /* Start by setting display:none to make this hidden.
    Then we position it in relation to the viewport window
    with position:fixed. Width, height, top and left speak
@@ -281,39 +276,16 @@ body.loading .modal {
   text-decoration: none;
 }
 
-header {
+.main-website-header {
+  position: fixed;
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   -ms-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   -o-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.96);
-  padding: 8px 0;
   z-index: 999;
-}
-
-header .social-info {
-  margin-bottom: 0;
-  padding-top: 8px;
-  text-align: right;
-}
-
-header .social-info li {
-  display: inline-block;
-}
-
-header .social-info li:first-child a {
-  border-left: 1px solid #dedede;
-}
-
-header .social-info li a {
-  color: #aeaeae;
-  padding: 3px 8px;
-  border-right: 1px solid #dedede;
-}
-
-header .social-info li a:hover {
-  color: #f48e5c;
+  padding: 12px 0 8px 0
 }
 
 .fixed-in-scroll {

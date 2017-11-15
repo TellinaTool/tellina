@@ -5,33 +5,10 @@ html, body {
 }
 
 .body-panel {
+    padding-top: 72px;
     padding-left: 40px;
     padding-right: 40px;
 }
-
-/* .request-list-block {
-	padding-top: 10px;
-	text-align:center;
-}
-
-.request-list-block a{
-	text-decoration: underline;
-	color: #222222;
-}
-
-.request-list-block a:hover{
-	text-decoration: underline;
-	color: #337ab7;
-}
-
-.request-list{
-    padding-top: 0;
-    margin-top: 0;
-    display:inline-block;
-    float:none;
-    text-align: left;
-    vertical-align: top;
-} */
 
 .instruction-panel {
     background-color: rgba(76, 175, 80, 0.1);
@@ -86,4 +63,10 @@ html, body {
 
 .fadeInUp {
     -webkit-animation-duration: 1s;
+}
+
+@media (max-width: 980px) {
+    .body-panel {
+      padding-top: 160px;
+    }
 }

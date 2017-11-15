@@ -9,7 +9,7 @@
 {% endblock %}
 {% block body %}
 <div class="container-fluid translate-panel">
-    <div class="row" id="suggestions">
+    <div class="row">
         <div class="col-md-9">
             {% if trans_list %}
             {% for translation, upvoted, downvoted, starred, to_expl_cmd, annotated_cmd in trans_list %}
@@ -26,28 +26,28 @@
                                 </div>
                             </td>-->
                             <td>
-                                <div style="background-color:#f8f8f8; margin-left: 30px" class="span7" id="oneliner-{{forloop.counter}}">
-                                    <code id="pred-cmd-{{forloop.counter}}" class="command bash hljs" style="font-size: 14px">
+                                <div style="background-color:#f8f8f8;" class="span7" id="oneliner-{{forloop.counter}}">
+                                    <code id="pred-cmd-{{forloop.counter}}" class="command bash hljs">
                                         {{annotated_cmd | safe}}
                                     </code>
                                 </div>
-                            </td>
-                            <td align="right" style="width: 100px">
-                                <button type="button" class="btn btn-default btn-copy"
-                                                      data-clipboard-target="#pred-cmd-{{forloop.counter}}"
-                                                      id="copy-btn-{{forloop.counter}}">
-                                    <img src="/static/img/clippy.svg" width="14">
-                                </button>
-                                <button type="button" class="btn btn-default btn-expl"
-                                                      id="expl-btn-{{forloop.counter}}"
-                                                      onclick="window.open('http://explainshell.com/explain?cmd={{to_expl_cmd}}')">
-                                    <i class="fa fa-question-circle-o fa-lg"></i>
-                                </button>
+                                <div align="right">
+                                    <button type="button" class="btn btn-default btn-copy"
+                                        data-clipboard-target="#pred-cmd-{{forloop.counter}}"
+                                        id="copy-btn-{{forloop.counter}}">
+                                            <img src="/static/img/clippy.svg" width="14">
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-expl"
+                                        id="expl-btn-{{forloop.counter}}"
+                                        onclick="window.open('http://explainshell.com/explain?cmd={{to_expl_cmd}}')">
+                                        <i class="fa fa-question-circle-o fa-lg"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     </table>
+                    <hr>
                 </div>
-                <hr>
             {% endfor %}
             {% else %}
             <div class="translation-error">
