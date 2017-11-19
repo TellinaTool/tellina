@@ -27,5 +27,6 @@ run:
 
 clean: 
 	# Destroy database and migrations	 
+    find . -type d -name "__pycache__" | xargs rm -r
 	rm -rf website/migrations 
 	# rm -rf db.sqlite3
