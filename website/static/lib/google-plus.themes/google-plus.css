@@ -47,7 +47,7 @@
     top: 0px;
     right: 0px;
     height: 100%;
-	border-right: 3px solid rgb(66, 127, 237);
+    border-right: 3px solid rgb(66, 127, 237);
 }
 .panel-google-plus > .panel-google-plus-tags > ul:hover > li,
 .panel-google-plus > .panel-google-plus-tags > ul > li:first-child {
@@ -174,3 +174,4 @@
     /* border-color: rgb(0, 0, 0); */
     color: #f48e5c
 }
+

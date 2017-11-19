@@ -48,12 +48,19 @@
                         <div class="tiny-push"></div>
 
                         <ul>
-                            <li>Type an imperative English sentence (not a question) stating your goal.</li>
+                            <li>Type an imperative English sentence (not a question) stating your goal. For example,
+                                <ul>
+                                    <li><i>"split &lsquo;/usr/bin/gcc&rsquo; into 1000 files of about equal size";</i></li>
+                                    <li><i>"print top 10 largest files and directories";</i></li>
+                                    <li><a class="example-or-recently-asked">more examples...</a></li>
+                                </ul>
+                            </li>
                             <li>Tellina works best for specific inputs. For example,
                                 <ul>
                                     <li>instead of "some files", use "pdf files";</li>
                                     <li>instead of "sometime ago", use "5 days ago".</li>
                                 </ul>
+                            </li>
                             <li>Quoting <code>""</code> names, strings and regular expressions often improves the translation.</li>
                             <li>Put <code>/</code> at the end of a directory name such that Tellina interprets it as a folder.</li>
                         </ul>
@@ -154,23 +161,30 @@
                                     <span class="nl-request">${data_point.nl}</span><br>
                             </div>`;
                     };
+                    panel_tags = '';
+                    for (var j = 0; j < data_point.tags.length; j ++) {
+                        panel_tags = panel_tags + 
+                            '<li><code>' + 
+                            data_point.tags[j] + 
+                            '</code></li>'; 
+                    }
                     panel_obj.append(
                         `<div class='row'>
                             <div class="[ panel panel-default ] panel-google-plus">
                                 <div class='panel-google-plus-tags'>
                                     <ul>
-                                        <li><code>find</code></li>
-                                    </ul>
+                        ` + panel_tags + 
+                        `           </ul>
                                 </div>
                         ` + panel_request +
-                        `        <div class='panel-body'>
-                                    <div style='margin: 0px 20px 0px 20px'>
+                        `       <div class='panel-body'>
+                                    <div style='margin: 16px 20px 0px 20px'>
                                         <code class='panel-command command bash hljs'>
                                             ${data_point.top_translation}
                                         </code>
                                     </div>
                                 </div>
-                                <div class='panel-footer'>
+                        ` + `   <div class='panel-footer'>
                                     <button type='button' class="[ btn btn-default expand-translation-instance ]">
                                         <span class="[ fa fa-plus-square-o ]"></span>
                                     </button>

@@ -18,7 +18,7 @@ sys.path.append(os.path.join(
 
 from bashlint import data_tools
 
-WEBSITE_DEVELOP = False
+WEBSITE_DEVELOP = True
 CACHE_TRANSLATIONS = False
 
 from website import functions
@@ -226,14 +226,13 @@ def example_requests_with_translations(request):
             for top_translation in Translation.objects.filter(
                     nl__str=request_str, score=max_score):
                 break
-            top_translation = top_translation.pred_cmd.str
         else:
             # Compute the translations on the fly
+            top_translation = None
             if not WEBSITE_DEVELOP:
                 # call learning model and store the translations
                 batch_outputs, output_logits = translate_fun(request_str)
                 max_score = -np.inf
-                top_translation = ''
                 if batch_outputs:
                     top_k_predictions = batch_outputs[0]
                     top_k_scores = output_logits[0]
@@ -242,16 +241,21 @@ def example_requests_with_translations(request):
                         score = top_k_scores[i]
                         if score > max_score:
                             max_score = score
-                            top_translation = pred_cmd
                         cmd = get_command(pred_cmd)
-                        Translation.objects.create(
+                        top_translation = Translation.objects.create(
                             nl=nl, pred_cmd=cmd, score=score)
-            else:
-                top_translation = 'No translation available.'
-        example_requests_with_translations.append({
-            'nl': nl.str,
-            'top_translation': top_translation
-        })
+        if top_translation:
+            example_requests_with_translations.append({
+                'nl': nl.str,
+                'top_translation': top_translation.pred_cmd.str,
+                'tags': [tag.str for tag in top_translation.pred_cmd.tags.all()]
+            })
+        else:
+            example_requests_with_translations.append({
+                'nl': nl.str,
+                'top_translation': 'No translation available.',
+                'tags': []
+            })
 
     return json_response({
         'example_requests_with_translations': example_requests_with_translations})
@@ -262,17 +266,20 @@ def latest_requests_with_translations(request):
 
     for request in NLRequest.objects.order_by('-submission_time'):
         translations = Translation.objects.filter(nl=request.nl)
+        top_translation = None
         if translations:
             max_score = translations.aggregate(Max('score'))['score__max']
             for top_translation in Translation.objects.filter(
                     nl=request.nl, score=max_score):
                 break
-            top_translation = top_translation.pred_cmd.str
-        else:
-            top_translation = 'No translation available.'
+        top_translation_tags = [tag.str for tag in top_translation.pred_cmd.tags.all()] \
+            if top_translation else []
+        top_translation_cmd = top_translation.pred_cmd.str if top_translation \
+            else 'No translation available.'
         latest_requests_with_translations.append({
             'nl': request.nl.str, 
-            'top_translation': top_translation,
+            'tags': top_translation_tags,
+            'top_translation': top_translation_cmd,
             'submission_time': request.submission_time.strftime("%Y-%m-%d %H:%M:%S"),
             'user_city': request.user.city,
             'user_region': request.user.region,
