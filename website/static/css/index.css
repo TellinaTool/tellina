@@ -11,7 +11,7 @@ html, body {
 }
 
 .instruction-panel {
-    background-color: rgba(76, 175, 80, 0.1);
+    background-color: #e2edff;
     color: rgb(72, 72, 72);
     font-size: 16px;
     font-weight: 300;
@@ -26,9 +26,11 @@ html, body {
 
 .instruction-panel > h2 {
     text-align: left;
+    line-height: 1.4;
     font-size: 16px;
     font-weight: 300;
-    color: #43a047;
+    /* color: #43a047; */
+    color: #484c51;
 }
 
 .instruction-panel > ul > li{
@@ -63,6 +65,11 @@ html, body {
 
 .fadeInUp {
     -webkit-animation-duration: 1s;
+}
+
+.btn-tag {
+    background-color: #e2edff;
+    color: #5a6b87;
 }
 
 @media (max-width: 980px) {

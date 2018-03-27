@@ -188,12 +188,12 @@ body.loading .modal {
    left: 0;
 }
 
-#top-search:focus {
+/* #top-search:focus {
    border-color: #7DCEA0;
-   -moz-box-shadow: 0 0 8px rgba(125, 206, 160, 0.6);
-   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(125, 206, 160,  0.6);
+   -moz-box-shadow: 0 0 8px rgba(125, 125, 206, 0.6);
+   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(125, 125, 206, 0.6);
    outline: 0 none;
-}
+} */
 
 #prevnext {
     text-align: center;

@@ -26,7 +26,7 @@
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
-                                <li class="example-or-recently-asked"><a class="example-or-recently-asked-text-display">Sample Questions</a></li>
+                                <li class="example-or-recently-asked"><a class="example-or-recently-asked-text-display">Sample TODOs</a></li>
                                 <li><a href="developers">Developers</a></li>
                             </ul>
                         </div>
@@ -66,7 +66,7 @@
                         </ul>
                     </div>
                     <footer class="hidden-xs hidden-sm">
-                        <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
+                        <div class="footer"><small>&copy; Tellina Tools 2018. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
                     </footer>
                 </div>
                 <div class="col-md-7 col-xs-12 col-sm-12">
@@ -77,7 +77,7 @@
         </div>
         
         <footer class="hidden-md hidden-lg hidden-xl" style="text-align: center">
-            <div class="footer"><small>&copy; Tellina Tools 2017. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
+            <div class="footer"><small>&copy; Tellina Tools 2018. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
         </footer>
     {% endblock %}
     
@@ -125,7 +125,7 @@
                                           false);
                         });
                         $('.example-panel').show();
-                        $('.example-or-recently-asked-text-display').text('Recently Asked');
+                        $('.example-or-recently-asked-text-display').text('Recently Issued');
                         recently_asked = false;
                     } else {
                         $('.example-panel').hide();
@@ -134,7 +134,7 @@
                                           true);
                         });
                         $('.recently-asked-panel').show();
-                        $('.example-or-recently-asked-text-display').text('Sample Questions');
+                        $('.example-or-recently-asked-text-display').text('Sample TODOs');
                         recently_asked = true;
                     }
                 });
@@ -161,21 +161,17 @@
                                     <span class="nl-request">${data_point.nl}</span><br>
                             </div>`;
                     };
-                    panel_tags = '';
+                    panel_tags = '<div style="padding: 0 0 0 20px; text-align: left">';
                     for (var j = 0; j < data_point.tags.length; j ++) {
                         panel_tags = panel_tags + 
-                            '<li><code>' + 
-                            data_point.tags[j] + 
-                            '</code></li>'; 
+                            '<button type="button" class="btn btn-tag btn-xs">' + 
+                                data_point.tags[j] + 
+                            '</button>&nbsp;'; 
                     }
+                    panel_tags = panel_tags + '</div>'
                     panel_obj.append(
                         `<div class='row'>
                             <div class="[ panel panel-default ] panel-google-plus">
-                                <div class='panel-google-plus-tags'>
-                                    <ul>
-                        ` + panel_tags + 
-                        `           </ul>
-                                </div>
                         ` + panel_request +
                         `       <div class='panel-body'>
                                     <div style='margin: 16px 20px 0px 20px'>
@@ -184,7 +180,8 @@
                                         </code>
                                     </div>
                                 </div>
-                        ` + `   <div class='panel-footer'>
+                        ` + panel_tags +
+                        `   <div class='panel-footer'>
                                     <button type='button' class="[ btn btn-default expand-translation-instance ]">
                                         <span class="[ fa fa-plus-square-o ]"></span>
                                     </button>
