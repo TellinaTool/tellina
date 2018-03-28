@@ -11,7 +11,8 @@ html, body {
 }
 
 .instruction-panel {
-    background-color: #e2edff;
+    /* background-color: #e2edff; */
+    background-color: #f9fbff;
     color: rgb(72, 72, 72);
     font-size: 16px;
     font-weight: 300;
@@ -30,7 +31,7 @@ html, body {
     font-size: 16px;
     font-weight: 300;
     /* color: #43a047; */
-    color: #484c51;
+    color: #163f8e;
 }
 
 .instruction-panel > ul > li{
