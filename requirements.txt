@@ -2,4 +2,4 @@ Django==1.10.2
 nltk==3.2.1
 matplotlib==1.5.3
 tqdm==4.9.0
-requests==2.13.0
+requests==2.20.0
