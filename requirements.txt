@@ -1,4 +1,4 @@
-Django==1.10.2
+Django>=1.10.8
 nltk==3.2.1
 matplotlib==1.5.3
 tqdm==4.9.0
