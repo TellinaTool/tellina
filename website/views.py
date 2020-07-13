@@ -18,7 +18,7 @@ sys.path.append(os.path.join(
 
 from bashlint import data_tools
 
-WEBSITE_DEVELOP = True
+WEBSITE_DEVELOP = False
 CACHE_TRANSLATIONS = False
 
 from website import functions
