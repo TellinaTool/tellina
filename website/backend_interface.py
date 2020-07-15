@@ -23,9 +23,8 @@ else:
     os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 # initialize FLAGS by parsing a dummy argument list
-if tf.__version__.startswith('1.4'):
-    tf.app.flags.FLAGS(sys.argv[:1])
-    FLAGS = tf.app.flags.FLAGS
+tf.compat.v1.flags.FLAGS(sys.argv[:1])
+FLAGS = tf.compat.v1.flags.FLAGS
 
 FLAGS.demo = True
 FLAGS.fill_argument_slots = False
@@ -72,7 +71,7 @@ FLAGS.max_tg_token_size = 100
 buckets = [(13, 57), (18, 57), (42, 57)]
 
 # Create tensorflow session
-sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True,
+sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(allow_soft_placement=True,
     log_device_placement=FLAGS.log_device_placement))
 
 # create model and load nerual model parameters.
