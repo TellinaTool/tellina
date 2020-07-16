@@ -8,7 +8,7 @@ Or, you can install it locally; this document tells you how.
 ## Installation
 
 ### Install Tensorflow
-Tellina uses Tensorflow (>=r1.0).
+Tellina uses Tensorflow 2.0.
 
 Follow the instructions on the [Tensorflow website](https://www.tensorflow.org/get_started/get_started). The simplest way is to install using [`pip3`](https://www.tensorflow.org/install/).
 
