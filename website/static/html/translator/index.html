@@ -27,7 +27,7 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav">
                                 <li class="example-or-recently-asked"><a class="example-or-recently-asked-text-display">Sample TODOs</a></li>
-                                <li><a href="developers">Developers</a></li>
+                                <li><a href="developers">About</a></li>
                             </ul>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         </ul>
                     </div>
                     <footer class="hidden-xs hidden-sm">
-                        <div class="footer"><small>&copy; Tellina Tools 2018. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
+                        <div class="footer"><small>&copy; Tellina Tools 2018-2020. This website is under active construction. If you have any suggestions, <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">email us</a> or issue a pull request on <a href="https://github.com/TellinaTool/tellina">Github</a>.</small></div>
                     </footer>
                 </div>
                 <div class="col-md-7 col-xs-12 col-sm-12">
@@ -77,7 +77,7 @@
         </div>
         
         <footer class="hidden-md hidden-lg hidden-xl" style="text-align: center">
-            <div class="footer"><small>&copy; Tellina Tools 2018. This website is under active construction. <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">Email us</a> if you have any suggestion.</small></div>
+            <div class="footer"><small>&copy; Tellina Tools 2018-2020. This website is under active construction. If you have any suggestions, <a href="mailto:xilin@cs.washington.edu?Subject=Tellina%20Website" target="_top">email us</a> or issue a pull request on <a href="https://github.com/TellinaTool/tellina">Github</a>.</small></div>
         </footer>
     {% endblock %}
     
@@ -152,7 +152,7 @@
                                 <span class="nl-request">${data_point.nl}</span><br>
                                 <span class="post-time"><i class="glyphicon glyphicon-time"></i>&nbsp;${data_point.submission_time}</span>&nbsp;
                                 <span class="post-location"><i class="glyphicon glyphicon-map-marker"></i>&nbsp;
-                                    ${data_point.user_city}, ${data_point.user_region}, ${data_point.user_country}</span>
+                                    ${data_point.user_region}, ${data_point.user_country}</span>
                             </div>`;
                     } else {
                         panel_request =
@@ -161,13 +161,17 @@
                                     <span class="nl-request">${data_point.nl}</span><br>
                             </div>`;
                     };
-                    panel_tags = '<div style="padding: 0 0 0 20px; text-align: left">';
+                    panel_tags = '<div style="padding: 0 0 16px 20px; text-align: left">';
                     for (var j = 0; j < data_point.tags.length; j ++) {
                         panel_tags = panel_tags + 
                             '<button type="button" class="btn btn-tag btn-xs">' + 
                                 data_point.tags[j] + 
-                            '</button>&nbsp;'; 
+                            '</button>&nbsp;&nbsp;';
                     }
+                    panel_tags = panel_tags +
+                        '<button type="button" class="btn btn-top-k btn-xs expand-translation-instance">' +
+                            'More like this' +
+                        '</button>&nbsp;&nbsp;' 
                     panel_tags = panel_tags + '</div>'
                     panel_obj.append(
                         `<div class='row'>
@@ -181,7 +185,7 @@
                                     </div>
                                 </div>
                         ` + panel_tags +
-                        `   <div class='panel-footer'>
+                        `       <!--<div class='panel-footer'>
                                     <button type='button' class="[ btn btn-default expand-translation-instance ]">
                                         <span class="[ fa fa-plus-square-o ]"></span>
                                     </button>
@@ -190,8 +194,8 @@
                                     </button>
                                     <button type='button' class="[ btn btn-default ]">-1</button>
                                     <button type='button' class="[ btn btn-default ]">+1</button>
-                                    <!-- <div class='input-placeholder'>Add a comment...</div> -->
-                                </div>
+                                    <div class='input-placeholder'>Add a comment...</div>
+                                </div>-->
                                 <div class='panel-google-plus-comment'>
                                     <img class='img-circle' src='https://lh3.googleusercontent.com/uFp_tsTJboUY7kue5XAsGA=s46' alt='User Image' />
                                     <div class='panel-google-plus-textarea'>
@@ -204,7 +208,7 @@
                             </div>
                         </div>`
                     );
-                    panel_obj.find(".row").find(".panel-footer").find(".expand-translation-instance").click(function() {
+                    panel_obj.find(".row").find(".expand-translation-instance").click(function() {
                         var nl_request_str = $(this).parent().parent().find('.panel-request').find('.nl-request').text();
                         console.log(nl_request_str);
                         window.location.replace(`translate?request_str=${nl_request_str}&ip_address=${ip_address}`);

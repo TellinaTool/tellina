@@ -69,8 +69,17 @@ html, body {
 }
 
 .btn-tag {
+    border-radius:1px;
     background-color: #e2edff;
     color: #5a6b87;
+}
+
+.btn-top-k {
+    border-radius:1px;
+    background-color: #e5e3e1;
+    color: #76716e;
+    margin-right: 20px; 
+    float: right;
 }
 
 @media (max-width: 980px) {
