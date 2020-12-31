@@ -18,13 +18,14 @@ sys.path.append(os.path.join(
 
 from bashlint import data_tools
 
-WEBSITE_DEVELOP = True
-CACHE_TRANSLATIONS = False
+WEBSITE_DEVELOP = False
+CACHE_TRANSLATIONS = True
 
 from website import functions
 from website.cmd2html import tokens2html
 from website.models import NL, Command, NLRequest, URL, Translation, Vote, User
 from website.utils import get_tag, get_nl, get_command, NUM_TRANSLATIONS
+
 
 if not WEBSITE_DEVELOP:
     from website.backend_interface import translate_fun
@@ -103,6 +104,7 @@ def translate(request, ip_address):
     # save the natural language request issued by this IP Address
     nl_request = NLRequest.objects.create(nl=nl, user=user)
 
+    start_time = time.time()
     if not trans_list:
         if not WEBSITE_DEVELOP:
             # call learning model and store the translations
@@ -126,11 +128,8 @@ def translate(request, ip_address):
                         trans.score = score
                         trans.save()
                     trans_list.append(trans)
-                    start_time = time.time()
                     annotated_trans_list.append(tokens2html(pred_tree))
-                    print(time.time() - start_time)
-                    start_time = time.time()
-
+        
     translation_list = []
     for trans, annotated_cmd in zip(trans_list, annotated_trans_list):
         upvoted, downvoted, starred = "", "", ""
@@ -149,6 +148,7 @@ def translate(request, ip_address):
         'nl_request': nl_request,
         'trans_list': translation_list
     }
+    print('backend translation time = {}'.format(time.time() - start_time))
     return HttpResponse(template.render(context, request))
 
 @ip_address_required
@@ -248,7 +248,7 @@ def example_requests_with_translations(request):
             example_requests_with_translations.append({
                 'nl': nl.str,
                 'top_translation': top_translation.pred_cmd.str,
-                'tags': [tag.str for tag in top_translation.pred_cmd.tags.all()]
+                'tags': [tag.str for tag in top_translation.pred_cmd.tags.all().order_by('frequency')]
             })
         else:
             example_requests_with_translations.append({
@@ -272,7 +272,7 @@ def latest_requests_with_translations(request):
             for top_translation in Translation.objects.filter(
                     nl=request.nl, score=max_score):
                 break
-        top_translation_tags = [tag.str for tag in top_translation.pred_cmd.tags.all()] \
+        top_translation_tags = [tag.str for tag in top_translation.pred_cmd.tags.all().order_by('frequency')] \
             if top_translation else []
         top_translation_cmd = top_translation.pred_cmd.str if top_translation \
             else 'No translation available.'
